@@ -53,7 +53,7 @@ Bei `/ideen` ersetzt die Freigabeliste den Gate-Block: eine Zeile je Idee mit Sl
 
 ## Commits
 
-Ein Lauf oder eine Stufe = ein Commit. Danach immer `python scripts/dashboard.py` und `DASHBOARD.md` mitcommitten.
+Ein Lauf oder eine Stufe = ein Commit. Danach immer `python scripts/dashboard.py`, `DASHBOARD.md` und `dashboard.html` mitcommitten und `dashboard.html` als Artifact unter https://claude.ai/artifact/2rvyEyRe1p9ietKExeRiiT neu veröffentlichen.
 
 ```
 feat(ideen): lauf 2026-09-18 giesszubehoer

@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Erzeugt DASHBOARD.md aus dem Frontmatter in ideas/, pipeline/ und products/.
+"""Erzeugt DASHBOARD.md und dashboard.html aus dem Frontmatter in ideas/, pipeline/ und products/.
 
 Aufruf: python scripts/dashboard.py
 Keine Abhängigkeiten außer der Standardbibliothek (kein PyYAML nötig).
 """
 from __future__ import annotations
 
+import json
 import re
 import sys
 from datetime import date
@@ -76,21 +77,83 @@ def _coerce(val: str):
         return val
 
 
+def parse_body(text: str) -> dict:
+    """Liest die Pflichtabschnitte des Steckbriefs für dashboard.html (Kurzbeschreibung, SWOT, KPIs, Offene Punkte)."""
+    m = re.match(r"^---\n(.*?)\n---", text, re.S)
+    body = text[m.end():] if m else text
+    secs: dict[str, list[str]] = {}
+    cur = None
+    for line in body.splitlines():
+        if line.startswith("## "):
+            cur = line[3:].strip()
+            secs[cur] = []
+        elif cur is not None:
+            secs[cur].append(line)
+
+    def sec(prefix: str) -> list[str]:
+        for k, v in secs.items():
+            if k.lower().startswith(prefix):
+                return v
+        return []
+
+    def cells(row: str) -> list[str]:
+        return [c.strip() for c in row.strip().strip("|").split("|")]
+
+    def is_sep(row: str) -> bool:
+        return set(row.replace("|", "").strip()) <= set("-: ")
+
+    def items(cell: str) -> list[str]:
+        return [x.strip() for x in re.split(r"<br\s*/?>", cell) if x.strip()]
+
+    kurz = " ".join(l.strip() for l in sec("kurzbeschreibung") if l.strip()).strip()
+
+    swot = {"s": [], "w": [], "o": [], "t": []}
+    rows = [r for r in sec("swot") if r.strip().startswith("|") and not is_sep(r)]
+    data_rows = [r for r in rows if not any(h in r for h in ("Stärken", "Staerken", "Chancen"))]
+    if len(data_rows) >= 1:
+        c = cells(data_rows[0]) + ["", ""]
+        swot["s"], swot["w"] = items(c[0]), items(c[1])
+    if len(data_rows) >= 2:
+        c = cells(data_rows[1]) + ["", ""]
+        swot["o"], swot["t"] = items(c[0]), items(c[1])
+
+    kpis = []
+    for r in sec("kpis"):
+        if r.strip().startswith("|") and not is_sep(r):
+            c = cells(r)
+            if c and c[0] not in ("Kennzahl",):
+                kpis.append([c[0], c[1] if len(c) > 1 else ""])
+
+    offen = [l.strip()[2:].strip() for l in sec("offene punkte") if l.strip().startswith("- ")]
+    return {"kurz": kurz, "swot": swot, "kpis": kpis, "offen": offen}
+
+
 def load_entries() -> list[dict]:
     entries: dict[str, dict] = {}
     # Reihenfolge: ideas zuerst, pipeline/products überschreiben (haben Vorrang).
     for path in sorted((ROOT / "ideas").glob("*.md")):
-        fm = parse_frontmatter(path.read_text(encoding="utf-8"))
+        text = path.read_text(encoding="utf-8")
+        fm = parse_frontmatter(text)
         if fm.get("slug"):
             fm["_pfad"] = str(path.relative_to(ROOT))
+            fm["_body"] = parse_body(text)
             entries[fm["slug"]] = fm
     for base in ("pipeline", "products"):
         for path in sorted((ROOT / base).glob("*/00-idee.md")):
-            fm = parse_frontmatter(path.read_text(encoding="utf-8"))
+            text = path.read_text(encoding="utf-8")
+            fm = parse_frontmatter(text)
             if fm.get("slug"):
                 fm["_pfad"] = str(path.parent.relative_to(ROOT))
+                fm["_body"] = parse_body(text)
                 entries[fm["slug"]] = fm
     return list(entries.values())
+
+
+def load_runs() -> list[dict]:
+    runs = []
+    for r in sorted((ROOT / "ideas" / "_laeufe").glob("*.md")):
+        runs.append(parse_frontmatter(r.read_text(encoding="utf-8")))
+    return runs
 
 
 def fmt(v) -> str:
@@ -194,12 +257,11 @@ def build(entries: list[dict]) -> str:
     lines.append("")
 
     # Läufe
-    runs = sorted((ROOT / "ideas" / "_laeufe").glob("*.md"))
+    runs = load_runs()
     lines += ["## Läufe", ""]
     if runs:
         lines += ["| Lauf | Thema | Ziel | Gefunden | Dedupe | Einschränkungen |", "|---|---|---|---|---|---|"]
-        for r in runs:
-            fm = parse_frontmatter(r.read_text(encoding="utf-8"))
+        for fm in runs:
             lines.append(f"| {fmt(fm.get('lauf'))} | {fmt(fm.get('thema'))} | {fmt(fm.get('ziel_anzahl'))} | {fmt(fm.get('gefunden'))} | {fmt(fm.get('dedupe_verworfen'))} | {fmt(fm.get('quellen_eingeschraenkt'))} |")
     else:
         lines.append("Noch keine Läufe.")
@@ -207,11 +269,62 @@ def build(entries: list[dict]) -> str:
     return "\n".join(lines)
 
 
+def build_html(entries: list[dict], runs: list[dict]) -> str:
+    """Füllt scripts/dashboard_template.html mit den Daten (JSON im <script id="data">)."""
+    def num(v):
+        return v if isinstance(v, (int, float)) and not isinstance(v, bool) else None
+
+    rows = []
+    for e in entries:
+        s = e.get("vk_spanne_eur")
+        vk_min = vk_max = None
+        if isinstance(s, list) and len(s) == 2:
+            vk_min, vk_max = num(s[0]), num(s[1])
+        scores = e.get("scores") if isinstance(e.get("scores"), dict) else {}
+        body = e.get("_body", {})
+        rows.append({
+            "slug": e.get("slug"),
+            "titel": e.get("titel") or e.get("slug"),
+            "status": e.get("status"),
+            "status_datum": e.get("status_datum"),
+            "quelle": e.get("quelle"),
+            "lauf": e.get("lauf"),
+            "kategorie": e.get("kategorie"),
+            "vk_min": vk_min,
+            "vk_max": vk_max,
+            "score": e.get("score") if e.get("score") in ("A", "B", "C", "D") else None,
+            "score_gesamt": num(e.get("score_gesamt")),
+            "scores": {k: num(scores.get(k)) for k in ("marge", "markt", "usp", "risiko")},
+            "ko_verstoss": [str(x) for x in e.get("ko_verstoss") or [] if x is not None],
+            "pipeline_status_miro": e.get("pipeline_status_miro"),
+            "gate_1": e.get("gate_1"),
+            "gate_2": e.get("gate_2"),
+            "gate_3": e.get("gate_3"),
+            "ng_nummer": e.get("ng_nummer"),
+            "stop_grund": e.get("stop_grund"),
+            "pfad": e.get("_pfad"),
+            "kurz": body.get("kurz", ""),
+            "swot": body.get("swot", {}),
+            "kpis": body.get("kpis", []),
+            "offen": body.get("offen", []),
+        })
+    run_rows = [{
+        "lauf": r.get("lauf"), "thema": r.get("thema"), "ziel_anzahl": r.get("ziel_anzahl"),
+        "gefunden": r.get("gefunden"), "dedupe_verworfen": r.get("dedupe_verworfen"),
+        "quellen_eingeschraenkt": r.get("quellen_eingeschraenkt"),
+    } for r in runs]
+    data = {"stand": date.today().isoformat(), "next_ng": next_ng(entries), "entries": rows, "runs": run_rows}
+    payload = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
+    template = (ROOT / "scripts" / "dashboard_template.html").read_text(encoding="utf-8")
+    return template.replace("__DATA__", payload)
+
+
 def main() -> int:
     entries = load_entries()
-    out = ROOT / "DASHBOARD.md"
-    out.write_text(build(entries), encoding="utf-8")
-    print(f"DASHBOARD.md geschrieben: {len(entries)} Einträge")
+    runs = load_runs()
+    (ROOT / "DASHBOARD.md").write_text(build(entries), encoding="utf-8")
+    (ROOT / "dashboard.html").write_text(build_html(entries, runs), encoding="utf-8")
+    print(f"DASHBOARD.md und dashboard.html geschrieben: {len(entries)} Einträge")
     return 0
 
 

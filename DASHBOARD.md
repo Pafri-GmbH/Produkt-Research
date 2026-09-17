@@ -1,6 +1,6 @@
 # Dashboard nicegarden Produktrecherche
 
-Stand: 2026-09-16 · generiert von `scripts/dashboard.py` · 41 Einträge · nächste freie NG-Nummer: **NG0003**
+Stand: 2026-09-17 · generiert von `scripts/dashboard.py` · 41 Einträge · nächste freie NG-Nummer: **NG0003**
 
 ## Status-Übersicht
 
