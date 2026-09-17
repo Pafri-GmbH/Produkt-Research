@@ -62,3 +62,6 @@ Kategorie laut Miro: **Pflege & Werkzeug**. Markenfit-Begründung: [fehlt] (Anha
 
 ## Offene Punkte
 - Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche).
+
+## Ergänzung Lauf 2026-09-16-giesszubehoer-innenraum
+Dedupe-Treffer (nicht neu angelegt): Povanjer Umtopfschale wasserdicht (B0C5VR5PRL), Ralleyfun PE-Matte 50,8 x 50,8 cm (B0CYQCYR55), Zerodis Arbeitsmatte (B08MXWJMR4), Secwell 25-tlg Werkzeugset inkl. Matte (B09BM4KM92) (Snippets 2026-09-16). Bundle-Partner: neues `zimmerpflanzen-werkzeug-set`.

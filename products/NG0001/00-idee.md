@@ -37,3 +37,6 @@ Edelstahl-Gießkanne 1–1,5 l für Zimmerpflanzen, rostfrei, schlankes Design, 
 
 ## Offene Punkte
 - Stufen-Dateien 01–03 liegen nur in Drive, nicht im Repo. Bei Bedarf nachträglich extrahieren.
+
+## Ergänzung Lauf 2026-09-16-giesszubehoer-innenraum
+Varianten-Idee **Zimmergießkanne mit langer, dünner Tülle 1–1,2 l** (Dedupe: gleicher Produkttyp wie NG0001, nicht neu angelegt). Wettbewerb lt. Snippets 2026-09-16: Cyrank 1,2 l transparent mit langem Auslauf (B09BR4HN1Y), Haws Metall 1 l Geschenkbox (B003NEBSWE), DOITOOL Edelstahl Bonsai-Gießkanne 1 l (B08ZD63M1Z), 2-l-Kanne mit Edelstahlauslauf und abnehmbarer Brause (B0GSGG7BNJ), eBay Edelstahl 1000 ml 30,95 €, Zack FLOWAS Edelstahl. Amazon-Bestsellerliste Gießkannen node 120555031 zeigt Edelstahl-Langtüllen-Modelle. Alibaba-Snippet: Edelstahl-Zimmergießkanne 1000 ml mit Holzgriff, MOQ 100 Sets, Metall-Kannen ab ~4 $. Empfehlung: als Line-Extension von NG0001 prüfen, nicht als neue Idee.

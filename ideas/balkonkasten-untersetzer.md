@@ -62,3 +62,6 @@ Kategorie laut Miro: **Gefäße & Deko**. Markenfit-Begründung: [fehlt] (Anhalt
 
 ## Offene Punkte
 - Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche).
+
+## Ergänzung Lauf 2026-09-16-giesszubehoer-innenraum
+Abgrenzung: neues `pflanzenuntersetzer-edelstahl-set` (rund, innen) und `fensterbank-pflanzentablett-edelstahl` (rechteckig, innen) im Lauf angelegt; dieser Eintrag bleibt der Außen-Untersetzer für Balkonkästen.

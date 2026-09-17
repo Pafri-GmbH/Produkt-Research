@@ -62,3 +62,6 @@ Kategorie laut Miro: **Gefäße & Deko**. Markenfit-Begründung: [fehlt] (Anhalt
 
 ## Offene Punkte
 - Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche).
+
+## Ergänzung Lauf 2026-09-16-giesszubehoer-innenraum
+Dedupe-Treffer Hydrokultur-/Ableger-Gläser (nicht neu angelegt): Pilz-Glas-Pflanzgefäß 5er Anzuchtstationen (B0CQKDFV9V), NLDGR Pilz-Hydrokultur-Vase (B0BRKYG4L4). Hydrokultur im Glas als Ratgeber-Trend (hydroponik-ratgeber.de) (Snippets 2026-09-16).

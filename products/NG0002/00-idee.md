@@ -55,3 +55,6 @@ Miro-Lane A, Pipeline-Status „Launch aktiv" (April 2026). Voranalyse (18.12.20
 
 ## Offene Punkte
 - Stufen-Dateien 01–03 nicht im Repo-Format; Voranalyse und Tiefenanalyse als Textfassung in `vorlagen/`.
+
+## Ergänzung Lauf 2026-09-16-giesszubehoer-innenraum
+Varianten-Hinweise (Dedupe, nicht neu angelegt): Glas-Bewässerungsvögel (planthetsimpel B010TRZU0S), Scheurich Bördy 4er 220 ml (B00ZC4807E), Netrox 2er Glas-Kugeln als Bestseller in Kategorie „Watering Globes“ node 4288560031, Netrox Tonkegel als Bestseller Nr. 5 „Wasserspender“ (Snippets 2026-09-16). Neue verwandte Idee im Lauf: `bewaesserungskegel-ton-flaschenadapter` (Lane B) als Bundle-Partner.

@@ -62,3 +62,6 @@ Kategorie laut Miro: **Gefäße & Deko**. Markenfit-Begründung: [fehlt] (Anhalt
 
 ## Offene Punkte
 - Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche).
+
+## Ergänzung Lauf 2026-09-16-giesszubehoer-innenraum
+Verwandte Idee im Lauf: `selbstbewaessernder-uebertopf` (Lane C, Lechuza-Markt). Bei Voranalyse gemeinsam betrachten.

@@ -62,3 +62,6 @@ Kategorie laut Miro: **Pflege & Werkzeug**. Markenfit-Begründung: [fehlt] (Anha
 
 ## Offene Punkte
 - Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche).
+
+## Ergänzung Lauf 2026-09-16-giesszubehoer-innenraum
+Dedupe-Treffer (nicht neu angelegt): XLUX Bodenfeuchtesensor ohne Batterie (B08BL1NTGL), Netrox Bodenfeuchtigkeitsmesser (B0CM42QQRK), Pflanzwerk Premium (B01NH5QMFB), LaGreen (B0G71G14L5), 15er Set Gießanzeiger (B0CWWC4H5Y), Asfrode 3-in-1 (B0CWH663NL). Amazon „Am häufigsten gewünscht“ Pflanzen- & Bodenüberwachung node 27318410031 (Snippets 2026-09-16). Netrox ist auch hier aktiv.

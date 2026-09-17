@@ -62,3 +62,6 @@ Kategorie laut Miro: **Pflege & Werkzeug**. Markenfit-Begründung: [fehlt] (Anha
 
 ## Offene Punkte
 - Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche).
+
+## Ergänzung Lauf 2026-09-16-giesszubehoer-innenraum
+Abgrenzung: neues `zimmerpflanzen-werkzeug-set` (Indoor-Mini-Set 4–6 Teile Edelstahl/Holz) im Lauf angelegt; dieses Set bleibt das 3-teilige Gartenwerkzeug für draußen. Bei Voranalyse gemeinsam betrachten.

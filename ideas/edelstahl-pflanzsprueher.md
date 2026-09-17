@@ -62,3 +62,6 @@ Kategorie laut Miro: **Bewässerung**. Markenfit-Begründung: [fehlt] (Anhaltspu
 
 ## Offene Punkte
 - Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche).
+
+## Ergänzung Lauf 2026-09-16-giesszubehoer-innenraum
+Dedupe-Treffer Messing-/Glas-Sprüher (nicht neu angelegt): Haws Messing-Pflanzensprüher 0,3 l (B00COUN9MA), Haws Sets Gießkanne + Sprüher (B07K342D1F, B00PYAH1D0), Lianshi Messing-Sprüher (B07DB742RB), Esschert Design Glas-Zerstäuber (B0082BOMBM). Amazon-Kategorie „Pflanzensprüher Edelstahl“ vorhanden. Haws ist der Premium-Anker (Snippets 2026-09-16). Kandidat für das neue `pflanzenpflege-starter-set`.

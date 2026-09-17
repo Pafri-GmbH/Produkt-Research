@@ -62,3 +62,6 @@ Kategorie laut Miro: **Anzucht & Ranken**. Markenfit-Begründung: [fehlt] (Anhal
 
 ## Offene Punkte
 - Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche).
+
+## Ergänzung Lauf 2026-09-16-giesszubehoer-innenraum
+Dedupe-Treffer (nicht neu angelegt): Risegun 100 Stück Edelstahl 6,5 cm lasergravierbar (B0CPJG57BQ), Mengmen 50 Stück Edelstahl 27 cm (B0BJCQDG89), STARTOSTAR 30er verzinkt (B07V4297ZC), Tiny Garden Schiefer mit Edelstahlstab 10er (B0BSFNW76Y), Pflanzenetiketten Edelstahl (B08X4ST8PT) (Snippets 2026-09-16).

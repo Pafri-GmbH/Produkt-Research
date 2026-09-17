@@ -62,3 +62,6 @@ Kategorie laut Miro: **Gefäße & Deko**. Markenfit-Begründung: [fehlt] (Anhalt
 
 ## Offene Punkte
 - Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche).
+
+## Ergänzung Lauf 2026-09-16-giesszubehoer-innenraum
+Dedupe-Treffer (nicht neu angelegt): Stimo 30–40 cm Metall 100 kg (B0GXZ8L4RP), Relaxdays 2er Metall schwarz mit Bremse (B08576TN1L), Spetebo Ø 35 cm (B095CR5G1S), HRB weiß 80 kg (B06XPCBZHM), QPY Ø 60 cm 200 kg (B08YYR469P) (Snippets 2026-09-16).
