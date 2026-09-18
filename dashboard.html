@@ -1,0 +1,585 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>nicegarden Produktradar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f3f5f0; --surface:#fcfcfb; --surface-2:#ecefe8; --surface-3:#e2e6dd;
+  --ink:#171b18; --ink-2:#545b56; --muted:#858b86; --line:#dfe3db; --line-2:#c6ccc4;
+  --accent:#1f6b47; --accent-ink:#ffffff; --accent-soft:#e1eee6; --accent-line:#a9cdb9;
+  --steel:#6e7781;
+  --cat-1:#2a78d6; --cat-2:#eb6834; --cat-3:#1baf7a; --cat-4:#eda100;
+  --good:#0ca30c; --good-text:#006300; --warn:#fab219; --warn-text:#7a4f00; --warn-soft:#fff3d6;
+  --crit:#d03b3b; --crit-text:#8f1f1f; --crit-soft:#fbe3e3;
+  --shadow:0 1px 2px rgba(23,27,24,.06),0 8px 24px rgba(23,27,24,.08);
+  --sans:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0f120f; --surface:#191c19; --surface-2:#222623; --surface-3:#2c312d;
+    --ink:#f2f4ef; --ink-2:#c0c5bd; --muted:#8a9089; --line:#2b302c; --line-2:#3c423d;
+    --accent:#52b785; --accent-ink:#0f120f; --accent-soft:#1a2e23; --accent-line:#2f5a44;
+    --steel:#9aa3ac;
+    --cat-1:#3987e5; --cat-2:#d95926; --cat-3:#199e70; --cat-4:#c98500;
+    --good:#0ca30c; --good-text:#4fcf4f; --warn:#fab219; --warn-text:#f5c85a; --warn-soft:#2e2712;
+    --crit:#d03b3b; --crit-text:#ef7d7d; --crit-soft:#3a1c1c;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0f120f; --surface:#191c19; --surface-2:#222623; --surface-3:#2c312d;
+  --ink:#f2f4ef; --ink-2:#c0c5bd; --muted:#8a9089; --line:#2b302c; --line-2:#3c423d;
+  --accent:#52b785; --accent-ink:#0f120f; --accent-soft:#1a2e23; --accent-line:#2f5a44;
+  --steel:#9aa3ac;
+  --cat-1:#3987e5; --cat-2:#d95926; --cat-3:#199e70; --cat-4:#c98500;
+  --good:#0ca30c; --good-text:#4fcf4f; --warn:#fab219; --warn-text:#f5c85a; --warn-soft:#2e2712;
+  --crit:#d03b3b; --crit-text:#ef7d7d; --crit-soft:#3a1c1c;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1320px;margin:0 auto;padding-block:20px 48px;padding-inline:clamp(16px,3vw,32px);display:flex;flex-direction:column;gap:22px}
+h1,h2,h3{margin:0;text-wrap:balance;font-weight:700}
+h1{font-size:clamp(22px,3vw,30px);letter-spacing:-.01em}
+h2{font-size:16px}
+h3{font-size:13px;color:var(--ink-2)}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600}
+.mono{font-family:var(--mono);font-size:12px}
+.muted{color:var(--muted)}
+.tab{font-variant-numeric:tabular-nums}
+code{font-family:var(--mono);font-size:12px;background:var(--surface-2);padding:1px 5px;border-radius:4px}
+
+/* Header */
+.head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.head .meta{display:flex;flex-wrap:wrap;gap:6px 18px;color:var(--ink-2);font-size:13px}
+.head .meta b{color:var(--ink);font-weight:700}
+.head .ng{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
+.head .ng .val{font-family:var(--mono);font-size:22px;font-weight:500;color:var(--accent)}
+
+/* Panels */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px 20px}
+.panel-h{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 16px;margin-bottom:14px}
+.panel-h p{margin:0;color:var(--ink-2);font-size:13px}
+
+/* Process strip */
+.stages{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.stage{position:relative;background:var(--surface-2);border-radius:8px;padding:12px 12px 10px;border:1px solid transparent;cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:2px;min-height:96px;transition:border-color .15s}
+.stage:hover{border-color:var(--line-2)}
+.stage.active{border-color:var(--accent);background:var(--accent-soft)}
+.stage .n{font-size:30px;font-weight:800;line-height:1;letter-spacing:-.02em}
+.stage .lbl{font-weight:700;font-size:13px;margin-top:6px}
+.stage .who{font-size:11.5px;color:var(--ink-2)}
+.stage .gate{position:absolute;top:8px;right:8px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line-2);border-radius:999px;padding:2px 6px;background:var(--surface)}
+.stage.attn .n{color:var(--warn-text)}
+.stage.attn{background:var(--warn-soft)}
+.stage.done .n{color:var(--good-text)}
+@media (max-width:900px){.stages{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:480px){.stages{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Next steps */
+.next{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:800px){.next{grid-template-columns:1fr}}
+.next ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.next li{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;background:var(--surface-2);cursor:pointer}
+.next li:hover{background:var(--surface-3)}
+.next li.empty{display:block;cursor:default;background:transparent}
+.next li.empty:hover{background:transparent}
+.next li .t{flex:1;min-width:0}
+.next li .t b{display:block;font-weight:700}
+.next li .t span{font-size:12px;color:var(--ink-2)}
+.empty{color:var(--ink-2);font-size:13px;margin:0;padding:10px 12px;border:1px dashed var(--line-2);border-radius:6px}
+
+/* Pills & chips */
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:999px;border:1px solid var(--line-2);color:var(--ink-2);white-space:nowrap;line-height:1.5}
+.pill i{font-style:normal;font-size:10px;line-height:1}
+.pill.wait{background:var(--warn-soft);border-color:transparent;color:var(--warn-text)}
+.pill.go{background:var(--accent-soft);border-color:transparent;color:var(--accent)}
+.pill.ok{background:var(--accent-soft);border-color:transparent;color:var(--good-text)}
+.pill.stop{background:var(--crit-soft);border-color:transparent;color:var(--crit-text)}
+.pill.watch{background:var(--surface-2);border-color:transparent;color:var(--ink-2)}
+.lane{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:5px;font-weight:800;font-size:12px;border:1.5px solid var(--ink-2);color:var(--ink);font-family:var(--mono)}
+.lane.A{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.lane.B{border-color:var(--ink)}
+.lane.C{border-color:var(--line-2);color:var(--ink-2)}
+.lane.D{border-style:dashed;border-color:var(--line-2);color:var(--muted)}
+.lane.none{border-color:transparent;color:var(--muted);background:var(--surface-2)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;flex:none;vertical-align:-1px;margin-right:6px}
+.cat-1{background:var(--cat-1)}.cat-2{background:var(--cat-2)}.cat-3{background:var(--cat-3)}.cat-4{background:var(--cat-4)}.cat-0{background:var(--line-2)}
+
+/* Charts */
+.charts{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:16px}
+@media (max-width:900px){.charts{grid-template-columns:1fr}}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--ink-2);margin-top:10px}
+.legend span{display:inline-flex;align-items:center}
+.cols{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:14px;align-items:end;height:190px;padding-top:18px;border-bottom:1px solid var(--line-2)}
+.col{display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;gap:0;position:relative}
+.col .stack{width:100%;max-width:56px;display:flex;flex-direction:column-reverse;gap:2px;justify-content:flex-start;height:100%}
+.col .seg{width:100%;border-radius:0;cursor:default;min-height:2px}
+.col .seg:last-child{border-radius:4px 4px 0 0}
+.col .cap{position:absolute;top:-18px;font-size:12px;font-weight:700;color:var(--ink)}
+.col-x{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:14px;margin-top:6px}
+.col-x div{text-align:center;font-size:12px;color:var(--ink-2)}
+.col-x div b{display:block;color:var(--ink)}
+.range{display:flex;flex-direction:column;gap:3px;margin-top:6px}
+.range .axis{display:grid;grid-template-columns:190px 1fr;align-items:center;margin-bottom:4px}
+.range .axis .ticks{position:relative;height:16px}
+.range .axis .ticks span{position:absolute;top:0;transform:translateX(-50%);font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.range .row{display:grid;grid-template-columns:190px 1fr;align-items:center;gap:8px;height:18px;cursor:pointer;border-radius:4px}
+.range .row:hover{background:var(--surface-2)}
+.range .row .lbl{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-left:4px;display:flex;align-items:center;gap:6px}
+.range .track{position:relative;height:100%;background-image:linear-gradient(to right,var(--line) 1px,transparent 1px);background-size:var(--tick,10%) 100%}
+.range .bar{position:absolute;top:4px;height:10px;border-radius:4px;min-width:6px}
+.range .bar.none{background:var(--line-2)}
+.range .val{position:absolute;top:1px;font-size:11px;color:var(--ink-2);white-space:nowrap;font-variant-numeric:tabular-nums;padding-left:6px}
+.range .val.left{transform:translateX(-100%);padding-left:0;padding-right:6px}
+@media (max-width:600px){.range .axis,.range .row{grid-template-columns:110px 1fr}}
+
+/* Filter + table */
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.filters input,.filters select{background:var(--surface);border:1px solid var(--line-2);border-radius:6px;padding:6px 10px;font-size:13px;min-height:34px}
+.filters input{flex:1 1 200px;min-width:160px}
+.filters select{flex:0 1 auto}
+.filters button{background:transparent;border:1px solid var(--line-2);border-radius:6px;padding:6px 10px;cursor:pointer;color:var(--ink-2);font-size:13px}
+.filters button:hover{background:var(--surface-2)}
+.filters .count{margin-left:auto;font-size:12px;color:var(--muted)}
+.tbl-wrap{overflow-x:auto;margin-inline:-20px;padding-inline:20px}
+table{border-collapse:collapse;width:100%;min-width:760px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;cursor:pointer;user-select:none;white-space:nowrap;position:sticky;top:0;background:var(--surface)}
+th.sorted{color:var(--ink)}
+th .arr{font-size:9px;margin-left:3px}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:var(--surface-2)}
+tbody tr.sel{background:var(--accent-soft)}
+td .title{font-weight:600}
+td .slug{font-family:var(--mono);font-size:11px;color:var(--muted)}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+td .step{font-size:12px;color:var(--ink-2)}
+td .step code{font-size:11px;white-space:nowrap}
+
+/* Products + runs */
+.grid2{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:16px}
+@media (max-width:900px){.grid2{grid-template-columns:1fr}}
+.prods{display:flex;flex-direction:column;gap:8px}
+.prod{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;cursor:pointer}
+.prod:hover{background:var(--surface-2)}
+.prod .ng{font-family:var(--mono);font-weight:500;color:var(--accent);font-size:13px}
+.prod .t{flex:1;min-width:0}
+.prod .t b{display:block}
+.prod .t span{font-size:12px;color:var(--ink-2)}
+table.runs{min-width:0}
+table.runs th{cursor:default}
+
+/* Detail drawer */
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100%);background:var(--surface);border-left:1px solid var(--line);box-shadow:var(--shadow);transform:translateX(105%);transition:transform .2s ease;z-index:20;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
+.drawer.open{transform:none}
+@media (prefers-reduced-motion: reduce){.drawer{transition:none}}
+.drawer-h{display:flex;align-items:flex-start;gap:12px;padding:16px 20px 12px;border-bottom:1px solid var(--line)}
+.drawer-h .t{flex:1;min-width:0}
+.drawer-h h2{font-size:18px}
+.drawer-h .close{background:transparent;border:1px solid var(--line-2);border-radius:6px;width:32px;height:32px;cursor:pointer;flex:none;font-size:16px;line-height:1}
+.drawer-b{overflow:auto;padding:16px 20px 32px;display:flex;flex-direction:column;gap:18px}
+.drawer-b section h3{margin-bottom:6px;text-transform:uppercase;font-size:11px;letter-spacing:.06em;color:var(--muted)}
+.drawer-b p{margin:0}
+.kv{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 16px;font-size:13px}
+.kv div{display:flex;flex-direction:column;gap:1px}
+.kv .k{font-size:11px;color:var(--muted)}
+.kv .v{font-weight:600;font-variant-numeric:tabular-nums}
+.gates{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.gate-box{border:1px solid var(--line);border-radius:6px;padding:8px 10px;font-size:12px}
+.gate-box b{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.swot{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.swot div{background:var(--surface-2);border-radius:6px;padding:8px 10px;font-size:12.5px}
+.swot b{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-2);margin-bottom:4px}
+.swot ul{margin:0;padding-left:16px}
+.cmd{display:flex;align-items:center;gap:10px;background:var(--accent-soft);border:1px solid var(--accent-line);border-radius:6px;padding:10px 12px}
+.cmd code{background:transparent;color:var(--accent);font-weight:500;font-size:13px;padding:0}
+.cmd span{font-size:12px;color:var(--ink-2)}
+.fehlt{color:var(--muted);font-style:italic}
+.kpi{width:100%;min-width:0;font-size:12.5px}
+.kpi th{position:static;cursor:default}
+.kpi td{padding:5px 8px}
+.stop{background:var(--crit-soft);border-radius:6px;padding:8px 10px;font-size:12.5px;color:var(--crit-text)}
+.watchbox{background:var(--surface-2);border-radius:6px;padding:8px 10px;font-size:12.5px}
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.25);z-index:19}
+.scrim[hidden]{display:none}
+
+/* tooltip */
+.tip{position:fixed;z-index:30;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12px;padding:6px 9px;border-radius:6px;max-width:260px;box-shadow:var(--shadow)}
+.tip b{display:block}
+.foot{color:var(--muted);font-size:12px;display:flex;flex-wrap:wrap;gap:6px 18px;padding-top:8px;border-top:1px solid var(--line)}
+</style>
+
+<div class="wrap">
+  <header class="head">
+    <div>
+      <div class="eyebrow">Pafri GmbH · nicegarden · Amazon.de FBA</div>
+      <h1>nicegarden Produktradar</h1>
+      <div class="meta" id="meta"></div>
+    </div>
+    <div class="ng">
+      <span class="eyebrow">Nächste freie NG-Nummer</span>
+      <span class="val" id="nextng"></span>
+    </div>
+  </header>
+
+  <section class="panel">
+    <div class="panel-h">
+      <h2>Prozess Idee → Voranalyse → Tiefenanalyse → Briefing</h2>
+      <p>Klick auf eine Stufe filtert die Liste. Zahlen = Ideen, die aktuell in dieser Stufe stehen.</p>
+    </div>
+    <div class="stages" id="stages"></div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-h">
+      <h2>Jetzt dran</h2>
+      <p>Gates entscheidet nur Pafri. Skills starten nie eigenmächtig die nächste Stufe.</p>
+    </div>
+    <div class="next">
+      <div>
+        <h3>Entscheidung Pafri</h3>
+        <ul id="next-pafri"></ul>
+      </div>
+      <div>
+        <h3>Bereit für den nächsten Skill</h3>
+        <ul id="next-skill"></ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="charts">
+    <section class="panel">
+      <div class="panel-h">
+        <h2>Ideen je Lane</h2>
+        <p>Stufe 0 nach Kategorie</p>
+      </div>
+      <div id="lanechart"></div>
+    </section>
+    <section class="panel">
+      <div class="panel-h">
+        <h2>VK-Korridor Amazon.de</h2>
+        <p>Zielpreis in € (Schätzung, Miro-Longlist) · folgt den Filtern unten</p>
+      </div>
+      <div id="rangechart"></div>
+    </section>
+  </div>
+
+  <section class="panel" id="list">
+    <div class="panel-h">
+      <h2>Ideenliste</h2>
+      <p>Alle Einträge aus <code>ideas/</code>, <code>pipeline/</code> und <code>products/</code>. Zeile anklicken für Steckbrief.</p>
+    </div>
+    <div class="filters">
+      <input id="q" type="search" placeholder="Suchen: Titel, Slug, Kategorie …" autocomplete="off">
+      <select id="f-lane"><option value="">Lane: alle</option></select>
+      <select id="f-cat"><option value="">Kategorie: alle</option></select>
+      <select id="f-status"><option value="">Status: alle</option></select>
+      <button id="reset" type="button">Zurücksetzen</button>
+      <span class="count" id="count"></span>
+    </div>
+    <div class="tbl-wrap">
+      <table id="tbl">
+        <thead><tr>
+          <th data-k="lane">Lane</th>
+          <th data-k="titel">Idee</th>
+          <th data-k="kategorie">Kategorie</th>
+          <th data-k="vkmin">VK-Spanne</th>
+          <th data-k="status">Status</th>
+          <th data-k="status_datum">Seit</th>
+          <th>Nächster Schritt</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="grid2">
+    <section class="panel">
+      <div class="panel-h"><h2>Produkte</h2><p>Gate 3 Go, NG-Nummer vergeben</p></div>
+      <div class="prods" id="prods"></div>
+    </section>
+    <section class="panel">
+      <div class="panel-h"><h2>Recherche-Läufe</h2><p><code>ideas/_laeufe/</code></p></div>
+      <div class="tbl-wrap"><table class="runs" id="runs"></table></div>
+    </section>
+  </div>
+
+  <footer class="foot">
+    <span>Generiert von <code>scripts/dashboard.py</code> aus dem Frontmatter, gleicher Stand wie <code>DASHBOARD.md</code>.</span>
+    <span>Nach jedem Statuswechsel: <code>python scripts/dashboard.py</code> ausführen und dashboard.html neu veröffentlichen.</span>
+    <span>Alle Preise und Absätze sind Schätzungen ohne Helium 10.</span>
+  </footer>
+</div>
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer-h">
+    <div class="t" id="d-head"></div>
+    <button class="close" id="d-close" type="button" aria-label="Schließen">×</button>
+  </div>
+  <div class="drawer-b" id="d-body"></div>
+</aside>
+
+<script id="data" type="application/json">{"stand": "2026-09-17", "next_ng": "NG0003", "entries": [{"slug": "anzucht-set", "titel": "Anzucht-Set", "status": "importiert", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Anzucht & Ranken", "vk_min": 12, "vk_max": 24, "score": "A", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": null, "pfad": "ideas/anzucht-set.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne. Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["BSR Top 300 in Saison", "klare Zielgruppe"], "w": ["starke Saisonalitaet", "Lagerrisiko off-season"], "o": ["Gartencenter offline", "Social Feb bis Mai"], "t": ["Billigsets unter 8 EUR", "IKEA und OBI offline stark"]}, "kpis": [["VK-Korridor", "12–24 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "balkonkasten-untersetzer", "titel": "Balkonkasten-Untersetzer", "status": "importiert", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Gefäße & Deko", "vk_min": 12, "vk_max": 22, "score": "C", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": null, "pfad": "ideas/balkonkasten-untersetzer.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne. Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["klarer Balkon-Einsatz", "Edelstahl differenziert"], "w": ["spitze Nische", "Plastik extrem guenstig"], "o": ["Bundle mit Bewaesserungskugeln"], "t": ["Volumen zu gering allein", "kaum SEO-Traffic"]}, "kpis": [["VK-Korridor", "12–22 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "bodenfeuchtigkeitsmesser", "titel": "Bodenfeuchtigkeitsmesser", "status": "importiert", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Pflege & Werkzeug", "vk_min": 7, "vk_max": 14, "score": "B", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": null, "pfad": "ideas/bodenfeuchtigkeitsmesser.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne. Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["hohes Suchvolumen", "kein Elektroprodukt"], "w": ["Chinaseller unter 8 EUR", "Differenzierung schwierig"], "o": ["Edelstahl als Nische", "Bundle mit Giesskanne"], "t": ["Anbieter mit 500 plus Reviews", "Preisspirale"]}, "kpis": [["VK-Korridor", "7–14 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "duengestaebchen-premium", "titel": "Düngestäbchen Premium", "status": "importiert", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Pflege & Werkzeug", "vk_min": 8, "vk_max": 15, "score": "B", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": null, "pfad": "ideas/duengestaebchen-premium.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne. Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["Wiederkauf garantiert", "Bio als USP"], "w": ["Compo und Substral etabliert", "Duengemittelrecht"], "o": ["Abo-Modell", "Starter-Kit mit Giesskanne"], "t": ["Preiskampf Standard", "regulatorische Huerden"]}, "kpis": [["VK-Korridor", "8–15 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "edelstahl-pflanzsprueher", "titel": "Edelstahl-Pflanzsprüher", "status": "importiert", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Bewässerung", "vk_min": 14, "vk_max": 22, "score": "A", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Voranalyse fertig", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": null, "pfad": "ideas/edelstahl-pflanzsprueher.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne. Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["Synergie mit Giesskanne", "ganzjaehrig"], "w": ["viele Chinaseller unter 10 EUR", "Spruehkopf-QC kritisch"], "o": ["Duo-Bundle mit Giesskanne", "TikTok plant care"], "t": ["Preisspirale unter 15 EUR", "leicht kopierbar"]}, "kpis": [["VK-Korridor", "14–22 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "eiskuebel-edelstahl", "titel": "Eiskübel Edelstahl", "status": "beobachten", "status_datum": "2026-09-16", "quelle": "drive", "lauf": "2026-09-16-miro-import", "kategorie": "Gefäße & Deko", "vk_min": null, "vk_max": null, "score": null, "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": null, "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": "Nicht auf der Miro-Longlist (April 2026). Tiefenanalyse vom 21.11.2025 liegt in Drive, kein Gate dokumentiert. Markenfit (Garten/Pflanzenpflege) offen; Pafri entscheidet, ob wieder aufnehmen oder ablehnen.", "pfad": "ideas/eiskuebel-edelstahl.md", "kurz": "[fehlt] – Idee stammt aus dem Drive-Ordner „Nicegarden/Eiskübel\" (Bearbeiter Paul Schöngarth), nicht aus Miro. Hier angelegt, damit Dedupe vollständig ist.", "swot": {"s": ["[fehlt]"], "w": ["[fehlt]"], "o": ["[fehlt]"], "t": ["[fehlt]"]}, "kpis": [["VK-Korridor", "[fehlt]"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Bei Wiederaufnahme: Tiefenanalyse aus Drive als `02-deep-dive.md` übernehmen, Voranalyse nachziehen."]}, {"slug": "erntekorb-edelstahl", "titel": "Erntekorb Edelstahl", "status": "importiert", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Pflege & Werkzeug", "vk_min": 22, "vk_max": 40, "score": "C", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": null, "pfad": "ideas/erntekorb-edelstahl.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne (in Miro als NEU markiert). Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["Selbstversorger-Trend", "Premium-Optik Draht und Holz"], "w": ["Nische mit begrenztem Volumen", "hoeherer EK"], "o": ["Geschenk fuer Gaertner", "Gartencenter offline"], "t": ["kleiner Markt", "saisonabhaengig"]}, "kpis": [["VK-Korridor", "22–40 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "garten-schuerze", "titel": "Garten-Schürze", "status": "importiert", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Pflege & Werkzeug", "vk_min": 18, "vk_max": 35, "score": "C", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": null, "pfad": "ideas/garten-schuerze.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne. Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["Lifestyle plus Funktion", "Geschenkprodukt"], "w": ["Designrisiko", "Groessen erhoehen Retouren"], "o": ["Bundle als Gaertner-Geschenkset"], "t": ["Handmade-Konkurrenz", "Markenfit fraglich"]}, "kpis": [["VK-Korridor", "18–35 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "gartenhandschuhe-premium", "titel": "Gartenhandschuhe Premium", "status": "abgelehnt", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Pflege & Werkzeug", "vk_min": 12, "vk_max": 22, "score": "D", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": "Miro-Lane D Ablehnen (April 2026): Retourenquote durch Groesse, keine Differenzierung, kein Brand Building", "pfad": "ideas/gartenhandschuhe-premium.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne. Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["hohe Nachfrage"], "w": ["Retourenquote durch Groesse", "keine Differenzierung", "kein Brand Building"], "o": ["nur als Bundle-Beigabe"], "t": ["Race to bottom", "Groessenreklamationen druecken Bewertungen"]}, "kpis": [["VK-Korridor", "12–22 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "giessstab-edelstahl", "titel": "Gießstab Edelstahl", "status": "importiert", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Bewässerung", "vk_min": 16, "vk_max": 28, "score": "C", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": null, "pfad": "ideas/giessstab-edelstahl.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne (in Miro als NEU markiert). Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["on-brand Bewaesserung", "fuer Haengepflanzen"], "w": ["spitze Nische", "erklaerungsbeduerftig"], "o": ["Bundle mit Giesskanne", "Premium-Edelstahl-Linie"], "t": ["geringe Suchvolumina", "Giesskanne als Ersatz"]}, "kpis": [["VK-Korridor", "16–28 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "grillplatte-edelstahl", "titel": "Edelstahl-Grillplatte (Plancha)", "status": "beobachten", "status_datum": "2026-09-16", "quelle": "drive", "lauf": "2026-09-16-miro-import", "kategorie": "Gefäße & Deko", "vk_min": null, "vk_max": null, "score": null, "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": null, "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": "Nicht auf der Miro-Longlist (April 2026). Tiefenanalyse vom 27.11.2025 liegt in Drive, kein Gate dokumentiert. Markenfit (Garten/Pflanzenpflege) offen; Pafri entscheidet, ob wieder aufnehmen oder ablehnen.", "pfad": "ideas/grillplatte-edelstahl.md", "kurz": "[fehlt] – Idee stammt aus dem Drive-Ordner „Nicegarden/Edelstahl Grillplatte\" (Bearbeiter Paul Schöngarth), nicht aus Miro. Hier angelegt, damit Dedupe vollständig ist.", "swot": {"s": ["[fehlt]"], "w": ["[fehlt]"], "o": ["[fehlt]"], "t": ["[fehlt]"]}, "kpis": [["VK-Korridor", "[fehlt]"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Bei Wiederaufnahme: Tiefenanalyse aus Drive als `02-deep-dive.md` übernehmen, Voranalyse nachziehen."]}, {"slug": "hochbeet-liner", "titel": "Hochbeet-Liner", "status": "importiert", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Anzucht & Ranken", "vk_min": 10, "vk_max": 20, "score": "B", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": null, "pfad": "ideas/hochbeet-liner.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne. Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["Hochbeet-Trend 2026", "guenstige Herstellung"], "w": ["kein Markenbezug", "Kauf oft beim Hersteller"], "o": ["Cross-Sell Anzucht-Set", "Komplettloesung-Bundle"], "t": ["kaum Differenzierung", "Hersteller-Bundles dominant"]}, "kpis": [["VK-Korridor", "10–20 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "insektenhotel-premium", "titel": "Insektenhotel Premium", "status": "importiert", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Gefäße & Deko", "vk_min": 18, "vk_max": 35, "score": "B", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": null, "pfad": "ideas/insektenhotel-premium.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne. Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["Nachhaltigkeits-USP", "Deko plus Funktion"], "w": ["nicht am Pflegekern", "viele Anbieter"], "o": ["starke PR-Story", "Naturgarten-Fachgeschaefte"], "t": ["Standardware unter 15 EUR", "Markenfit offen"]}, "kpis": [["VK-Korridor", "18–35 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "kompost-eimer-kueche", "titel": "Kompost-Eimer Küche", "status": "importiert", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Pflege & Werkzeug", "vk_min": 14, "vk_max": 28, "score": "B", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": null, "pfad": "ideas/kompost-eimer-kueche.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne. Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["Nachhaltigkeitstrend", "ganzjaehrig stabil"], "w": ["Geruchsthema in Reviews", "Markenfit fraglich"], "o": ["Edelstahl mit Aktivkohlefilter als Premium", "Bio-Trend"], "t": ["Anbieter mit starken Reviews", "Bewertungsrisiko Geruch"]}, "kpis": [["VK-Korridor", "14–28 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "kraeuteranzucht-kit", "titel": "Kräuteranzucht-Kit", "status": "importiert", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Anzucht & Ranken", "vk_min": 18, "vk_max": 35, "score": "A", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": null, "pfad": "ideas/kraeuteranzucht-kit.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne. Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["Geschenkcharakter", "hoher VK bei guenstigem EK"], "w": ["Saatgut-Haltbarkeit", "Holzbox erhoeht Komplexitaet"], "o": ["Geschenkboutiquen", "Unboxing-Content"], "t": ["viele Sets am Markt", "Weihnachts-Timing"]}, "kpis": [["VK-Korridor", "18–35 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "kraeuterschneider-wiegemesser", "titel": "Kräuterschneider / Wiegemesser", "status": "importiert", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Pflege & Werkzeug", "vk_min": 12, "vk_max": 22, "score": "C", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": null, "pfad": "ideas/kraeuterschneider-wiegemesser.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne. Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["ganzjaehrig nachgefragt", "Edelstahl differenziert"], "w": ["Markenfit Kueche", "sehr wettbewerbsintensiv"], "o": ["Kraeutergarten-Bundle"], "t": ["Roesle und WMF stark", "keine Gartenassoziation"]}, "kpis": [["VK-Korridor", "12–22 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "kuechenkraeuter-topfhalter", "titel": "Küchenkraeuter-Topfhalter", "status": "importiert", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Gefäße & Deko", "vk_min": 16, "vk_max": 28, "score": "B", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": null, "pfad": "ideas/kuechenkraeuter-topfhalter.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne. Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["Indoor-Outdoor-Trend", "sehr Instagram-faehig"], "w": ["Markenfit eher Kueche", "IKEA GRUNDTAL stark"], "o": ["Pinterest Kuechendeko", "Kuechen- und Dekolaeden"], "t": ["Assoziation Kueche statt Garten", "Preisdruck"]}, "kpis": [["VK-Korridor", "16–28 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "microgreens-anzuchtset", "titel": "Microgreens-Anzuchtset", "status": "importiert", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Anzucht & Ranken", "vk_min": 20, "vk_max": 35, "score": "A", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": null, "pfad": "ideas/microgreens-anzuchtset.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne (in Miro als NEU markiert). Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["Sprossen-Trend 2026", "Wiederkauf ueber Saatgut"], "w": ["Saatgut-Haltbarkeit", "Schimmel-Thema in Reviews"], "o": ["Selbstversorger-Community", "Premium Glas und Edelstahl"], "t": ["guenstige Keimglaeser", "Lebensmittelnaehe"]}, "kpis": [["VK-Korridor", "20–35 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "moosstab-premium", "titel": "Moosstab Premium", "status": "importiert", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Anzucht & Ranken", "vk_min": 12, "vk_max": 22, "score": "B", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": null, "pfad": "ideas/moosstab-premium.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne (in Miro als NEU markiert). Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["Monstera-Trend", "guenstiger EK"], "w": ["Markt voll mit Plastik", "Differenzierung schwierig"], "o": ["Kokos-Premiumvariante", "Bundle mit Pflanzstaeben"], "t": ["Race to bottom", "starke Reviews bei Platzhirschen"]}, "kpis": [["VK-Korridor", "12–22 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "pflanzampeln-makramee", "titel": "Pflanzampeln Makramee", "status": "importiert", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Gefäße & Deko", "vk_min": 12, "vk_max": 28, "score": "B", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": null, "pfad": "ideas/pflanzampeln-makramee.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne. Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["Pinterest-Trend konstant", "Handmade-Aesthetik"], "w": ["Designrisiko", "Markenschutz schwierig"], "o": ["Etsy als Kanal", "Kombi mit Sukkulenten-Toepfen"], "t": ["sehr viele Anbieter", "Handmade gegen Industrie"]}, "kpis": [["VK-Korridor", "12–28 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "pflanzenetiketten-metall", "titel": "Pflanzenetiketten Metall", "status": "importiert", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Anzucht & Ranken", "vk_min": 9, "vk_max": 16, "score": "A", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": null, "pfad": "ideas/pflanzenetiketten-metall.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne. Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["EK unter 1", "50 EUR", "FBA-ideal klein"], "w": ["Markt fragmentiert", "niedriger VK"], "o": ["Etsy als Zusatzkanal", "gravierbare Premiumvariante"], "t": ["schnell kopierbar", "Race to bottom"]}, "kpis": [["VK-Korridor", "9–16 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "pflanzenroller-metall", "titel": "Pflanzenroller Metall", "status": "importiert", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Gefäße & Deko", "vk_min": 15, "vk_max": 30, "score": "B", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": null, "pfad": "ideas/pflanzenroller-metall.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne (in Miro als NEU markiert). Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["eigene Amazon-Bestsellerkategorie", "Metall differenziert von WPC"], "w": ["Gewicht erhoeht FBA", "viele Anbieter"], "o": ["Edelstahl-Design als USP", "Cross-Sell grosse Uebertoepfe"], "t": ["Lechuza und Wagner etabliert", "Preisdruck Standard"]}, "kpis": [["VK-Korridor", "15–30 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "pflanzenschere", "titel": "Pflanzenschere", "status": "importiert", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Pflege & Werkzeug", "vk_min": 12, "vk_max": 25, "score": "A", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": null, "pfad": "ideas/pflanzenschere.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne. Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["ganzjaehrig breite Zielgruppe", "Edelstahl und Holzgriff"], "w": ["Billigscheren unter 8 EUR", "Schaerfe-QC entscheidend"], "o": ["Bundle mit Werkzeug-Set", "plant care Content"], "t": ["Fiskars bekannt", "Schaerfeverlust in Reviews"]}, "kpis": [["VK-Korridor", "12–25 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "pflanzenstaender-metall", "titel": "Pflanzenständer Metall", "status": "importiert", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Gefäße & Deko", "vk_min": 20, "vk_max": 40, "score": "B", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": null, "pfad": "ideas/pflanzenstaender-metall.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne (in Miro als NEU markiert). Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["Indoor-Pflanzen-Trend", "Mid-Century-Look gefragt"], "w": ["Amazon Basics als Wettbewerb", "Designrisiko"], "o": ["Premium-Metall und Farben", "Instagram-Content"], "t": ["moebelnahe Konkurrenz", "Versandgroesse"]}, "kpis": [["VK-Korridor", "20–40 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "pflanzgefaess-edelstahl-gross", "titel": "Pflanzgefäß Edelstahl gross", "status": "importiert", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Gefäße & Deko", "vk_min": 25, "vk_max": 55, "score": "B", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": null, "pfad": "ideas/pflanzgefaess-edelstahl-gross.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne. Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["Container-Gaertnern Trend", "Premiumpreise moeglich"], "w": ["Gewicht steigert FBA", "mehr Kapital im Lager"], "o": ["Deko- und Gartenlaeden", "Terrassen-Content"], "t": ["viele Design-Marken", "FBA-Gewichtsklassen"]}, "kpis": [["VK-Korridor", "25–55 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "pflanzstaebe-rankstaebe", "titel": "Pflanzstäbe / Rankstäbe", "status": "importiert", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Anzucht & Ranken", "vk_min": 10, "vk_max": 20, "score": "A", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": null, "pfad": "ideas/pflanzstaebe-rankstaebe.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne. Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["sehr einfaches Produkt", "Marge ueber 80 Prozent"], "w": ["Preiswettbewerb Standard", "schwache SEO allein"], "o": ["Edelstahl als Premium", "Bundle mit Anzucht-Set"], "t": ["Bambus als guenstige Alternative", "Massenware unter 5 EUR"]}, "kpis": [["VK-Korridor", "10–20 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "pflanzwerkzeug-set", "titel": "Pflanzwerkzeug-Set", "status": "importiert", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Pflege & Werkzeug", "vk_min": 18, "vk_max": 35, "score": "A", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": null, "pfad": "ideas/pflanzwerkzeug-set.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne. Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["hohe konstante Nachfrage", "Premium-USP Holzgriff"], "w": ["QC bei drei Teilen", "OBI und Hornbach offline stark"], "o": ["Bundle mit Etiketten", "Gartencenter als B2B-Einstieg"], "t": ["China-Sets unter 10 EUR", "Holz leidet bei Witterung"]}, "kpis": [["VK-Korridor", "18–35 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "rankgitter-balkon", "titel": "Rankgitter Balkon", "status": "importiert", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Anzucht & Ranken", "vk_min": 20, "vk_max": 40, "score": "C", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": null, "pfad": "ideas/rankgitter-balkon.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne. Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["vertikale Begruenung Trend 2026"], "w": ["Groesse und Gewicht teuer in FBA", "komplexe Logistik"], "o": ["Gartencenter offline idealer Kanal"], "t": ["wenig Produktdifferenzierung", "Uebergroessenzuschlag"]}, "kpis": [["VK-Korridor", "20–40 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "rankhilfen-pflanzgitter", "titel": "Rankhilfen / Pflanzgitter", "status": "importiert", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Anzucht & Ranken", "vk_min": 12, "vk_max": 22, "score": "B", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": null, "pfad": "ideas/rankhilfen-pflanzgitter.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne. Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["vertikale Begruenung Trend 2026", "Metall differenziert"], "w": ["Saisonalitaet", "Bambus guenstig praesent"], "o": ["Balkon-Transformation Content", "Gartencenter"], "t": ["Gardena und Nortene bekannt", "FBA bei Groesse"]}, "kpis": [["VK-Korridor", "12–22 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "rasenduenger-rasenprodukte", "titel": "Rasendünger / Rasenprodukte", "status": "abgelehnt", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Pflege & Werkzeug", "vk_min": 15, "vk_max": 40, "score": "D", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": "Miro-Lane D Ablehnen (April 2026): FBA-Gewicht, Duengemittelrecht, stark saisonal", "pfad": "ideas/rasenduenger-rasenprodukte.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne. Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["sehr hohes Marktvolumen"], "w": ["FBA-Gewicht", "Duengemittelrecht", "stark saisonal"], "o": ["evtl. Spezialerde in 1-2 kg"], "t": ["Compo und WOLF dominieren", "kein Markenprofil"]}, "kpis": [["VK-Korridor", "15–40 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "regenwasser-eimer-edelstahl", "titel": "Regenwasser-Eimer Edelstahl", "status": "importiert", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Bewässerung", "vk_min": 20, "vk_max": 40, "score": "A", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": null, "pfad": "ideas/regenwasser-eimer-edelstahl.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne. Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["Nachhaltigkeit als Kaufmotiv", "Edelstahl einzigartig"], "w": ["hoeherer EK und FBA-Gewicht", "Baumarkt unter 10 EUR"], "o": ["starke PR-Story", "Gartencenter offline"], "t": ["Plastik zu Discounterpreisen", "FBA-Marge bei Volumen"]}, "kpis": [["VK-Korridor", "20–40 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "schlauchaufroller-schlauchwagen", "titel": "Schlauchaufroller / Schlauchwagen", "status": "abgelehnt", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Bewässerung", "vk_min": 30, "vk_max": 80, "score": "D", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": "Miro-Lane D Ablehnen (April 2026): FBA-Kosten prohibitiv, Gardena dominiert, falsche Zielgruppe", "pfad": "ideas/schlauchaufroller-schlauchwagen.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne. Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["hohes Suchvolumen"], "w": ["FBA-Kosten prohibitiv", "Gardena dominiert", "falsche Zielgruppe"], "o": ["langfristig offline pruefen"], "t": ["Kaercher und Gardena unschlagbar", "Marge vernichtet"]}, "kpis": [["VK-Korridor", "30–80 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "schnecken-abwehrband-kupfer", "titel": "Schnecken-Abwehrband Kupfer", "status": "importiert", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Pflege & Werkzeug", "vk_min": 8, "vk_max": 14, "score": "B", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": null, "pfad": "ideas/schnecken-abwehrband-kupfer.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne. Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["natuerliche Alternative zu Chemie", "guenstig zu sourcen"], "w": ["spitze Nische", "kein Markenfit"], "o": ["Bundle-Beigabe mit Werkzeug oder Toepfen"], "t": ["viele Niedrigpreis-Angebote", "Standalone wenig sinnvoll"]}, "kpis": [["VK-Korridor", "8–14 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "sukkulenten-toepfe-set", "titel": "Sukkulenten-Töpfe Set", "status": "importiert", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Gefäße & Deko", "vk_min": 16, "vk_max": 28, "score": "A", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": null, "pfad": "ideas/sukkulenten-toepfe-set.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne. Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["Zimmerpflanzen-Boom", "Edelstahl differenziert"], "w": ["Designrisiko Geschmack", "Keramik mit Bruchrisiko"], "o": ["Pinterest Shelfie-Content", "Bundle mit Giesskanne"], "t": ["Terracotta als Parallelprodukt", "viele Anbieter mit Reviews"]}, "kpis": [["VK-Korridor", "16–28 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "terracotta-uebertoepfe-set", "titel": "Terracotta-Übertöpfe Set", "status": "importiert", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Gefäße & Deko", "vk_min": 16, "vk_max": 35, "score": "B", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": null, "pfad": "ideas/terracotta-uebertoepfe-set.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne. Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["starker Pinterest-Trend", "hoher Perceived Value"], "w": ["Bruchrisiko FBA", "Gewicht erhoeht Kosten"], "o": ["Deko-Boutiquen offline", "Peak Maerz bis Mai"], "t": ["IKEA und OBI dominant", "Bruchreklamationen"]}, "kpis": [["VK-Korridor", "16–35 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "umtopfmatte-faltbar", "titel": "Umtopfmatte faltbar", "status": "importiert", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Pflege & Werkzeug", "vk_min": 10, "vk_max": 18, "score": "B", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": null, "pfad": "ideas/umtopfmatte-faltbar.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne (in Miro als NEU markiert). Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["praktisch und leicht", "FBA-guenstig"], "w": ["Commodity", "niedriger Durchschnittspreis"], "o": ["Bundle mit Werkzeug-Set", "Premium-Material als USP"], "t": ["starker Preiskampf", "kaum echte Differenzierung"]}, "kpis": [["VK-Korridor", "10–18 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "vermehrungsstation-glas", "titel": "Vermehrungsstation Glas", "status": "importiert", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Gefäße & Deko", "vk_min": 18, "vk_max": 32, "score": "A", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": null, "pfad": "ideas/vermehrungsstation-glas.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne (in Miro als NEU markiert). Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["starker Instagram-Trend", "Premium-Look Glas und Holz"], "w": ["Glas-Bruchrisiko FBA", "viele China-Anbieter"], "o": ["Geschenk Weihnachten", "Bundle mit Sukkulenten-Toepfen"], "t": ["designabhaengig", "schnell kopierbar"]}, "kpis": [["VK-Korridor", "18–32 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "vogeltraenke-vogelbad", "titel": "Vogeltränke / Vogelbad", "status": "importiert", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Gefäße & Deko", "vk_min": 18, "vk_max": 40, "score": "B", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": null, "pfad": "ideas/vogeltraenke-vogelbad.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne. Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["starke Suchvolumina", "Edelstahl differenziert"], "w": ["Gewicht erhoeht FBA", "Bruchrisiko Naturstein"], "o": ["Deko plus Vogelschutz", "Gartencenter offline"], "t": ["viele Anbieter im Massenmarkt", "grosse Formatvarianz"]}, "kpis": [["VK-Korridor", "18–40 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "windlicht-laterne-outdoor", "titel": "Windlicht / Laterne Outdoor", "status": "importiert", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Gefäße & Deko", "vk_min": 15, "vk_max": 35, "score": "C", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Longlist", "gate_1": null, "gate_2": null, "gate_3": null, "ng_nummer": null, "stop_grund": null, "pfad": "ideas/windlicht-laterne-outdoor.md", "kurz": "[fehlt] – Miro-Karte enthält nur SWOT und VK-Spanne. Kurzbeschreibung wird bei `/voranalyse` oder im nächsten `/ideen`-Lauf ergänzt.", "swot": {"s": ["sehr grosse Kategorie", "Weihnachts-Peak"], "w": ["kein Pflanzenbezug", "Designrisiko hoch"], "o": ["Edelstahl als Qualitaetsmerkmal"], "t": ["riesige Konkurrenz", "stark saisonal"]}, "kpis": [["VK-Korridor", "15–35 € (Miro-Longlist, Stand April 2026, Schätzung)"], ["~Absatz Top-3 / Monat", "[fehlt]"], ["~EK Alibaba", "[fehlt]"], ["Versandgewicht", "[fehlt]"]], "offen": ["Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche)."]}, {"slug": "blumengiesskanne-edelstahl", "titel": "Edelstahl-Gießkanne (Blumengießkanne)", "status": "produkt", "status_datum": "2026-09-16", "quelle": "pafri", "lauf": "2026-09-16-miro-import", "kategorie": "Bewässerung", "vk_min": null, "vk_max": null, "score": "A", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": null, "gate_1": "go", "gate_2": "go", "gate_3": "go", "ng_nummer": "NG0001", "stop_grund": null, "pfad": "products/NG0001", "kurz": "Edelstahl-Gießkanne 1–1,5 l für Zimmerpflanzen, rostfrei, schlankes Design, Griff mit Holz-/Farbakzent, Ziel-EK ~3 €, MOQ 500, Jahresmenge ~2.500 (Briefing Dez 2024).", "swot": {"s": [], "w": [], "o": [], "t": []}, "kpis": [], "offen": ["Stufen-Dateien 01–03 liegen nur in Drive, nicht im Repo. Bei Bedarf nachträglich extrahieren."]}, {"slug": "bewaesserungskugeln-glas", "titel": "Bewässerungskugeln Glas", "status": "produkt", "status_datum": "2026-09-16", "quelle": "miro-longlist", "lauf": "2026-09-16-miro-import", "kategorie": "Bewässerung", "vk_min": 16, "vk_max": 28, "score": "A", "score_gesamt": null, "scores": {"marge": null, "markt": null, "usp": null, "risiko": null}, "ko_verstoss": [], "pipeline_status_miro": "Launch aktiv", "gate_1": "go", "gate_2": "go", "gate_3": "go", "ng_nummer": "NG0002", "stop_grund": null, "pfad": "products/NG0002", "kurz": "", "swot": {"s": ["Voranalyse positiv", "junger Markt"], "w": ["Saisonalität Urlaub", "Glas-Bruchrisiko"], "o": ["Bundle mit Gießkanne", "Urlaubs-Marketing"], "t": ["Netrox als Marktführer", "wenige relevante Keywords"]}, "kpis": [["VK-Korridor Wettbewerb", "9,99–22,99 €"], ["~Absatz Topseller / Monat", "~700 (Netrox), ~515 (Relaxdays), ~473 (Netrox 2er)"], ["~EK Alibaba Vergleichsprodukt", "~1,50 €"], ["Saison", "Anfang April bis Anfang Oktober"]], "offen": ["Stufen-Dateien 01–03 nicht im Repo-Format; Voranalyse und Tiefenanalyse als Textfassung in `vorlagen/`."]}], "runs": [{"lauf": "2026-09-16-miro-import", "thema": "Import Miro-Longlist „Nicegarden Scout Longlist\" (Stand April 2026)", "ziel_anzahl": 38, "gefunden": 38, "dedupe_verworfen": 0, "quellen_eingeschraenkt": ["kein Recherche-Lauf", "nur Import; Miro-Karten enthalten nur VK-Spanne und SWOT"]}]}</script>
+<script>
+(function(){
+  const D = JSON.parse(document.getElementById('data').textContent);
+  const E = D.entries;
+  const CATS = ["Bewässerung","Pflege & Werkzeug","Anzucht & Ranken","Gefäße & Deko"];
+  const catIdx = c => { const i = CATS.indexOf(c); return i < 0 ? 0 : i + 1; };
+  const LANES = ["A","B","C","D"];
+  const esc = s => String(s ?? "").replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+  const fehlt = v => (v == null || v === "" || (Array.isArray(v) && !v.length)) ? '<span class="fehlt">fehlt</span>' : esc(Array.isArray(v) ? v.join(", ") : v);
+  const isFehlt = s => !s || /^\[fehlt\]/.test(s);
+
+  // ---------- Status model ----------
+  const STAGES = [
+    {key:"s0", label:"Stufe 0 · Ideen", who:"Freigabe durch Pafri", statuses:["importiert","idee"]},
+    {key:"s0f", label:"Freigegeben", who:"→ /voranalyse", statuses:["freigegeben"]},
+    {key:"s1", label:"Stufe 1 · Voranalyse", who:"Gate 1", statuses:["voranalyse"], gate:"Gate 1"},
+    {key:"s2", label:"Stufe 2 · Deep-Dive", who:"Gate 2", statuses:["deep-dive"], gate:"Gate 2"},
+    {key:"s3", label:"Stufe 3 · Briefing", who:"Gate 3 → NG-Nummer", statuses:["briefing"], gate:"Gate 3"},
+    {key:"p", label:"Produkt", who:"in products/", statuses:["produkt"], done:true},
+  ];
+  const STATUS_LABEL = {importiert:"Importiert (Miro)", idee:"Wartet auf Freigabe", freigegeben:"Freigegeben", voranalyse:"Voranalyse", "deep-dive":"Deep-Dive", briefing:"Briefing", produkt:"Produkt", beobachten:"Beobachten", abgelehnt:"Abgelehnt"};
+  const STATUS_ORDER = ["produkt","briefing","deep-dive","voranalyse","freigegeben","idee","importiert","beobachten","abgelehnt"];
+
+  function gateOf(e){ return e.status==="voranalyse"?["gate_1",1]:e.status==="deep-dive"?["gate_2",2]:e.status==="briefing"?["gate_3",3]:null; }
+
+  // Returns {kind: 'pafri'|'skill'|'none', text, cmd}
+  function nextStep(e){
+    const s = e.status, slug = e.slug;
+    if (s==="importiert" || s==="idee") return {kind:"pafri", text: s==="idee"?"Freigabe nach /ideen-Lauf":"Freigabe aus Miro-Longlist", cmd:"/voranalyse "+slug, note:"status: freigegeben setzen"};
+    if (s==="freigegeben") return {kind:"skill", text:"Voranalyse starten", cmd:"/voranalyse "+slug};
+    const g = gateOf(e);
+    if (g){
+      const [k,n] = g, v = e[k];
+      const nextCmd = n===1?"/deep-dive "+slug : n===2?"/briefing "+slug : "NG-Nummer vergeben, Ordner nach products/";
+      if (v==="go") return {kind:"skill", text:"Gate "+n+" Go erteilt", cmd:nextCmd};
+      if (v==null) return {kind:"pafri", text:"Gate "+n+": Go / Stop / Beobachten / Nacharbeit", cmd:nextCmd, note:"Empfehlung im Gate-Block lesen"};
+      return {kind:"none", text:"Gate "+n+": "+v};
+    }
+    if (s==="beobachten") return {kind:"none", text:"Zurückgestellt – Wiederaufnahme bei Anlass"};
+    if (s==="abgelehnt") return {kind:"none", text:"Abgelehnt"};
+    if (s==="produkt") return {kind:"none", text:e.ng_nummer||"Produkt"};
+    return {kind:"none", text:"–"};
+  }
+  function pill(e){
+    const s = e.status, g = gateOf(e);
+    if (s==="produkt") return `<span class="pill ok"><i>✓</i>${esc(e.ng_nummer||"Produkt")}</span>`;
+    if (s==="abgelehnt") return `<span class="pill stop"><i>×</i>Abgelehnt</span>`;
+    if (s==="beobachten") return `<span class="pill watch"><i>◔</i>Beobachten</span>`;
+    if (s==="idee") return `<span class="pill wait"><i>!</i>Wartet auf Freigabe</span>`;
+    if (s==="freigegeben") return `<span class="pill go"><i>▶</i>Freigegeben</span>`;
+    if (g){ const [k,n]=g; const v=e[k];
+      if (v==="go") return `<span class="pill go"><i>▶</i>Gate ${n} Go</span>`;
+      if (v==null) return `<span class="pill wait"><i>!</i>Gate ${n} wartet</span>`;
+      return `<span class="pill">${esc(STATUS_LABEL[s])} · ${esc(v)}</span>`; }
+    return `<span class="pill">${esc(STATUS_LABEL[s]||s)}</span>`;
+  }
+  const laneChip = l => `<span class="lane ${l?esc(l):"none"}" title="Lane ${l||"ohne"}">${l?esc(l):"–"}</span>`;
+  const vk = e => (e.vk_min!=null && e.vk_max!=null) ? `${e.vk_min}–${e.vk_max} €` : "–";
+  const catDot = c => `<span class="dot cat-${catIdx(c)}"></span>`;
+
+  // ---------- Header ----------
+  document.getElementById('meta').innerHTML =
+    `<span>Stand <b>${esc(D.stand)}</b></span><span><b>${E.length}</b> Einträge</span><span><b>${E.filter(e=>["importiert","idee"].includes(e.status)).length}</b> Ideen offen</span><span><b>${E.filter(e=>e.status==="produkt").length}</b> Produkte</span>`;
+  document.getElementById('nextng').textContent = D.next_ng;
+
+  // ---------- Stages ----------
+  let stageFilter = null;
+  function renderStages(){
+    const el = document.getElementById('stages');
+    el.innerHTML = STAGES.map(st => {
+      const items = E.filter(e => st.statuses.includes(e.status));
+      const waiting = items.filter(e => nextStep(e).kind==="pafri").length;
+      const cls = ["stage", stageFilter===st.key?"active":"", st.done?"done":"", (waiting && !st.done)?"attn":""].join(" ");
+      return `<button type="button" class="${cls}" data-stage="${st.key}">
+        ${st.gate?`<span class="gate">${st.gate}</span>`:""}
+        <span class="n">${items.length}</span>
+        <span class="lbl">${esc(st.label)}</span>
+        <span class="who">${waiting?`${waiting} offen · `:""}${esc(st.who)}</span>
+      </button>`;
+    }).join("");
+    el.querySelectorAll('.stage').forEach(b => b.addEventListener('click', () => {
+      stageFilter = stageFilter===b.dataset.stage ? null : b.dataset.stage;
+      F.status = ""; renderStages(); renderTable(); save();
+      document.getElementById('list').scrollIntoView({behavior:"smooth", block:"start"});
+    }));
+  }
+
+  // ---------- Next steps ----------
+  function renderNext(){
+    const p = E.filter(e => nextStep(e).kind==="pafri" && !["importiert"].includes(e.status));
+    const sk = E.filter(e => nextStep(e).kind==="skill");
+    const imp = E.filter(e => e.status==="importiert");
+    const li = e => { const n = nextStep(e); return `<li data-slug="${esc(e.slug)}">${laneChip(e.score)}<span class="t"><b>${esc(e.titel)}</b><span>${esc(n.text)}${n.cmd?` · <code>${esc(n.cmd)}</code>`:""}</span></span>${pill(e)}</li>`; };
+    const pEl = document.getElementById('next-pafri'), sEl = document.getElementById('next-skill');
+    pEl.innerHTML = p.length ? p.map(li).join("") :
+      `<li class="empty">Keine offenen Gates.${imp.length?` <b>${imp.length}</b> importierte Ideen warten auf Freigabe: in <code>ideas/&lt;slug&gt;.md</code> <code>status: freigegeben</code> setzen, dann <code>/voranalyse &lt;slug&gt;</code>. Lane A zuerst.`:""}</li>`;
+    sEl.innerHTML = sk.length ? sk.map(li).join("") : `<li class="empty">Nichts freigegeben. Sobald eine Idee <code>freigegeben</code> ist, erscheint hier der Befehl.</li>`;
+    [pEl,sEl].forEach(ul => ul.querySelectorAll('li[data-slug]').forEach(l => l.addEventListener('click', () => openDetail(l.dataset.slug))));
+  }
+
+  // ---------- Lane chart ----------
+  function renderLaneChart(){
+    const base = E.filter(e => ["importiert","idee","freigegeben","voranalyse","deep-dive","briefing","beobachten"].includes(e.status));
+    const groups = ["A","B","C",null];
+    const counts = groups.map(l => CATS.map(c => base.filter(e => (e.score||null)===l && e.kategorie===c).length));
+    const totals = counts.map(a => a.reduce((x,y)=>x+y,0));
+    const max = Math.max(1, ...totals);
+    const el = document.getElementById('lanechart');
+    el.innerHTML = `<div class="cols">${groups.map((l,i)=>`<div class="col"><span class="cap">${totals[i]}</span><div class="stack">${counts[i].map((n,ci)=>n?`<div class="seg cat-${ci+1}" style="height:${n/max*100}%" data-tip="<b>${esc(CATS[ci])}</b>${n} ${n===1?"Idee":"Ideen"} · Lane ${l||"ohne"}"></div>`:"").join("")}</div></div>`).join("")}</div>
+      <div class="col-x">${groups.map(l=>`<div><b>${l?"Lane "+l:"ohne Lane"}</b>${l==="A"?"empfohlen":l==="B"?"prüfen":l==="C"?"beobachten":"Drive"}</div>`).join("")}</div>
+      <div class="legend">${CATS.map((c,i)=>`<span>${catDot(c)}${esc(c)}</span>`).join("")}</div>`;
+    bindTips(el);
+  }
+
+  // ---------- Range chart ----------
+  function renderRange(rows){
+    const el = document.getElementById('rangechart');
+    const withVk = rows.filter(e => e.vk_min!=null && e.vk_max!=null);
+    if (!withVk.length){ el.innerHTML = `<p class="empty">Keine VK-Spannen in der aktuellen Auswahl.</p>`; return; }
+    const max = Math.max(...withVk.map(e=>e.vk_max));
+    const step = max > 60 ? 20 : 10;
+    const top = Math.ceil(max/step)*step;
+    const pct = v => (v/top*100);
+    const sorted = withVk.slice().sort((a,b)=> (LANES.indexOf(a.score)+1||9)-(LANES.indexOf(b.score)+1||9) || a.vk_min-b.vk_min || a.vk_max-b.vk_max);
+    const ticks = []; for (let t=0;t<=top;t+=step) ticks.push(t);
+    el.innerHTML = `<div class="range">
+      <div class="axis"><span class="eyebrow">${sorted.length} Ideen</span><div class="ticks">${ticks.map(t=>`<span style="left:${pct(t)}%">${t} €</span>`).join("")}</div></div>
+      ${sorted.map(e=>`<div class="row" data-slug="${esc(e.slug)}" data-tip="<b>${esc(e.titel)}</b>${vk(e)} · ${esc(e.kategorie||"")} · Lane ${e.score||"–"}">
+        <span class="lbl">${laneChip(e.score)}<span>${esc(e.titel)}</span></span>
+        <div class="track" style="--tick:${100/(ticks.length-1)}%"><div class="bar cat-${catIdx(e.kategorie)}" style="left:${pct(e.vk_min)}%;width:${Math.max(pct(e.vk_max-e.vk_min),1)}%"></div>${pct(e.vk_max)>86?`<span class="val left" style="left:${pct(e.vk_min)}%">${e.vk_min}–${e.vk_max}</span>`:`<span class="val" style="left:${pct(e.vk_max)}%">${e.vk_min}–${e.vk_max}</span>`}</div>
+      </div>`).join("")}
+      <div class="legend">${CATS.map(c=>`<span>${catDot(c)}${esc(c)}</span>`).join("")}<span class="muted">Sortiert nach Lane, dann Preis</span></div>
+    </div>`;
+    el.querySelectorAll('.row').forEach(r => r.addEventListener('click', () => openDetail(r.dataset.slug)));
+    bindTips(el);
+  }
+
+  // ---------- Filters / table ----------
+  const F = {q:"", lane:"", cat:"", status:"", sortK:"lane", sortD:1};
+  const $ = id => document.getElementById(id);
+  function fillSelect(id, values, fmt){ const s=$(id); values.forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=fmt?fmt(v):v;s.appendChild(o);}); }
+  fillSelect('f-lane', ["A","B","C","D","none"], v => v==="none"?"ohne Lane":"Lane "+v);
+  fillSelect('f-cat', CATS);
+  fillSelect('f-status', STATUS_ORDER.filter(s=>E.some(e=>e.status===s)), s => STATUS_LABEL[s]||s);
+
+  function laneRank(e){ const i = LANES.indexOf(e.score); return i<0?9:i; }
+  function sortVal(e,k){
+    if (k==="lane") return laneRank(e);
+    if (k==="vkmin") return e.vk_min==null?1e9:e.vk_min;
+    if (k==="status") return STATUS_ORDER.indexOf(e.status);
+    return (e[k]||"").toString().toLowerCase();
+  }
+  function filtered(){
+    const q = F.q.trim().toLowerCase();
+    let rows = E.filter(e => {
+      if (stageFilter){ const st = STAGES.find(s=>s.key===stageFilter); if (!st.statuses.includes(e.status)) return false; }
+      if (F.lane==="none" ? e.score : (F.lane && e.score!==F.lane)) return false;
+      if (F.cat && e.kategorie!==F.cat) return false;
+      if (F.status && e.status!==F.status) return false;
+      if (q && !(`${e.titel} ${e.slug} ${e.kategorie} ${e.status} ${e.quelle} ${e.ng_nummer||""}`.toLowerCase().includes(q))) return false;
+      return true;
+    });
+    rows.sort((a,b)=>{ const x=sortVal(a,F.sortK), y=sortVal(b,F.sortK); const c = x<y?-1:x>y?1:0; return (c || (a.titel||"").localeCompare(b.titel||"","de")) * F.sortD; });
+    return rows;
+  }
+  let selected = null;
+  function renderTable(){
+    const rows = filtered();
+    $('count').textContent = `${rows.length} von ${E.length}`;
+    $('tbl').querySelector('tbody').innerHTML = rows.map(e => { const n = nextStep(e); return `<tr data-slug="${esc(e.slug)}" class="${selected===e.slug?"sel":""}">
+      <td>${laneChip(e.score)}</td>
+      <td><div class="title">${esc(e.titel)}</div><div class="slug">${esc(e.slug)}</div></td>
+      <td>${catDot(e.kategorie)}${esc(e.kategorie||"–")}</td>
+      <td class="num">${vk(e)}</td>
+      <td>${pill(e)}</td>
+      <td class="num">${esc(e.status_datum||"–")}</td>
+      <td><div class="step">${esc(n.text)}${n.cmd && n.kind!=="none"?`<br><code>${esc(n.cmd)}</code>`:""}</div></td>
+    </tr>`; }).join("");
+    $('tbl').querySelectorAll('tbody tr').forEach(tr => tr.addEventListener('click', () => openDetail(tr.dataset.slug)));
+    $('tbl').querySelectorAll('th[data-k]').forEach(th => { th.classList.toggle('sorted', th.dataset.k===F.sortK); th.querySelector('.arr')?.remove(); if (th.dataset.k===F.sortK){ const a=document.createElement('span'); a.className='arr'; a.textContent=F.sortD>0?"▲":"▼"; th.appendChild(a);} });
+    renderRange(rows);
+  }
+  $('tbl').querySelectorAll('th[data-k]').forEach(th => th.addEventListener('click', () => { if (F.sortK===th.dataset.k) F.sortD*=-1; else {F.sortK=th.dataset.k; F.sortD=1;} renderTable(); save(); }));
+  ['q','f-lane','f-cat','f-status'].forEach(id => $(id).addEventListener('input', () => { F.q=$('q').value; F.lane=$('f-lane').value; F.cat=$('f-cat').value; F.status=$('f-status').value; if (F.status) stageFilter=null; renderStages(); renderTable(); save(); }));
+  $('reset').addEventListener('click', () => { F.q=F.lane=F.cat=F.status=""; stageFilter=null; F.sortK="lane"; F.sortD=1; syncInputs(); renderStages(); renderTable(); save(); });
+  function syncInputs(){ $('q').value=F.q; $('f-lane').value=F.lane; $('f-cat').value=F.cat; $('f-status').value=F.status; }
+
+  // ---------- Products & runs ----------
+  function renderProds(){
+    const p = E.filter(e=>e.status==="produkt").sort((a,b)=>(a.ng_nummer||"").localeCompare(b.ng_nummer||""));
+    $('prods').innerHTML = p.length ? p.map(e=>`<div class="prod" data-slug="${esc(e.slug)}"><span class="ng">${esc(e.ng_nummer)}</span><span class="t"><b>${esc(e.titel)}</b><span>${esc(e.kategorie||"")} · <span class="mono">${esc(e.pfad)}</span></span></span>${catDot(e.kategorie)}</div>`).join("") : `<p class="empty">Noch keine.</p>`;
+    $('prods').querySelectorAll('.prod').forEach(d => d.addEventListener('click', () => openDetail(d.dataset.slug)));
+    const runs = D.runs;
+    $('runs').innerHTML = `<thead><tr><th>Lauf</th><th>Thema</th><th>Ziel</th><th>Gefunden</th><th>Dedupe</th><th>Einschränkungen</th></tr></thead><tbody>${runs.length?runs.map(r=>`<tr><td class="mono">${esc(r.lauf)}</td><td>${esc(r.thema)}</td><td class="num">${fehlt(r.ziel_anzahl)}</td><td class="num">${fehlt(r.gefunden)}</td><td class="num">${fehlt(r.dedupe_verworfen)}</td><td>${fehlt(r.quellen_eingeschraenkt)}</td></tr>`).join(""):`<tr><td colspan="6" class="muted">Noch keine Läufe.</td></tr>`}</tbody>`;
+  }
+
+  // ---------- Detail drawer ----------
+  function openDetail(slug){
+    const e = E.find(x=>x.slug===slug); if (!e) return;
+    selected = slug; renderTable();
+    const n = nextStep(e), sc = e.scores||{};
+    const list = arr => arr && arr.length ? `<ul>${arr.map(x=>isFehlt(x)?`<li class="fehlt">fehlt</li>`:`<li>${esc(x)}</li>`).join("")}</ul>` : `<span class="fehlt">fehlt</span>`;
+    $('d-head').innerHTML = `<div class="eyebrow">${esc(e.kategorie||"ohne Kategorie")} · ${esc(e.quelle||"")}</div><h2>${esc(e.titel)}</h2><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:6px">${laneChip(e.score)}${pill(e)}<span class="mono muted">${esc(e.slug)}</span></div>`;
+    const swot = e.swot||{};
+    $('d-body').innerHTML = `
+      ${n.kind!=="none" ? `<div class="cmd"><code>${esc(n.cmd)}</code><span>${esc(n.text)}${n.note?` · ${esc(n.note)}`:""}</span></div>` : ""}
+      ${e.stop_grund ? `<div class="${e.status==="abgelehnt"?"stop":"watchbox"}"><b>${e.status==="abgelehnt"?"Stop-Grund":"Grund"}:</b> ${esc(e.stop_grund)}</div>` : ""}
+      <section><h3>Eckdaten</h3><div class="kv">
+        <div><span class="k">VK-Spanne Amazon.de</span><span class="v">${vk(e)}</span></div>
+        <div><span class="k">Score gesamt (1–10)</span><span class="v">${fehlt(e.score_gesamt)}</span></div>
+        <div><span class="k">Einzelscores M / Mk / USP / R</span><span class="v">${[sc.marge,sc.markt,sc.usp,sc.risiko].map(v=>v==null?"–":v).join(" / ")}</span></div>
+        <div><span class="k">K.O.-Verstöße</span><span class="v">${e.ko_verstoss&&e.ko_verstoss.length?esc(e.ko_verstoss.join(", ")):"keine"}</span></div>
+        <div><span class="k">Status seit</span><span class="v">${esc(e.status_datum||"–")}</span></div>
+        <div><span class="k">Lauf</span><span class="v mono">${esc(e.lauf||"–")}</span></div>
+        ${e.pipeline_status_miro?`<div><span class="k">Miro-Status</span><span class="v">${esc(e.pipeline_status_miro)}</span></div>`:""}
+        <div><span class="k">Pfad</span><span class="v mono">${esc(e.pfad)}</span></div>
+      </div></section>
+      <section><h3>Gates</h3><div class="gates">${[1,2,3].map(i=>{const v=e["gate_"+i];return `<div class="gate-box"><b>Gate ${i}</b>${v==="go"?"✓ Go":v==="stop"?"× Stop":v==="beobachten"?"◔ Beobachten":"offen"}</div>`;}).join("")}</div></section>
+      <section><h3>Kurzbeschreibung</h3><p>${isFehlt(e.kurz)?`<span class="fehlt">fehlt – ${esc((e.kurz||"").replace(/^\[fehlt\]\s*[–-]?\s*/,""))||"wird bei /voranalyse ergänzt"}</span>`:esc(e.kurz)}</p></section>
+      <section><h3>SWOT</h3><div class="swot">
+        <div><b>Stärken</b>${list(swot.s)}</div><div><b>Schwächen</b>${list(swot.w)}</div>
+        <div><b>Chancen</b>${list(swot.o)}</div><div><b>Risiken</b>${list(swot.t)}</div>
+      </div></section>
+      ${e.kpis&&e.kpis.length?`<section><h3>KPIs (Schätzungen)</h3><table class="kpi"><tbody>${e.kpis.map(k=>`<tr><td>${esc(k[0])}</td><td>${isFehlt(k[1])?'<span class="fehlt">fehlt</span>':esc(k[1])}</td></tr>`).join("")}</tbody></table></section>`:""}
+      ${e.offen&&e.offen.length?`<section><h3>Offene Punkte</h3><ul style="margin:0;padding-left:18px">${e.offen.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></section>`:""}
+    `;
+    $('drawer').classList.add('open'); $('drawer').setAttribute('aria-hidden','false'); $('scrim').hidden=false; save();
+  }
+  function closeDetail(){ selected=null; $('drawer').classList.remove('open'); $('drawer').setAttribute('aria-hidden','true'); $('scrim').hidden=true; renderTable(); save(); }
+  $('d-close').addEventListener('click', closeDetail); $('scrim').addEventListener('click', closeDetail);
+  document.addEventListener('keydown', ev => { if (ev.key==="Escape" && $('drawer').classList.contains('open')) closeDetail(); });
+
+  // ---------- Tooltip ----------
+  let tipEl = null;
+  function bindTips(root){
+    root.querySelectorAll('[data-tip]').forEach(el => {
+      el.addEventListener('mouseenter', ev => { if(!tipEl){tipEl=document.createElement('div');tipEl.className='tip';document.body.appendChild(tipEl);} tipEl.innerHTML=el.dataset.tip; moveTip(ev); });
+      el.addEventListener('mousemove', moveTip);
+      el.addEventListener('mouseleave', () => { if(tipEl){tipEl.remove();tipEl=null;} });
+    });
+  }
+  function moveTip(ev){ if(!tipEl) return; const x=Math.min(ev.clientX+14, window.innerWidth-tipEl.offsetWidth-8); tipEl.style.left=x+'px'; tipEl.style.top=(ev.clientY+14)+'px'; }
+
+  // ---------- Persistence (per viewer, convenience only) ----------
+  function save(){ try{ localStorage.setItem('ng-radar', JSON.stringify({F, stageFilter, selected})); }catch(_){} }
+  function load(){ try{ const s=JSON.parse(localStorage.getItem('ng-radar')||"null"); if(s){ Object.assign(F, s.F||{}); stageFilter=s.stageFilter||null; selected=s.selected||null; } }catch(_){} }
+
+  load(); syncInputs();
+  renderStages(); renderNext(); renderLaneChart(); renderProds(); renderTable();
+  if (selected && E.some(e=>e.slug===selected)) openDetail(selected); else selected=null;
+})();
+</script>
