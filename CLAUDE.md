@@ -20,7 +20,7 @@ Details, Status-Werte und Gate-Block: `rules/prozess.md`.
 5. **Status nur über Frontmatter.** Statuswechsel setzt der jeweilige Skill (`rules/schema.md`); danach immer `python scripts/dashboard.py`. Das erzeugt `DASHBOARD.md` und `dashboard.html`; `dashboard.html` anschließend als Artifact unter https://claude.ai/artifact/2rvyEyRe1p9ietKExeRiiT neu veröffentlichen (gleiche URL, nie ein neues Artifact anlegen, nie den Parameter `capabilities` übergeben – sonst verlieren die Dashboard-Buttons ihre Datenbank).
 6. **Dedupe.** Vor jeder neuen Idee `ideas/`, `pipeline/` und `products/` prüfen – Slug, Synonyme, gleicher Produkttyp in anderer Größe.
 7. **Ein Lauf oder eine Stufe = ein Commit.** Format: `feat(ideen): lauf 2026-09-18 giesszubehoer` · `feat(<slug>): voranalyse` · `gate(<slug>): go deep-dive`.
-8. **Websuche.** Amazon.de-Seiten per WebFetch können blockiert sein. Dann: Suchmaschinen-Snippets, Wettbewerber-Shops, Preisvergleiche, Händlerseiten. Einschränkung im Lauf-Protokoll vermerken, nie stillschweigend raten.
+8. **Websuche.** Amazon.de zuerst über `/amazon` (`node scripts/amazon.mjs`, braucht die Allowlist der Cloud-Umgebung, siehe `.claude/skills/amazon/SKILL.md`). Meldet das Skript Captcha oder Egress-Sperre oder ist WebFetch blockiert, dann: Suchmaschinen-Snippets, Wettbewerber-Shops, Preisvergleiche, Händlerseiten. Einschränkung im Lauf-Protokoll vermerken, nie stillschweigend raten.
 9. **Nichts außerhalb des Repos.** Keine Mails, keine Bestellungen, keine Lieferantenkontakte – das Briefing ist die Übergabe an Pafri.
 
 ## Repo-Struktur
@@ -37,8 +37,8 @@ ideas/_laeufe/          Protokoll je Recherche-Lauf
 pipeline/<slug>/        Stufe 1–3: 00-idee.md, 01-voranalyse.md, 02-deep-dive.md, 03-briefing.md (Review im Dashboard liest fazit + Gate-Block)
 products/NG00xx/        nach Gate 3 (Go): Ordner aus pipeline/ hierher verschoben
 data/raw/               Rohdaten, ignoriert (z. B. Miro-Export)
-scripts/                dashboard.py, dashboard_template.html, entscheidungen.py
-.claude/skills/         ideen, voranalyse, deep-dive, briefing, entscheidungen
+scripts/                dashboard.py, dashboard_template.html, entscheidungen.py, amazon.mjs (Amazon.de-Abruf)
+.claude/skills/         ideen, voranalyse, deep-dive, briefing, entscheidungen, amazon
 ```
 
 ## Beim Start jeder Session

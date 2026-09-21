@@ -10,9 +10,9 @@ description: Stufe 2 – Tiefenanalyse nach Pafris xlsx-Vorlage mit 4–6 Wettbe
 2. `pipeline/<slug>/00-idee.md` und `01-voranalyse.md` lesen. `gate_1` muss `go` sein, sonst abbrechen und nachfragen.
 
 ## Recherche
-3. 4–6 Wettbewerber wählen: Referenz-ASIN der Voranalyse, Marktführer, 1–2 Private-Label, 1 Niedrigpreis. ASINs im Frontmatter `wettbewerber`.
-4. Alle Abschnitte 0 und A–O aus `rules/deep-dive.md` füllen, je Wettbewerber eine Spalte. Absatz/Umsatz als Schätzung aus BSR markieren. Leere Zellen `[fehlt]`, nie raten. Zahlen aus der Voranalyse übernehmen, Änderungen im Executive Summary ausweisen.
-5. Abschnitt D: je Wettbewerber bis zu 7 kritische Rezensionen mit Datum. D2 (Rezensions-Mining) über alle Wettbewerber clustern, D3 (Produktanforderungen aus Kundensicht) daraus ableiten.
+3. 4–6 Wettbewerber wählen: Referenz-ASIN der Voranalyse, Marktführer, 1–2 Private-Label, 1 Niedrigpreis (`/amazon suche`, `/amazon bestseller <node>`). ASINs im Frontmatter `wettbewerber`.
+4. Alle Abschnitte 0 und A–O aus `rules/deep-dive.md` füllen, je Wettbewerber eine Spalte; Abschnitt A–C aus `/amazon produkt <ASIN …>` (Preis, BSR, Bewertungen, erhältlich seit, Verkäufer/FBA, Varianten, Bilder, A+). Absatz/Umsatz als Schätzung aus BSR markieren. Leere Zellen `[fehlt]`, nie raten. Zahlen aus der Voranalyse übernehmen, Änderungen im Executive Summary ausweisen. Amazon nicht erreichbar (Exit 2/3) → `rules/quellen.md`.
+5. Abschnitt D: je Wettbewerber bis zu 7 kritische Rezensionen mit Datum aus `/amazon rezensionen <ASIN> --kritisch --max 7`. D2 (Rezensions-Mining) über alle Wettbewerber clustern, D3 (Produktanforderungen aus Kundensicht) daraus ableiten.
 6. Abschnitt L Einkauf: Alibaba/1688 lesend, Preisspanne, MOQ, Lead Time. Kein Kontakt. Sourcing-Anforderungen für Briefing Teil B notieren.
 7. Abschnitt K Wunschprodukt je Start-Variante (max. 2) vollständig ausfüllen; M Detailkalkulation je Variante mit Sensitivität nach `rules/kalkulation.md`; N Compliance; O Launch-Skizze.
 

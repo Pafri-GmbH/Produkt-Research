@@ -11,8 +11,8 @@ description: Stufe 0 – Recherche-Lauf für neue nicegarden-Produktideen auf Am
 
 ## Recherche
 3. Suchraster aus dem Thema ableiten: 8–15 Keywords (deutsch), Amazon-Kategorien, Synonyme.
-4. Quellen in der Reihenfolge aus `rules/quellen.md`. Amazon.de blockiert → Alternativen, Einschränkung notieren.
-5. Je Kandidat: Preisspanne, 3 Top-Anbieter mit ~Bewertungen, Saisonalität, Versandgewicht, grobe Alibaba-Spanne. Jede Zahl mit Quelle/Datum oder `~`.
+4. Quellen in der Reihenfolge aus `rules/quellen.md`: zuerst `/amazon suche "<keyword>"` (Seite 1) je Keyword, Suchraster mit `/amazon autocomplete` prüfen. Amazon nicht erreichbar (Exit 2/3) → Alternativen, `quellen_eingeschraenkt` im Protokoll.
+5. Je Kandidat: Preisspanne, 3 Top-Anbieter mit Bewertungen (aus `suche`; sonst `~`), Saisonalität, Versandgewicht, grobe Alibaba-Spanne. Jede Zahl mit Quelle/Datum oder `~`.
 6. K.O.-Regeln (`rules/scoring.md` Abschnitt 3) prüfen. K.O. → Lane D, trotzdem anlegen, damit die Ablehnung dokumentiert ist.
 7. Vor-Score als Lane A–D vergeben (keine Einzelscores).
 
