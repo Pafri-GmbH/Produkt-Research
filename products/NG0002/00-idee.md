@@ -1,6 +1,6 @@
 ---
-slug: bewaesserungskugeln-glas
-titel: Bewässerungskugeln Glas
+slug: bewaesserungskugeln-ton
+titel: Bewässerungskugeln Ton
 status: produkt
 status_datum: 2026-09-16
 quelle: miro-longlist
@@ -25,7 +25,9 @@ ng_nummer: NG0002
 stop_grund: null
 ---
 
-# Bewässerungskugeln Glas (NG0002)
+# Bewässerungskugeln Ton (NG0002)
+
+**Material: Ton** (Pafri, 2026-09-21, Kommentar im Dashboard). Miro-Karte, Drive-Dateinamen („Glass watering globes") und die Analysen von Dezember 2025 sprechen noch von Glas; das geplante Produkt ist aus Ton. Slug geändert von `bewaesserungskugeln-glas` (bis 2026-09-21).
 
 Miro-Lane A, Pipeline-Status „Launch aktiv" (April 2026). Voranalyse (18.12.2025) und Tiefenanalyse (18.12.2025, 4 Wettbewerber) liegen in Drive; ein eigenständiges Briefing-Dokument existiert nicht (Stand 2026-09-16), der Sourcing-Prozess lief über Hersteller-Anschreiben, Quotation Sheet (Jan 2026), Golden Sample (Mai 2026), Prüfplan und Margenkalkulatoren 180 ml / 360 ml.
 
@@ -38,7 +40,7 @@ Miro-Lane A, Pipeline-Status „Launch aktiv" (April 2026). Voranalyse (18.12.20
 ## SWOT (Miro, April 2026)
 | Stärken | Schwächen |
 |---|---|
-| Voranalyse positiv<br>junger Markt | Saisonalität Urlaub<br>Glas-Bruchrisiko |
+| Voranalyse positiv<br>junger Markt | Saisonalität Urlaub<br>Glas-Bruchrisiko (Miro-Stand Glas; bei Ton neu bewerten) |
 
 | Chancen | Risiken |
 |---|---|
