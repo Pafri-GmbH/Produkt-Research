@@ -10,7 +10,7 @@ description: Stufe 1 – Voranalyse nach Pafris 22-Punkte-Checkliste für eine f
 2. `ideas/<slug>.md` lesen. Status muss `freigegeben` (oder `importiert`/`idee` mit ausdrücklicher Anweisung von Pafri) sein, sonst abbrechen und nachfragen.
 
 ## Recherche
-3. Referenz-ASIN festlegen (Hauptkonkurrent mit bestem Ranking). Amazon.de blockiert → `rules/quellen.md`.
+3. Referenz-ASIN festlegen (Hauptkonkurrent mit bestem Ranking): `/amazon suche` je Hauptkeyword (Seite 1–2), dann `/amazon produkt` für Referenz-ASIN und Top-Listings (BSR, Preis, Sterne, Bewertungen, erhältlich seit, Bilder/A+). Nr. 23 aus `/amazon autocomplete`, Nr. 24 aus `suche` + `produkt`. Amazon nicht erreichbar (Exit 2/3) → `rules/quellen.md`, `quellen_eingeschraenkt` im Kopfblock.
 4. Alle 22 Prüfpunkte in Originalreihenfolge bearbeiten, danach Block 4 (Nr. 23–30: Keywords, Top-Listings, Markteintritt, Kalkulation, Differenzierung, IP, Compliance/Logistik, Risiken). Spalte „Erklärung" unverändert aus `rules/voranalyse.md`. Kein Punkt leer: Befund mit Quelle/Datum, Schätzung markiert oder `[fehlt]`. Zahlen nach `rules/kalkulation.md` kennzeichnen.
 5. Nr. 22 Alibaba nur lesend. Kalkulation (Nr. 26) mit einer Variante und Pauschalen; EK ohne Angebot nach 30-%-Regel.
 

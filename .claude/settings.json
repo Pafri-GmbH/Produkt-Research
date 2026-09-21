@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node scripts/amazon.mjs:*)",
+      "Bash(python scripts/dashboard.py)",
+      "Bash(python scripts/entscheidungen.py:*)"
+    ]
+  }
+}

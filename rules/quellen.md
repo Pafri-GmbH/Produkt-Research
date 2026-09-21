@@ -1,7 +1,7 @@
 # Recherche-Quellen und Einschränkungen
 
 ## Reihenfolge
-1. **Amazon.de direkt** (`https://www.amazon.de/dp/<ASIN>`, Suche, Bestseller-Listen). Wird WebFetch blockiert → Punkt 2–5, Einschränkung im Lauf-Protokoll unter `quellen_eingeschraenkt` vermerken.
+1. **Amazon.de direkt über `/amazon`** (`node scripts/amazon.mjs`: `suche`, `produkt` mit BSR, `rezensionen`, `bestseller`, `autocomplete`; Regeln in `.claude/skills/amazon/SKILL.md`). Schlägt das Skript fehl (Exit 2 Captcha, Exit 3 Egress gesperrt) → Punkt 2–5, Einschränkung im Lauf-Protokoll bzw. Kopfblock der Stufen-Datei unter `quellen_eingeschraenkt` vermerken.
 2. **Suchmaschinen-Snippets** (WebSearch) mit `site:amazon.de <Keyword>`: Titel, Preis, Bewertungsanzahl, teils BSR.
 3. **Preisvergleiche und Händler**: idealo, Google Shopping, OBI, Hornbach, Dehner, Bauhaus, Manufactum, Etsy (nur für Trend/Preis).
 4. **Wettbewerber-Shops** (Netrox, Relaxdays, Gardena, Lechuza, Blumat u. a.) für Spezifikationen und Preise.
