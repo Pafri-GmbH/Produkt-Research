@@ -23,4 +23,4 @@ description: Stufe 1 – Voranalyse nach Pafris 22-Punkte-Checkliste für eine f
 
 ## Abschluss
 11. Gate-1-Block aus `rules/prozess.md`. Empfehlung Go nur bei `score_gesamt ≥ 6,5` und ohne K.O. Warten. Nie `/deep-dive` selbst starten.
-12. Nach Pafris Entscheidung: `gate_1` setzen, bei Stop/Beobachten Status + `stop_grund`, Dashboard, Commit `gate(<slug>): go deep-dive` bzw. `stop` / `beobachten`.
+12. Nach Pafris Entscheidung (im Chat oder per Dashboard-Button, abgeholt durch `/entscheidungen`): `gate_1` setzen, bei Stop/Beobachten Status + `stop_grund`, Dashboard, Commit `gate(<slug>): go deep-dive` bzw. `stop` / `beobachten`.
