@@ -35,6 +35,7 @@ Kurzblock, damit Pafri am Gate 3 nicht in den Deep-Dive zurück muss:
 - Erwarteter Absatz/Monat (Schätzung, Quelle)
 - Top-3 USPs aus Deep-Dive Abschnitt G
 - Top-3 Risiken aus Deep-Dive Abschnitt I
+- Kennzahlen aus Deep-Dive Abschnitt M: Landed Cost, DB1 %, DB2 %, Break-even-ACOS, Kapitalbedarf Charge 1 (unverändert)
 - Scores und `score_gesamt` (unverändert aus Deep-Dive)
 - Vorschlag NG-Nummer (nächste freie, siehe `DASHBOARD.md`)
 
