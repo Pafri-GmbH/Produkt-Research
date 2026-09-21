@@ -87,7 +87,7 @@ code{font-family:var(--mono);font-size:12px;background:var(--surface-2);padding:
 
 /* Next steps */
 .next{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-@media (max-width:900px){.next{grid-template-columns:1fr}}
+@media (max-width:900px){.next{grid-template-columns:minmax(0,1fr)}}
 .next ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
 .next li{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;background:var(--surface-2);cursor:pointer}
 .next li:hover{background:var(--surface-3)}
@@ -118,7 +118,7 @@ code{font-family:var(--mono);font-size:12px;background:var(--surface-2);padding:
 
 /* Charts */
 .charts{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:16px}
-@media (max-width:900px){.charts{grid-template-columns:1fr}}
+@media (max-width:900px){.charts{grid-template-columns:minmax(0,1fr)}}
 .legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--ink-2);margin-top:10px}
 .legend span{display:inline-flex;align-items:center}
 .cols{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:14px;align-items:end;height:190px;padding-top:18px;border-bottom:1px solid var(--line-2)}
@@ -169,12 +169,12 @@ td .step code{font-size:11px;white-space:nowrap}
 
 /* Products + runs */
 .grid2{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:16px}
-@media (max-width:900px){.grid2{grid-template-columns:1fr}}
+@media (max-width:900px){.grid2{grid-template-columns:minmax(0,1fr)}}
 .prods{display:flex;flex-direction:column;gap:8px}
 .prod{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;cursor:pointer}
 .prod:hover{background:var(--surface-2)}
 .prod .ng{font-family:var(--mono);font-weight:500;color:var(--accent);font-size:13px}
-.prod .t{flex:1;min-width:0}
+.prod .t{flex:1;min-width:0;overflow-wrap:anywhere}
 .prod .t b{display:block}
 .prod .t span{font-size:12px;color:var(--ink-2)}
 table.runs{min-width:0}
@@ -236,6 +236,86 @@ table.runs th{cursor:default}
 .queuebox .btn{align-self:flex-start;min-height:30px;padding:4px 10px;font-size:12px}
 .scrim{position:fixed;inset:0;background:rgba(0,0,0,.25);z-index:19}
 .scrim[hidden]{display:none}
+
+/* Filter-Hinweis */
+.filterbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;background:var(--warn-soft);border:1px solid var(--warn);border-radius:6px;padding:8px 12px;font-size:12.5px;margin-bottom:12px;color:var(--warn-text)}
+.filterbar b{color:var(--ink)}
+.filterbar button{margin-left:auto;background:var(--surface);border:1px solid var(--line-2);border-radius:6px;padding:4px 10px;cursor:pointer;font-size:12px;font-weight:600;color:var(--ink)}
+.filterbar[hidden]{display:none}
+.linkbtn{background:transparent;border:0;padding:0;color:var(--accent);cursor:pointer;font-size:12px;font-weight:600;text-decoration:underline}
+
+/* Analyse-Seite (Vollbild) */
+.page{position:fixed;inset:0;z-index:25;background:var(--bg);overflow:auto;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
+.page[hidden]{display:none}
+.page-top{position:sticky;top:0;z-index:2;background:var(--surface);border-bottom:1px solid var(--line);box-shadow:0 1px 0 var(--line)}
+.page-top .in{max-width:1320px;margin:0 auto;padding:12px clamp(16px,3vw,32px);display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px}
+.page-top .back{background:transparent;border:1px solid var(--line-2);border-radius:6px;padding:6px 12px;cursor:pointer;font-size:13px;font-weight:600;color:var(--ink);white-space:nowrap}
+.page-top .back:hover{background:var(--surface-2)}
+.page-top .t{flex:1;min-width:200px}
+.page-top .t h1{font-size:clamp(18px,2.4vw,24px)}
+.page-top .chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.page-top .acts{display:flex;flex-wrap:wrap;gap:8px}
+.page-body{max-width:1320px;width:100%;margin:0 auto;padding:18px clamp(16px,3vw,32px) 64px;display:grid;grid-template-columns:220px minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:900px){.page-body{grid-template-columns:minmax(0,1fr)}}
+.toc{position:sticky;top:76px;display:flex;flex-direction:column;gap:2px;font-size:12.5px}
+.toc .eyebrow{margin-bottom:6px}
+.toc a{color:var(--ink-2);text-decoration:none;padding:4px 8px;border-radius:5px;border-left:2px solid transparent}
+.toc a:hover{background:var(--surface-2);color:var(--ink)}
+.toc a.h3{padding-left:18px;font-size:12px}
+.toc a.on{color:var(--accent);border-left-color:var(--accent);background:var(--accent-soft)}
+@media (max-width:900px){.toc{position:static;flex-direction:row;flex-wrap:wrap;gap:4px}.toc a.h3{display:none}.toc .eyebrow{width:100%}}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.tabs button{background:var(--surface-2);border:1px solid transparent;border-radius:999px;padding:5px 12px;cursor:pointer;font-size:12.5px;font-weight:600;color:var(--ink-2)}
+.tabs button.on{background:var(--accent);color:var(--accent-ink)}
+.kzgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-bottom:18px}
+.kzgrid div{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:2px}
+.kzgrid .k{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.kzgrid .v{font-weight:800;font-size:18px;letter-spacing:-.01em;font-variant-numeric:tabular-nums;line-height:1.2}
+.kzgrid .v.small{font-size:14px;font-weight:700}
+.kzgrid .v.go{color:var(--good-text)}.kzgrid .v.review{color:var(--warn-text)}.kzgrid .v.reject{color:var(--crit-text)}
+.md{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:22px clamp(16px,3vw,32px) 28px;font-size:14px;line-height:1.55}
+.md>:first-child{margin-top:0}
+.md>h1:first-child{display:none}
+.md h1{font-size:22px;margin:0 0 6px}
+.md h2{font-size:18px;margin:34px 0 10px;padding-top:18px;border-top:1px solid var(--line)}
+.md h3{font-size:14px;margin:22px 0 8px;color:var(--ink)}
+.md h4{font-size:13px;margin:16px 0 6px;color:var(--ink-2)}
+.md p{margin:8px 0}
+.md ul,.md ol{margin:6px 0 10px;padding-left:22px}
+.md li{margin:3px 0}
+.md blockquote{margin:10px 0;padding:8px 14px;border-left:3px solid var(--accent-line);background:var(--surface-2);border-radius:0 6px 6px 0;color:var(--ink-2);font-size:13px}
+.md blockquote p{margin:4px 0}
+.md hr{border:0;border-top:1px solid var(--line);margin:22px 0}
+.md code{font-size:12px}
+.md a{word-break:break-all}
+.md .tblx{overflow-x:auto;margin:10px 0 14px;border:1px solid var(--line);border-radius:8px}
+.md table{min-width:0;width:100%;font-size:13px}
+.md th{position:static;cursor:default;background:var(--surface-2);font-size:11px;white-space:normal;vertical-align:bottom}
+.md td{vertical-align:top;line-height:1.45}
+.md tr:last-child td{border-bottom:0}
+.md td.nr,.md th.nr{width:36px;text-align:right;font-variant-numeric:tabular-nums;color:var(--muted);font-weight:700}
+.md td.merk{font-weight:600;min-width:140px}
+.md td.expl,.md th.expl{color:var(--ink-2);font-size:12px;min-width:220px}
+.md.hide-expl td.expl,.md.hide-expl th.expl{display:none}
+.md td.okc,.md th.okc{width:44px;text-align:center}
+.okb{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;font-size:13px;font-weight:800;line-height:1}
+.okb.ok{background:var(--accent-soft);color:var(--good-text)}
+.okb.warn{background:var(--warn-soft);color:var(--warn-text)}
+.okb.crit{background:var(--crit-soft);color:var(--crit-text)}
+.md .fehlt{color:var(--crit-text);font-style:normal;font-weight:600;background:var(--crit-soft);padding:0 5px;border-radius:4px;font-size:12px}
+.md .est{color:var(--ink-2)}
+.note{display:inline-block;width:100%;text-align:center;font-size:11px;color:var(--muted);margin-top:8px}
+.tn{display:flex;align-items:center;gap:8px;font-variant-numeric:tabular-nums;font-weight:700}
+.tn .bar{flex:1;height:8px;background:var(--surface-3);border-radius:4px;min-width:60px;overflow:hidden}
+.tn .bar i{display:block;height:100%;background:var(--accent);border-radius:4px}
+.md .gatecard{margin-top:26px;border:1px solid var(--accent-line);background:var(--accent-soft);border-radius:10px;padding:16px 20px}
+.md .gatecard h2{border:0;margin:0 0 8px;padding:0;font-size:17px}
+.md .gatecard p{margin:6px 0}
+.md .gatecard .rec{font-weight:800}
+.md .gatecard .rec.go{color:var(--good-text)}.md .gatecard .rec.stop{color:var(--crit-text)}.md .gatecard .rec.watch{color:var(--warn-text)}
+.md .summary{border:1px solid var(--line-2);border-radius:8px;padding:12px 16px;margin:10px 0 14px;background:var(--surface-2)}
+.md .summary ol{margin:4px 0 0}
+.page .decide-cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:18px;padding:14px 16px;border:1px dashed var(--line-2);border-radius:8px;font-size:13px;color:var(--ink-2)}
 
 /* tooltip */
 .tip{position:fixed;z-index:30;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12px;padding:6px 9px;border-radius:6px;max-width:260px;box-shadow:var(--shadow)}
@@ -307,6 +387,7 @@ table.runs th{cursor:default}
       <h2>Ideenliste</h2>
       <p>Alle Einträge aus <code>ideas/</code>, <code>pipeline/</code> und <code>products/</code>. Zeile anklicken für Steckbrief.</p>
     </div>
+    <div class="filterbar" id="filterbar" hidden></div>
     <div class="filters">
       <input id="q" type="search" placeholder="Suchen: Titel, Slug, Kategorie …" autocomplete="off">
       <select id="f-lane"><option value="">Lane: alle</option></select>
@@ -349,6 +430,17 @@ table.runs th{cursor:default}
   </footer>
 </div>
 
+<div class="page" id="page" hidden aria-modal="true" role="dialog">
+  <div class="page-top"><div class="in">
+    <button type="button" class="back" id="p-back">← Dashboard</button>
+    <div class="t" id="p-head"></div>
+    <div class="acts" id="p-acts"></div>
+  </div></div>
+  <div class="page-body">
+    <nav class="toc" id="p-toc" aria-label="Inhalt"></nav>
+    <div id="p-main"></div>
+  </div>
+</div>
 <div class="scrim" id="scrim" hidden></div>
 <aside class="drawer" id="drawer" aria-hidden="true">
   <div class="drawer-h">
@@ -553,9 +645,23 @@ table.runs th{cursor:default}
     return rows;
   }
   let selected = null;
+  function renderFilterbar(rows){
+    const parts = [];
+    if (stageFilter){ const st = STAGES.find(s=>s.key===stageFilter); if (st) parts.push("Stufe: <b>"+esc(st.label)+"</b>"); }
+    if (F.status) parts.push("Status: <b>"+esc(STATUS_LABEL[F.status]||F.status)+"</b>");
+    if (F.lane) parts.push("Lane: <b>"+esc(F.lane==="none"?"ohne":F.lane)+"</b>");
+    if (F.cat) parts.push("Kategorie: <b>"+esc(F.cat)+"</b>");
+    if (F.q.trim()) parts.push("Suche: <b>„"+esc(F.q.trim())+"“</b>");
+    const el = $('filterbar');
+    if (!parts.length){ el.hidden = true; el.innerHTML = ""; return; }
+    el.hidden = false;
+    el.innerHTML = `<span>Filter aktiv · ${rows.length} von ${E.length} Ideen sichtbar</span>${parts.map(p=>`<span>${p}</span>`).join("")}<button type="button" id="fb-reset">Alle ${E.length} anzeigen</button>`;
+    $('fb-reset').addEventListener('click', () => $('reset').click());
+  }
   function renderTable(){
     const rows = filtered();
     $('count').textContent = `${rows.length} von ${E.length}`;
+    renderFilterbar(rows);
     $('tbl').querySelector('tbody').innerHTML = rows.map(e => { const n = nextStep(e); return `<tr data-slug="${esc(e.slug)}" class="${selected===e.slug?"sel":""}">
       <td>${laneChip(e.score)}</td>
       <td><div class="title">${esc(e.titel)}</div><div class="slug">${esc(e.slug)}</div></td>
@@ -563,9 +669,10 @@ table.runs th{cursor:default}
       <td class="num">${vk(e)}</td>
       <td>${pill(e)}</td>
       <td class="num">${esc(e.status_datum||"–")}</td>
-      <td><div class="step">${esc(n.text)}${n.cmd && n.kind!=="none"?`<br><code>${esc(n.cmd)}</code>`:""}</div></td>
+      <td><div class="step">${esc(n.text)}${n.cmd && n.kind!=="none"?`<br><code>${esc(n.cmd)}</code>`:""}${e.stufe&&e.stufe.stufen&&e.stufe.stufen.length?`<br><button type="button" class="linkbtn" data-page="${esc(e.slug)}">Analyse öffnen ↗</button>`:""}</div></td>
     </tr>`; }).join("");
     $('tbl').querySelectorAll('tbody tr').forEach(tr => tr.addEventListener('click', () => openDetail(tr.dataset.slug)));
+    $('tbl').querySelectorAll('button[data-page]').forEach(b => b.addEventListener('click', ev => { ev.stopPropagation(); openPage(b.dataset.page); }));
     $('tbl').querySelectorAll('th[data-k]').forEach(th => { th.classList.toggle('sorted', th.dataset.k===F.sortK); th.querySelector('.arr')?.remove(); if (th.dataset.k===F.sortK){ const a=document.createElement('span'); a.className='arr'; a.textContent=F.sortD>0?"▲":"▼"; th.appendChild(a);} });
     renderRange(rows);
   }
@@ -607,7 +714,10 @@ table.runs th{cursor:default}
       ${gb.begruendung?`<div class="row"><span class="k">Begründung</span><span>${esc(gb.begruendung)}</span></div>`:""}
       ${gb.offen?`<div class="row"><span class="k">Offene Punkte / Datenlücken</span><span>${esc(gb.offen)}</span></div>`:""}
       ${gb.naechster?`<div class="row"><span class="k">Nächster Schritt bei Go</span><span class="mono">${esc(gb.naechster)}</span></div>`:""}`:`<p class="muted">Kein Gate-Block in <span class="mono">${esc(st.datei)}</span> gefunden.</p>`}
-      <a href="${esc(D.repo_url + st.datei)}" target="_blank" rel="noopener">Vollständige Analyse in GitHub öffnen ↗</a>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:4px">
+        ${st.stufen&&st.stufen.length?`<button type="button" class="btn primary" data-open-page="${esc(e.slug)}">Analyse als Seite öffnen</button>`:""}
+        <a href="${esc(D.repo_url + st.datei)}" target="_blank" rel="noopener">In GitHub öffnen ↗</a>
+      </div>
     </div></section>`;
   }
   function decideHtml(e){
@@ -682,10 +792,121 @@ table.runs th{cursor:default}
       <section><h3>Repo</h3><a href="${esc(e.github_url)}" target="_blank" rel="noopener" class="mono">${esc(e.pfad)} ↗</a></section>
     `;
     bindDecision(e);
+    $('d-body').querySelectorAll('button[data-open-page]').forEach(b => b.addEventListener('click', () => openPage(b.dataset.openPage)));
   }
   function closeDetail(){ selected=null; $('drawer').classList.remove('open'); $('drawer').setAttribute('aria-hidden','true'); $('scrim').hidden=true; renderTable(); save(); }
   $('d-close').addEventListener('click', closeDetail); $('scrim').addEventListener('click', closeDetail);
-  document.addEventListener('keydown', ev => { if (ev.key==="Escape" && $('drawer').classList.contains('open')) closeDetail(); });
+  document.addEventListener('keydown', ev => { if (ev.key!=="Escape") return; if (!$('page').hidden) closePage(); else if ($('drawer').classList.contains('open')) closeDetail(); });
+
+  // ---------- Markdown → HTML (Stufen-Dateien) ----------
+  function inline(s){
+    s = esc(s).replace(/&lt;br\s*\/?&gt;/g, "<br>");
+    s = s.replace(/`([^`]+)`/g, (_,c)=>`<code>${c}</code>`);
+    s = s.replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
+    s = s.replace(/(^|[\s(>])_([^_\n]+)_(?=[\s).,;:!?<]|$)/g, "$1<i>$2</i>");
+    s = s.replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    s = s.replace(/(^|[\s(])(https?:\/\/[^\s<)]+)/g, '$1<a href="$2" target="_blank" rel="noopener">$2</a>');
+    s = s.replace(/\[fehlt\]/g, '<span class="fehlt">fehlt</span>');
+    return s;
+  }
+  function mdToHtml(md){
+    const lines = md.replace(/\r/g,"").split("\n");
+    const out = []; let i = 0, para = [], list = null, inGate = false, hid = 0;
+    const toc = [];
+    const flushP = () => { if (para.length){ out.push(`<p>${inline(para.join(" "))}</p>`); para = []; } };
+    const flushL = () => { if (list){ out.push(`</${list}>`); list = null; } };
+    const isSep = l => /^\s*\|?\s*:?-{2,}/.test(l) && /^[\s|:\-]+$/.test(l);
+    const cells = l => l.trim().replace(/^\|/,"").replace(/\|$/,"").split("|").map(c=>c.trim());
+    const okb = c => c==="✅"?'<span class="okb ok" title="unkritisch">✓</span>':c==="⚠️"?'<span class="okb warn" title="Einschränkung">!</span>':c==="❌"?'<span class="okb crit" title="kritisch">×</span>':null;
+    while (i < lines.length){
+      const l = lines[i];
+      if (/^\s*$/.test(l)){ flushP(); flushL(); i++; continue; }
+      const h = l.match(/^(#{1,6})\s+(.*)$/);
+      if (h){
+        flushP(); flushL();
+        const lvl = h[1].length, txt = h[2].trim();
+        if (lvl===2 && /^Gate \d/.test(txt)){ out.push(`<section class="gatecard" id="sec-${++hid}"><h2>${inline(txt)}</h2>`); inGate = true; toc.push({id:"sec-"+hid, lvl:2, txt}); i++; continue; }
+        const id = "sec-"+(++hid); if (lvl===2||lvl===3) toc.push({id, lvl, txt});
+        out.push(`<h${lvl} id="${id}">${inline(txt)}</h${lvl}>`); i++; continue;
+      }
+      if (/^\s*(---+|\*\*\*+)\s*$/.test(l)){ flushP(); flushL(); if (inGate){ out.push("</section>"); inGate=false; } else if (out.length) out.push("<hr>"); i++; continue; }
+      if (/^>/.test(l)){
+        flushP(); flushL(); const q = [];
+        while (i < lines.length && /^>/.test(lines[i])){ q.push(lines[i].replace(/^>\s?/,"")); i++; }
+        out.push(`<blockquote>${q.map(x=>`<p>${inline(x)}</p>`).join("")}</blockquote>`); continue;
+      }
+      if (/^\s*\|/.test(l) && i+1 < lines.length && isSep(lines[i+1])){
+        flushP(); flushL();
+        const head = cells(l); i += 2; const rows = [];
+        while (i < lines.length && /^\s*\|/.test(lines[i])){ rows.push(cells(lines[i])); i++; }
+        const hl = head.map(x=>x.toLowerCase());
+        const cls = head.map(x => { const y = x.toLowerCase(); return y==="nr."||y==="nr"||y==="#" ? "nr" : y.startsWith("erklärung") ? "expl" : y==="ok" ? "okc" : y==="merkmal" ? "merk" : ""; });
+        const tnIdx = hl.findIndex(x=>x.startsWith("teilnote"));
+        const html = `<div class="tblx"><table><thead><tr>${head.map((c,ci)=>`<th class="${cls[ci]}">${inline(c)}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${head.map((_,ci)=>{
+          const c = r[ci] ?? ""; const o = cls[ci]==="okc" ? okb(c) : null;
+          if (o) return `<td class="okc">${o}</td>`;
+          if (ci===tnIdx && /^\d+(?:[.,]\d+)?$/.test(c)){ const v = parseFloat(c.replace(",",".")); return `<td><div class="tn"><span>${c}</span><span class="bar"><i style="width:${Math.max(0,Math.min(100,v*10))}%"></i></span></div></td>`; }
+          return `<td class="${cls[ci]}">${inline(c)}</td>`; }).join("")}</tr>`).join("")}</tbody></table></div>`;
+        out.push(html); continue;
+      }
+      const li = l.match(/^\s*(?:[-*]|(\d+)\.)\s+(.*)$/);
+      if (li){
+        flushP(); const kind = li[1] ? "ol" : "ul";
+        if (list !== kind){ flushL(); out.push(`<${kind}>`); list = kind; }
+        out.push(`<li>${inline(li[2])}</li>`); i++; continue;
+      }
+      if (/^\*\*[^*]+\*\*/.test(l.trim())) flushP();
+      para.push(l.trim()); i++;
+    }
+    flushP(); flushL(); if (inGate) out.push("</section>");
+    let html = out.join("\n");
+    // Fazit-Absatz („**Fazit:** … fünf Zeilen“) und Empfehlung im Gate-Block hervorheben
+    html = html.replace(/<p><b>Fazit:<\/b>(.*?)<\/p>\s*<ol>/s, '<div class="summary"><p><b>Fazit:</b>$1</p><ol>').replace(/(<div class="summary">[\s\S]*?<\/ol>)/, "$1</div>");
+    html = html.replace(/<p><b>Empfehlung:<\/b>\s*([^<]*)/g, (m, r) => { const c = /^go/i.test(r)?"go":/^stop/i.test(r)?"stop":/beobachten/i.test(r)?"watch":""; return `<p><b>Empfehlung:</b> <span class="rec ${c}">${r}</span>`; });
+    return {html, toc};
+  }
+
+  // ---------- Analyse-Seite ----------
+  let pageSlug = null, pageIdx = 0, hideExpl = true;
+  function openPage(slug, idx){
+    const e = E.find(x=>x.slug===slug); if (!e || !e.stufe || !e.stufe.stufen || !e.stufe.stufen.length) return;
+    pageSlug = slug; pageIdx = Math.min(idx ?? e.stufe.stufen.length-1, e.stufe.stufen.length-1);
+    if ($('drawer').classList.contains('open')) closeDetail();
+    renderPage(e);
+    $('page').hidden = false; document.body.style.overflow = "hidden";
+    if (location.hash !== "#analyse/"+slug) history.pushState(null, "", "#analyse/"+slug);
+    $('page').scrollTop = 0;
+  }
+  function closePage(){
+    if ($('page').hidden) return;
+    $('page').hidden = true; document.body.style.overflow = ""; pageSlug = null;
+    if (/^#analyse\//.test(location.hash)) history.pushState(null, "", location.pathname + location.search);
+  }
+  const ZONE_CLS = z => /go/i.test(z)?"go":/review/i.test(z)?"review":/reject/i.test(z)?"reject":"";
+  function renderPage(e){
+    const st = e.stufe, s = st.stufen[pageIdx], kz = s.kennzahlen || {};
+    const KZ = [["score","Score / 100"],["zone","Zone"],["empfehlung","Empfehlung"],["ko","K.O."],["vk_ziel","Ziel-VK"],["ek_annahme","EK-Annahme"],["landed_cost","Landed Cost"],["db1_prozent","DB1"],["db2_prozent","DB2"],["break_even_acos","Break-even-ACOS"],["moq","MOQ"],["kapitalbedarf","Kapitalbedarf"],["varianten","Varianten"],["risiko_hoch","Risiken hoch"],["ziel_vk_eur","Ziel-VK"],["ziel_ek_eur","Ziel-EK"]].filter(([k])=>kz[k]!=null && kz[k]!=="");
+    $('p-head').innerHTML = `<div class="eyebrow">${esc(e.kategorie||"")} · ${esc(STATUS_LABEL[s.stufe]||s.stufe)}${s.datum?` · ${esc(s.datum)}`:""} · <span class="mono">${esc(s.datei)}</span></div><h1>${esc(e.titel)}</h1><div class="chips">${laneChip(e.score)}${pill(e)}<span class="mono muted">${esc(e.slug)}</span></div>`;
+    $('p-acts').innerHTML = `<button type="button" class="btn" id="p-expl">${hideExpl?"Erklärungen einblenden":"Erklärungen ausblenden"}</button><button type="button" class="btn" id="p-detail">Steckbrief &amp; Entscheidung</button><a class="btn" href="${esc(D.repo_url + s.datei)}" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;align-items:center">GitHub ↗</a>`;
+    const {html, toc} = mdToHtml(s.md || "");
+    const tabs = st.stufen.length>1 ? `<div class="tabs">${st.stufen.map((x,i)=>`<button type="button" class="${i===pageIdx?"on":""}" data-idx="${i}">${esc(STATUS_LABEL[x.stufe]||x.stufe)}${x.datum?` · ${esc(x.datum)}`:""}</button>`).join("")}</div>` : "";
+    const n = nextStep(e);
+    $('p-main').innerHTML = `${tabs}
+      ${KZ.length?`<div class="kzgrid">${KZ.map(([k,l])=>{ const v=k==="zone"?String(kz[k]).replace(/^\w/,c=>c.toUpperCase()):String(kz[k]); const big = ["score","zone","db1_prozent","break_even_acos","vk_ziel"].includes(k); return `<div><span class="k">${esc(l)}</span><span class="v ${big?"":"small"} ${k==="zone"?ZONE_CLS(v):""}">${esc(v)}</span></div>`; }).join("")}</div>`:""}
+      <article class="md ${hideExpl?"hide-expl":""}" id="p-md">${html}</article>
+      ${n.kind==="pafri"?`<div class="decide-cta"><span><b>Deine Entscheidung steht aus:</b> ${esc(n.text)}.</span><button type="button" class="btn primary" id="p-decide">Jetzt entscheiden</button></div>`:""}`;
+    $('p-toc').innerHTML = `<span class="eyebrow">Inhalt</span>` + toc.map(x=>`<a href="#${x.id}" class="${x.lvl===3?"h3":""}" data-to="${x.id}">${esc(x.txt.replace(/[*`]/g,""))}</a>`).join("");
+    $('p-toc').querySelectorAll('a[data-to]').forEach(a => a.addEventListener('click', ev => { ev.preventDefault(); const el = document.getElementById(a.dataset.to); if (el) el.scrollIntoView({behavior:"smooth", block:"start"}); }));
+    $('p-main').querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => { pageIdx = Number(b.dataset.idx); renderPage(e); $('page').scrollTop = 0; }));
+    $('p-expl').addEventListener('click', () => { hideExpl = !hideExpl; renderPage(e); });
+    $('p-detail').addEventListener('click', () => { closePage(); openDetail(e.slug); });
+    const pd = $('p-decide'); if (pd) pd.addEventListener('click', () => { closePage(); openDetail(e.slug); });
+    // aktive TOC-Position beim Scrollen
+    const links = [...$('p-toc').querySelectorAll('a[data-to]')];
+    $('page').onscroll = () => { let cur = null; for (const x of toc){ const el = document.getElementById(x.id); if (el && el.getBoundingClientRect().top - 90 <= 0) cur = x.id; } links.forEach(a => a.classList.toggle('on', a.dataset.to===cur)); };
+  }
+  $('p-back').addEventListener('click', closePage);
+  window.addEventListener('popstate', () => { const m = location.hash.match(/^#analyse\/([a-z0-9-]+)$/); if (m) openPage(m[1]); else closePage(); });
 
   // ---------- Tooltip ----------
   let tipEl = null;
@@ -699,8 +920,9 @@ table.runs th{cursor:default}
   function moveTip(ev){ if(!tipEl) return; const x=Math.min(ev.clientX+14, window.innerWidth-tipEl.offsetWidth-8); tipEl.style.left=x+'px'; tipEl.style.top=(ev.clientY+14)+'px'; }
 
   // ---------- Persistence (per viewer, convenience only) ----------
-  function save(){ try{ localStorage.setItem('ng-radar', JSON.stringify({F, stageFilter, selected})); }catch(_){} }
-  function load(){ try{ const s=JSON.parse(localStorage.getItem('ng-radar')||"null"); if(s){ Object.assign(F, s.F||{}); stageFilter=s.stageFilter||null; selected=s.selected||null; } }catch(_){} }
+  // Filter und Auswahl werden bewusst nicht mehr gespeichert: ein gespeicherter Stufen-Filter ließ die Liste nach dem Neuladen leer erscheinen.
+  function save(){ try{ localStorage.removeItem('ng-radar'); }catch(_){} }
+  function load(){}
 
   function refresh(){
     renderStages(); renderNext(); renderTable();
@@ -718,9 +940,10 @@ table.runs th{cursor:default}
     );
   }
 
-  load(); syncInputs();
+  load(); save(); syncInputs();
   renderStages(); renderNext(); renderLaneChart(); renderProds(); renderTable();
-  if (selected && E.some(e=>e.slug===selected)) openDetail(selected); else selected=null;
+  selected = null;
+  { const m = location.hash.match(/^#analyse\/([a-z0-9-]+)$/); if (m) openPage(m[1]); }
   initDb();
 })();
 </script>

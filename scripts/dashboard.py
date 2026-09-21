@@ -168,6 +168,7 @@ def parse_stage(folder: Path) -> dict | None:
     """Stufen-Dateien in pipeline/<slug>/ bzw. products/NG00xx/: jüngste Datei (Fazit, Gate-Block) plus Kennzahlen aus allen Stufen."""
     result = None
     kennzahlen: dict = {}
+    stufen: list[dict] = []
     for name in STAGE_FILES:
         path = folder / name
         if not path.exists():
@@ -185,8 +186,18 @@ def parse_stage(folder: Path) -> dict | None:
             "fazit": fm.get("fazit"),
             "gate_block": parse_gate_block(text),
         }
+        # Volltext der Stufen-Datei (ohne Frontmatter) für die Analyse-Seite im Dashboard.
+        m = re.match(r"^---\n(.*?)\n---\n?", text, re.S)
+        stufen.append({
+            "datei": result["datei"],
+            "stufe": result["stufe"],
+            "datum": result["datum"],
+            "kennzahlen": {k: fm.get(k) for k in KENNZAHLEN.get(name, []) if fm.get(k) not in (None, "")},
+            "md": text[m.end():] if m else text,
+        })
     if result is not None:
         result["kennzahlen"] = kennzahlen
+        result["stufen"] = stufen
     return result
 
 
