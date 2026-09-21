@@ -21,12 +21,14 @@ quelle: miro-longlist         # miro-longlist | ideen-lauf | pafri | drive
 lauf: 2026-09-16-miro-import  # Dateiname in ideas/_laeufe/ ohne .md
 kategorie: Pflege & Werkzeug  # Bewässerung | Pflege & Werkzeug | Anzucht & Ranken | Gefäße & Deko
 vk_spanne_eur: [12, 25]       # Zielpreis auf Amazon.de, [min, max]
-score: A                      # A | B | C | D  (rules/scoring.md)
-score_gesamt: null            # 1–10, gewichteter Wert aus rules/scoring.md, null bis /voranalyse
-scores:                       # Einzelscores 1–10, null wenn nicht bewertet
+score: A                      # A | B | C | D  (Lane, rules/scoring.md Abschnitt 4)
+score_gesamt: null            # 0–100, gewichteter Wert aus rules/scoring.md, null bis /voranalyse
+scores:                       # Teilnoten 0–10 (sechs Kriterien), null wenn nicht bewertet
   marge: null
-  markt: null
-  usp: null
+  nachfrage: null
+  wettbewerb: null
+  logistik: null
+  markenfit: null
   risiko: null
 ko_verstoss: []               # Liste der K.O.-Regeln aus rules/scoring.md, leer = keine
 pipeline_status_miro: Longlist # nur bei quelle: miro-longlist
@@ -48,9 +50,11 @@ Fehlende Angaben werden als `[fehlt]` markiert, nie geraten.
 | Datei | Frontmatter-Zusätze |
 |---|---|
 | `00-idee.md` | Kopie des Ideensteckbriefs zum Zeitpunkt der Freigabe |
-| `01-voranalyse.md` | `stufe: voranalyse`, `datum`, `bearbeiter: claude`, `referenz_asin`, `hauptkategorie`, `fazit` |
-| `02-deep-dive.md` | `stufe: deep-dive`, `datum`, `wettbewerber: [ASIN, …]`, `fazit` |
+| `01-voranalyse.md` | `stufe: voranalyse`, `slug`, `datum`, `bearbeiter: claude`, `quellen_stand`, `referenz_asin`, `hauptkategorie`, `fazit` + Kennzahlen `score` (0–100), `zone` (go/review/reject), `vk_ziel`, `ek_annahme`, `db1_prozent`, `break_even_acos`, `kapitalbedarf`, `ko`, `empfehlung` |
+| `02-deep-dive.md` | `stufe: deep-dive`, `slug`, `datum`, `bearbeiter: claude`, `quellen_stand`, `wettbewerber: [ASIN, …]`, `fazit` + Kennzahlen `vk_ziel`, `landed_cost`, `db1_prozent`, `db2_prozent`, `break_even_acos`, `moq`, `kapitalbedarf`, `varianten`, `risiko_hoch`, `empfehlung`, `unsicherheit_1`, `unsicherheit_2` |
 | `03-briefing.md` | `stufe: briefing`, `datum`, `ziel_ek_eur`, `ziel_vk_eur`, `moq`, `fazit` |
+
+Mustervorlagen: `templates/01-voranalyse.md`, `templates/02-deep-dive.md` (1:1 kopieren, alle Abschnitte behalten). Kennzahlen als Zahl mit Einheit (`24,90 €`, `41 %`, `~6.800 €`); `scripts/dashboard.py` zeigt sie im Steckbrief und im Block „Analysen-Kennzahlen". Ein leeres `score` in `01-voranalyse.md` ist ein Fehler.
 
 Der Statuswechsel erfolgt immer in `ideas/<slug>.md` (bleibt Quelle der Wahrheit für Status) **und** in `pipeline/<slug>/00-idee.md`. `scripts/dashboard.py` bevorzugt `pipeline/`/`products/`, wenn dort eine `00-idee.md` liegt.
 

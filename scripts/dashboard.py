@@ -29,6 +29,15 @@ STAGE_LABEL = {
     "abgelehnt": "Abgelehnt",
 }
 LANE_ORDER = {"A": 0, "B": 1, "C": 2, "D": 3}
+REPO_URL = "https://github.com/Pafri-GmbH/Produkt-Research/blob/main/"
+STAGE_FILES = ["01-voranalyse.md", "02-deep-dive.md", "03-briefing.md"]  # Reihenfolge: spätere Stufe überschreibt Kennzahlen
+SCORE_KEYS = ["marge", "nachfrage", "wettbewerb", "logistik", "markenfit", "risiko"]
+# Kennzahlen je Stufen-Datei (rules/schema.md). Score und Zone stammen aus der Voranalyse und werden nur vom Deep-Dive überschrieben, wenn er sie setzt.
+KENNZAHLEN = {
+    "01-voranalyse.md": ["score", "zone", "ko", "vk_ziel", "ek_annahme", "db1_prozent", "break_even_acos", "kapitalbedarf", "empfehlung"],
+    "02-deep-dive.md": ["score", "zone", "vk_ziel", "landed_cost", "db1_prozent", "db2_prozent", "break_even_acos", "moq", "kapitalbedarf", "varianten", "risiko_hoch", "empfehlung", "unsicherheit_1", "unsicherheit_2"],
+    "03-briefing.md": ["ziel_ek_eur", "ziel_vk_eur", "moq"],
+}
 
 
 def parse_frontmatter(text: str) -> dict:
@@ -128,6 +137,70 @@ def parse_body(text: str) -> dict:
     return {"kurz": kurz, "swot": swot, "kpis": kpis, "offen": offen}
 
 
+def parse_gate_block(text: str) -> dict | None:
+    """Liest den Gate-Block (rules/prozess.md) aus einer Stufen-Datei: Empfehlung, Begründung, offene Punkte, nächster Schritt, Entscheidung."""
+    m = re.search(r"^## Gate (\d):[^\n]*\n(.*?)(?:^---\s*$|\Z)", text, re.S | re.M)
+    if not m:
+        return None
+    block = {"gate": int(m.group(1)), "ergebnis": "", "empfehlung": "", "begruendung": "", "offen": "", "naechster": "", "entscheidung": ""}
+    keys = {
+        "ergebnis": "ergebnis",
+        "empfehlung": "empfehlung", "begründung": "begruendung", "begruendung": "begruendung",
+        "offene punkte": "offen", "nächster schritt": "naechster", "naechster schritt": "naechster",
+        "deine entscheidung": "entscheidung",
+    }
+    cur = None
+    for line in m.group(2).splitlines():
+        fm = re.match(r"^\*\*(.+?)\*\*\s*:?\s*(.*)$", line.strip())
+        if fm:
+            label = fm.group(1).lower()
+            cur = next((v for k, v in keys.items() if label.startswith(k)), None)
+            if cur:
+                block[cur] = fm.group(2).strip()
+            continue
+        if cur and line.strip():
+            block[cur] = (block[cur] + " " + line.strip()).strip()
+    block["empfehlung"] = block["empfehlung"].strip(" _*")
+    return block
+
+
+def parse_stage(folder: Path) -> dict | None:
+    """Stufen-Dateien in pipeline/<slug>/ bzw. products/NG00xx/: jüngste Datei (Fazit, Gate-Block) plus Kennzahlen aus allen Stufen."""
+    result = None
+    kennzahlen: dict = {}
+    stufen: list[dict] = []
+    for name in STAGE_FILES:
+        path = folder / name
+        if not path.exists():
+            continue
+        text = path.read_text(encoding="utf-8")
+        fm = parse_frontmatter(text)
+        for key in KENNZAHLEN.get(name, []):
+            val = fm.get(key)
+            if val is not None and val != "":
+                kennzahlen[key] = val
+        result = {
+            "datei": str(path.relative_to(ROOT)),
+            "stufe": fm.get("stufe") or name[3:-3],
+            "datum": fm.get("datum"),
+            "fazit": fm.get("fazit"),
+            "gate_block": parse_gate_block(text),
+        }
+        # Volltext der Stufen-Datei (ohne Frontmatter) für die Analyse-Seite im Dashboard.
+        m = re.match(r"^---\n(.*?)\n---\n?", text, re.S)
+        stufen.append({
+            "datei": result["datei"],
+            "stufe": result["stufe"],
+            "datum": result["datum"],
+            "kennzahlen": {k: fm.get(k) for k in KENNZAHLEN.get(name, []) if fm.get(k) not in (None, "")},
+            "md": text[m.end():] if m else text,
+        })
+    if result is not None:
+        result["kennzahlen"] = kennzahlen
+        result["stufen"] = stufen
+    return result
+
+
 def load_entries() -> list[dict]:
     entries: dict[str, dict] = {}
     # Reihenfolge: ideas zuerst, pipeline/products überschreiben (haben Vorrang).
@@ -145,6 +218,7 @@ def load_entries() -> list[dict]:
             if fm.get("slug"):
                 fm["_pfad"] = str(path.parent.relative_to(ROOT))
                 fm["_body"] = parse_body(text)
+                fm["_stufe"] = parse_stage(path.parent)
                 entries[fm["slug"]] = fm
     return list(entries.values())
 
@@ -234,6 +308,24 @@ def build(entries: list[dict]) -> str:
         lines.append("Leer.")
     lines.append("")
 
+    # Analysen-Kennzahlen (aus dem Frontmatter der Stufen-Dateien, rules/schema.md)
+    analysen = [e for e in entries if e.get("_stufe") and e["_stufe"].get("kennzahlen")]
+    if analysen:
+        lines += ["## Analysen-Kennzahlen", "",
+                  "| Slug | Stufe | Score | Zone | VK-Ziel | DB1 % | BE-ACOS | Kapital Ch. 1 | Empfehlung | Stand |",
+                  "|---|---|---|---|---|---|---|---|---|---|"]
+        order = {"briefing": 0, "deep-dive": 1, "voranalyse": 2}
+        for e in sorted(analysen, key=lambda x: (order.get(str(x["_stufe"].get("stufe")), 9), x["slug"])):
+            st, k = e["_stufe"], e["_stufe"]["kennzahlen"]
+            lines.append(f"| {e['slug']} | {fmt(st.get('stufe'))} | {fmt(k.get('score'))} | {fmt(k.get('zone'))} | {fmt(k.get('vk_ziel'))} | {fmt(k.get('db1_prozent'))} | {fmt(k.get('break_even_acos'))} | {fmt(k.get('kapitalbedarf'))} | {fmt(k.get('empfehlung'))} | {fmt(st.get('datum'))} |")
+        lines += ["", "Stufe 2 überschreibt VK, DB1, BE-ACOS und Kapital aus Stufe 1; Score und Zone stammen aus der Voranalyse, bis der Deep-Dive sie aktualisiert."]
+        offen = [(e["slug"], [e["_stufe"]["kennzahlen"].get(k) for k in ("unsicherheit_1", "unsicherheit_2") if e["_stufe"]["kennzahlen"].get(k)]) for e in analysen]
+        offen = [(s, u) for s, u in offen if u]
+        if offen:
+            lines += ["", "Offen (Unsicherheiten aus Deep-Dive):"]
+            lines += [f"- {s}: " + " · ".join(str(x) for x in u) for s, u in offen]
+        lines.append("")
+
     # Ideen nach Lane
     ideas = [e for e in entries if e.get("status") in ("importiert", "idee", "beobachten")]
     lines += ["## Ideen (Stufe 0) nach Lane", ""]
@@ -294,7 +386,7 @@ def build_html(entries: list[dict], runs: list[dict]) -> str:
             "vk_max": vk_max,
             "score": e.get("score") if e.get("score") in ("A", "B", "C", "D") else None,
             "score_gesamt": num(e.get("score_gesamt")),
-            "scores": {k: num(scores.get(k)) for k in ("marge", "markt", "usp", "risiko")},
+            "scores": {k: num(scores.get(k)) for k in SCORE_KEYS},
             "ko_verstoss": [str(x) for x in e.get("ko_verstoss") or [] if x is not None],
             "pipeline_status_miro": e.get("pipeline_status_miro"),
             "gate_1": e.get("gate_1"),
@@ -307,13 +399,15 @@ def build_html(entries: list[dict], runs: list[dict]) -> str:
             "swot": body.get("swot", {}),
             "kpis": body.get("kpis", []),
             "offen": body.get("offen", []),
+            "github_url": REPO_URL + (e.get("_pfad") or ""),
+            "stufe": e.get("_stufe"),
         })
     run_rows = [{
         "lauf": r.get("lauf"), "thema": r.get("thema"), "ziel_anzahl": r.get("ziel_anzahl"),
         "gefunden": r.get("gefunden"), "dedupe_verworfen": r.get("dedupe_verworfen"),
         "quellen_eingeschraenkt": r.get("quellen_eingeschraenkt"),
     } for r in runs]
-    data = {"stand": date.today().isoformat(), "next_ng": next_ng(entries), "entries": rows, "runs": run_rows}
+    data = {"stand": date.today().isoformat(), "next_ng": next_ng(entries), "repo_url": REPO_URL, "entries": rows, "runs": run_rows}
     payload = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
     template = (ROOT / "scripts" / "dashboard_template.html").read_text(encoding="utf-8")
     return template.replace("__DATA__", payload)

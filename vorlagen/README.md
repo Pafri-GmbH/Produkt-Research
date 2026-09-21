@@ -10,7 +10,8 @@ Pafris Original-Vorlagen liegen in Google Drive und Notion. Dieser Ordner enthä
 | `beispiel-tiefenanalyse-bewaesserungskugeln.md` | Bewässerungskugeln - tiefgehende Analyse .xlsx | Drive `1ZEagtoTYx4gmCHNB9w_Mq_BOhiSFUQq2` |
 | `briefing-ng0001-blumengiesskanne.md` | Produktbriefing Quick Check - Blumengießkanne | Drive `1pG_0GzwZAn5rUzh4PpJwtcO6Ie6wHAmFk88fEmhMzdk` |
 | `vorlage-briefing-quick-check.md` | Produktbriefing Quick-Check- Vorlage (Beispiel Gartenabfallsack) | Drive `12E59pEdKTZW20VZlMONl-JVsXpSQJ5nM6VXUGXFd_B4` |
-| `scoring-notion.md` | Template – Produktanalyse-Bewertung | Notion `35a121f3f8e181abafabdfd6f72e5438` |
+| `scoring-notion.md` | Template – Produktanalyse-Bewertung (abgelöst durch das 6-Kriterien-Modell, Stand 2026-09-21) | Notion `35a121f3f8e181abafabdfd6f72e5438` |
+| `detaildokument-analysen.md` | Detaildokument Voranalyse und Tiefenanalyse (Paket von Pafri, 2026-09-21): Prüfpunkte, Scoring 0–100, Kalkulationslogik, Dashboard-Kennzahlen. Eingearbeitet in `rules/scoring.md`, `rules/kalkulation.md`, `rules/voranalyse.md` Block 4, `rules/deep-dive.md` [neu], `templates/01-voranalyse.md`, `templates/02-deep-dive.md`. Das mitgelieferte `dashboard.py` wurde nicht übernommen (anderes Status-Modell, kein HTML); der Block „Analysen-Kennzahlen" ist in `scripts/dashboard.py` integriert. | Upload |
 
 Nicht gefunden (Stand 2026-09-16): ein eigenständiges Scoring-Modell als Datei, ein Briefing zu NG0002. Weitere ausgefüllte Tiefenanalysen in Drive: Grillplatte (`1t5fI8VbRh3EdqVuJyBG6T7YFAewb_soS`), Eiskübel (`1MCdt82--b7hPr5eZAMQTMb1XjSM0Ffga`).
 

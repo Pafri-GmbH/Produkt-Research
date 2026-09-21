@@ -1,6 +1,8 @@
 # Voranalyse – Schema
 
-Quelle: Google Doc „Vorlage Voranalyse" (Produktrecherche – Checkliste (Voranalyse)), Drive-ID `1AvkjWEH3hdWBFMBiZd4fts0svuaeGi1lmKn8JkmJZDU`, Stand 2024-11-26. Ausgefülltes Beispiel: „Voranalyse Bewässerungskugeln" (18.12.2025). Alle Prüfpunkte 1:1 in Originalreihenfolge. Ausgabe: `pipeline/<slug>/01-voranalyse.md`.
+Quelle: Google Doc „Vorlage Voranalyse" (Produktrecherche – Checkliste (Voranalyse)), Drive-ID `1AvkjWEH3hdWBFMBiZd4fts0svuaeGi1lmKn8JkmJZDU`, Stand 2024-11-26. Ausgefülltes Beispiel: „Voranalyse Bewässerungskugeln" (18.12.2025, `vorlagen/beispiel-voranalyse-bewaesserungskugeln.md`). Alle Prüfpunkte 1:1 in Originalreihenfolge; Block 4 [neu] hängt die Ergänzungen aus Pafris Detaildokument (`vorlagen/detaildokument-analysen.md`, Abschnitt 1.3) an. Ausgabe: `pipeline/<slug>/01-voranalyse.md`, **Mustervorlage `templates/01-voranalyse.md` 1:1 kopieren und befüllen**.
+
+Zweck: In 1–2 Stunden Rechenzeit klären, ob eine freigegebene Idee eine Tiefenanalyse rechtfertigt. Vier Fragen: Gibt es Nachfrage? Ist der Wettbewerb angreifbar? Rechnet sich das im VK-Korridor 12–40 €? Gibt es ein K.O.?
 
 ## Kopf
 
@@ -52,13 +54,29 @@ Tabelle mit den Spalten der Vorlage: **Nr. · Produktspezifisches Merkmal · Erk
 | 21 | Brand Building | Ersteindruck: Lässt sich eine Marke um das Produkt oder den Produktbereich bauen? Dies wäre langfristig für die Vermarktung von Vorteil. |
 | 22 | Alibaba Check / EK | Grobe Alibaba Recherche, wie sehen die EKs aus etc. / Grober Richtwert EK ca. 20% vom VK Vergleichsprodukt |
 
+### Block 4: Ergänzungen [neu]
+
+Aus Pafris Detaildokument, Abschnitt 1.3. Ergänzen die Originalpunkte, ersetzen sie nicht. Aufwand: 15–30 Suchen.
+
+| Nr. | Merkmal | Inhalt |
+|---|---|---|
+| 23 | Keywords | Hauptkeyword und 3–5 Nebenkeywords aus Amazon-Suchvorschlägen und Listing-Titeln |
+| 24 | Top-Listings | Tabelle mit 5–10 Listings: Marke, ASIN, Preis, Sterne, Bewertungen, Material, Varianten, Bildqualität 1–3, sichtbare Schwäche. Darunter Wettbewerbsstruktur (Anteil China-Direkt, große Marken, Private-Label-Dichte) und die zwei angreifbarsten Listings mit Begründung (Bewertung < 4,3, Plastik, generische Bilder, Preislücke, fehlende Varianten) |
+| 25 | Markteintritts-Realismus | Bewertungen für Seite 1 (Bandbreite), realistischer Zeithorizont, CPC-Niveau (~Schätzung aus Nischenvergleich) |
+| 26 | Grobe Kalkulation | Nach `rules/kalkulation.md`: VK-Korridor und Ziel-VK mit Begründung der Premium-Position, EK-Annahme (30-%-Regel oder Alibaba-Richtpreis aus Nr. 22), Fracht/Zoll pauschal, FBA-Größenklasse, DB1 in € und %, Break-even-ACOS im Vergleich zum CPC-Niveau, Kapitalbedarf-Check (MOQ × Landed Cost) |
+| 27 | Differenzierungshypothesen | 3–5, jede aus einer beobachteten Wettbewerber-Schwäche abgeleitet |
+| 28 | IP-Schnellcheck | DPMA/EUIPO nach Marken, Google Patents / DPMAregister nach Design; Ergebnis unauffällig / prüfen / hoch |
+| 29 | Material, Compliance, Logistik | Anzahl Materialien (max. 2), GPSR-Kennzeichnung, Verpackungsgesetz/LUCID, Lebensmittelkontakt/Elektronik ausgeschlossen; Maße, Gewicht, Bruchrisiko, FBA-Klasse „Kleines Paket" erreichbar |
+| 30 | Weitere Risiken | Saisonalität, chinesische Direktanbieter, Kategorie-Beschränkungen |
+
 ## Fazit
 
-Freitext wie in der Vorlage („Fazit: Weiter verfolgen" / „Nicht weiter verfolgen"), danach die vier Einzelscores nach `rules/scoring.md` mit je einem Satz Begründung und `score_gesamt`.
+Freitext wie in der Vorlage („Fazit: Weiter verfolgen" / „Nicht weiter verfolgen") in fünf Zeilen, danach die Score-Tabelle nach `rules/scoring.md` (sechs Teilnoten mit je einem Begründungssatz, K.O.-Prüfung, Gesamtscore 0–100, Zone, Lane) und die offenen Fragen für die Tiefenanalyse.
 
 ## Hinweise zur Bearbeitung durch den Skill
 
 - Helium 10, Junglescout und Keepa stehen nicht zur Verfügung. Für Nr. 9, 11–14 gelten Schätzungen aus BSR, Bewertungsanzahl, Bewertungsdatum und Preishistorie-Snippets, immer als Schätzung markiert (`rules/prozess.md`).
 - Wo kein Befund möglich ist: `[fehlt]` in „Ergebnis / Bemerkung", nicht leer lassen.
 - Nr. 22: Alibaba-Recherche nur lesend (Preisspanne, MOQ, Anbieteranzahl). Kein Kontakt.
-- Der Gate-Block aus `rules/prozess.md` folgt nach dem Fazit.
+- Der Gate-Block aus `rules/prozess.md` folgt nach dem Fazit. Zeile „Ergebnis" nennt Score, Zone, DB1 und Break-even-ACOS. Empfehlung strikt nach Zone; bei Review die 1–2 Kriterien nennen, die das Bild kippen würden; bei Red Flags (`rules/scoring.md` Abschnitt 3) Stop empfehlen, auch wenn der Score über 50 liegt.
+- Frontmatter der Datei trägt die Kennzahlen für das Dashboard (`rules/schema.md`): `score`, `zone`, `vk_ziel`, `ek_annahme`, `db1_prozent`, `break_even_acos`, `kapitalbedarf`, `ko`, `empfehlung`. Ein leeres `score` ist ein Fehler.

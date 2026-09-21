@@ -38,3 +38,13 @@ Commit „chore: vorlagen und import". Dann warten – ich starte den ersten Lau
 ```
 
 Danach läuft der Prozess über die Skills: `/voranalyse <slug>`, `/deep-dive <slug>`, `/briefing <slug>`. Jeder Skill endet mit einem Gate-Block und wartet auf dein Go/Stop.
+
+## Bedienung über das Dashboard
+
+Im Dashboard (https://claude.ai/artifact/2rvyEyRe1p9ietKExeRiiT) öffnest du eine Idee, liest unter „Review“ Fazit und Gate-Empfehlung und klickst **Freigeben**, **Go**, **Stop**, **Beobachten** oder **Nacharbeit**. Der Klick landet in der Warteschlange. In einer Claude-Session genügt dann:
+
+```
+/entscheidungen
+```
+
+Claude holt alle Klicks ab, setzt Status und Gate im Repo, führt die nächste Stufe aus (Voranalyse, Deep-Dive, Briefing oder NG-Nummer) und veröffentlicht das Dashboard neu. Chat-Entscheidungen funktionieren weiterhin genauso.
