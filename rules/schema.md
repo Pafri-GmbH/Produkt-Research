@@ -4,7 +4,7 @@ Alle Dateien in `ideas/`, `pipeline/` und `products/` sind Markdown mit YAML-Fro
 
 ## Slug
 
-- Kleinbuchstaben, ASCII, Bindestriche: `bewaesserungskugeln-glas`, `pflanzenschere`.
+- Kleinbuchstaben, ASCII, Bindestriche: `bewaesserungskugeln-ton`, `pflanzenschere`.
 - Umlaute: ä→ae, ö→oe, ü→ue, ß→ss.
 - Produkttyp zuerst, Material/Variante danach: `pflanzgefaess-edelstahl-gross`.
 - Dedupe vor jedem Anlegen: gleicher Slug, Synonym oder gleicher Produkttyp in anderer Größe → bestehende Datei ergänzen statt neue anlegen.

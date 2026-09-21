@@ -1,6 +1,6 @@
 # Produktkriterien nicegarden
 
-Abgeleitet aus `CLAUDE.md`, den bestehenden Produkten (NG0001 Edelstahl-Gießkanne 1–1,5 l, NG0002 Bewässerungskugeln Glas 180/360 ml) und der Miro-Longlist (April 2026). Dient `/ideen` als Suchraster und `/voranalyse` als Markenfit-Prüfung.
+Abgeleitet aus `CLAUDE.md`, den bestehenden Produkten (NG0001 Edelstahl-Gießkanne 1–1,5 l, NG0002 Bewässerungskugeln Ton 180/360 ml) und der Miro-Longlist (April 2026). Dient `/ideen` als Suchraster und `/voranalyse` als Markenfit-Prüfung.
 
 ## Marke
 - nicegarden: Premium-Garten- und Pflanzenpflegeprodukte, Kernmaterial Edelstahl, ergänzend Glas, Holz, Ton. Amazon.de FBA. „Designed in Germany".

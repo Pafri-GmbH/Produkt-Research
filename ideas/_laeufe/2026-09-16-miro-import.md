@@ -18,7 +18,7 @@ Miro-Board „Nicegarden Scout Longlist", https://miro.com/app/board/uXjVHmZbxI8
 |---|---|
 | Lane A Empfohlen / B Pruefen / C Beobachten | `score: A/B/C`, `status: importiert` |
 | Lane D Ablehnen | `score: D`, `status: abgelehnt`, `stop_grund` = Miro-Schwächen |
-| Priority „Launch aktiv" (Bewaesserungskugeln Glas) | `products/NG0002/00-idee.md`, `status: produkt` |
+| Priority „Launch aktiv" (Bewaesserungskugeln Glas) | `products/NG0002/00-idee.md`, `status: produkt`; Material laut Pafri (2026-09-21) Ton, Slug seither `bewaesserungskugeln-ton` |
 | Priority „Voranalyse fertig" (Edelstahl-Pflanzsprüher) | `status: importiert`, `pipeline_status_miro: Voranalyse fertig`; Voranalyse-Dokument in Drive nicht gefunden → `[fehlt]` |
 | Tags | `kategorie` (Bewässerung · Pflege & Werkzeug · Anzucht & Ranken · Gefäße & Deko) |
 | Beschreibung „VK x-y EUR | STAERKEN | SCHWAECHEN | CHANCEN | RISIKEN" | `vk_spanne_eur`, SWOT-Tabelle |

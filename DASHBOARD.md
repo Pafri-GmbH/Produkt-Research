@@ -1,6 +1,6 @@
 # Dashboard nicegarden Produktrecherche
 
-Stand: 2026-09-17 · generiert von `scripts/dashboard.py` · 41 Einträge · nächste freie NG-Nummer: **NG0003**
+Stand: 2026-09-21 · generiert von `scripts/dashboard.py` · 41 Einträge · nächste freie NG-Nummer: **NG0003**
 
 ## Status-Übersicht
 
@@ -20,7 +20,7 @@ Keine offenen Gates.
 | NG | Slug | Titel | Pfad |
 |---|---|---|---|
 | NG0001 | blumengiesskanne-edelstahl | Edelstahl-Gießkanne (Blumengießkanne) | `products/NG0001` |
-| NG0002 | bewaesserungskugeln-glas | Bewässerungskugeln Glas | `products/NG0002` |
+| NG0002 | bewaesserungskugeln-ton | Bewässerungskugeln Ton | `products/NG0002` |
 
 ## Pipeline (Stufe 1–3)
 
