@@ -1,81 +1,67 @@
 # Scoring-Modell
 
-Abgeleitet aus zwei Quellen von Pafri (Stand 2026-09-16):
-1. Notion „Template – Produktanalyse-Bewertung" (Company Brain → Wiki & SOPs), 4 Kriterien je 1–10, Empfehlungslogik nach Gesamt-Score.
-2. Miro „Nicegarden Scout Longlist" (April 2026): Lanes A–D mit SWOT je Karte.
+Stand 2026-09-21. Gilt für `/voranalyse` (Erstvergabe) und `/deep-dive` (Aktualisierung mit belegten Zahlen). Abgeleitet aus Pafris Detaildokument „Voranalyse und Tiefenanalyse" (`vorlagen/detaildokument-analysen.md`, Abschnitt 1.4). Das ältere Notion-Modell (4 Kriterien 1–10, `vorlagen/scoring-notion.md`) ist damit abgelöst; seine Anker für Marge, Markt, USP und Risiko sind unten in die sechs Kriterien eingeflossen. Schema ändern nur nach Rücksprache mit Pafri.
 
-Ein eigenes Scoring-Dokument als Datei existiert nicht in Drive. Die Abschnitte „Gewichte", „K.O.-Regeln" und „Zuordnung A–D" sind Vorschläge und als **[neu]** markiert. Schema ändern nur nach Rücksprache mit Pafri.
+## 1. Sechs Kriterien, Teilnote 0–10, gewichtet
 
-## 1. Kriterien und Anker (Notion, 1:1)
+| # | Kriterium | Frontmatter-Key | Gewicht | schwach 0–3 | mittel 4–6 | stark 7–10 |
+|---|---|---|---|---|---|---|
+| 1 | Marge & DB-Potenzial | `marge` | 25 % | DB1 < 25 % | DB1 25–35 % | DB1 > 35 %, Break-even-ACOS mit Puffer zum CPC-Niveau |
+| 2 | Nachfrage | `nachfrage` | 20 % | schwaches Signal, fallend | stabil, mittel | stark, wachsend, ganzjährig |
+| 3 | Wettbewerb (invers) | `wettbewerb` | 20 % | Top 10 dominiert, > 1.000 Bewertungen durchgängig | gemischt | mehrere angreifbare Listings |
+| 4 | Logistik & FBA-Fit | `logistik` | 10 % | sperrig / zerbrechlich / > 2 kg | Standard | klein, leicht, robust, „Kleines Paket" |
+| 5 | Markenfit & Synergien | `markenfit` | 10 % | kein Garten-Bezug | Garten-nah, Insel | Kernsortiment + Cross-Selling zu NG0001/NG0002 |
+| 6 | Risikoprofil (invers) | `risiko` | 15 % | konkretes IP-/Compliance-Risiko | prüfbar, lösbar | unauffällig |
 
-### Marge Score (1–10)
-- **9–10**: > 50 % Marge, klar profitabel auch mit Werbekosten
-- **7–8**: 35–50 % Marge, gesund
-- **5–6**: 20–35 % Marge, knapp
-- **1–4**: < 20 % Marge, Vorsicht
+Jede Teilnote trägt genau einen Begründungssatz mit Zahl oder Grund. DB1, Break-even-ACOS und CPC-Niveau kommen aus `rules/kalkulation.md`.
 
-### Markt Score (1–10)
-- **9–10**: Wachsendes Segment, klare Nachfrage, niedrige Sättigung
-- **7–8**: Stabiler Markt mit Potenzial
-- **5–6**: Reifer Markt, kompetitiv
-- **1–4**: Schrumpfender oder übersättigter Markt
-
-### USP Score (1–10)
-- **9–10**: Klares Differenzierungsmerkmal, schwer zu kopieren
-- **7–8**: Mehrere Vorteile gegenüber Wettbewerb
-- **5–6**: Leichte Vorteile, vergleichbar
-- **1–4**: Me-too-Produkt
-
-### Risiko Score (1–10, 10 = wenig Risiko)
-- **9–10**: Stabile Lieferkette, keine regulatorischen Risiken, erprobte Kategorie
-- **7–8**: Geringe Risiken, gut handhabbar
-- **5–6**: Mittlere Risiken (z. B. Saisonalität, Lieferanten-Abhängigkeit)
-- **1–4**: Hohe Risiken (rechtlich, Lieferkette, IP)
-
-## 2. Empfehlungslogik (Notion, 1:1)
-
-- **Gesamt-Score ≥ 7,5**: 🟢 Klares Go
-- **Gesamt-Score 5,5–7,4**: 🟡 Bedingt – weitere Bedingungen prüfen
-- **Gesamt-Score < 5,5**: 🔴 Stop oder ⏸️ Mehr Recherche
-
-## 3. Gewichte [neu]
-
-Notion rechnet den Gesamt-Score als Formel, die Gewichtung ist im Template nicht dokumentiert. Bis Pafri etwas anderes festlegt: **ungewichteter Mittelwert** der vier Scores (entspricht dem Yoga-Block-Beispiel in Notion: 8/7/8/7 → 7,5).
+## 2. Gesamtscore und Zonen
 
 ```
-score_gesamt = (marge + markt + usp + risiko) / 4, eine Nachkommastelle
+score_gesamt = Σ (Teilnote × Gewicht) × 10        → 0–100, ganzzahlig gerundet
 ```
 
-## 4. Zuordnung Gesamt-Score → Lane A–D [neu]
+| Zone | `score_gesamt` | Bedeutung |
+|---|---|---|
+| **Go** | ≥ 70 | Empfehlung Go |
+| **Review** | 50–69 | Bedingt: die 1–2 Kriterien nennen, die das Bild kippen würden |
+| **Reject** | < 50 | Empfehlung Stop |
 
-Miro nutzt A–D, Notion nutzt Zahlen. Vorschlag zur Verbindung:
+Kalibrierung: NG0001 (Edelstahl-Gießkanne) und NG0002 (Bewässerungskugeln) sollten rückgerechnet ~70–80 erreichen.
 
-| Lane | Bedeutung (Miro) | Gesamt-Score | Ampel |
-|---|---|---|---|
-| A | Empfohlen | ≥ 7,5 | 🟢 |
-| B | Prüfen | 6,5–7,4 | 🟡 |
-| C | Beobachten | 5,5–6,4 | 🟡 |
-| D | Ablehnen | < 5,5 oder K.O. | 🔴 |
+## 3. K.O.-Regeln
 
-Importierte Miro-Karten behalten ihre Lane als `score`, `score_gesamt` bleibt `null`, bis `/voranalyse` die vier Einzelscores vergibt.
-
-## 5. K.O.-Regeln [neu]
-
-Abgeleitet aus den Prüfpunkten 4–8 der Voranalyse-Checkliste und den Ablehnungsgründen der Miro-Lane D. Ein K.O. setzt `score: D`, egal wie hoch die Einzelscores sind. Der Skill listet den Verstoß in `ko_verstoss`.
+Ein K.O. setzt `score: D` und Zone Reject, unabhängig vom Gesamtscore. Der Skill listet den Verstoß in `ko_verstoss`.
 
 | Nr. | Regel | Quelle |
 |---|---|---|
+| K0 | Teilnote ≤ 2 bei Kriterium 1 (Marge) oder 6 (Risiko) | Detaildokument 1.4 |
 | K1 | Elektroprodukt (Prüf-, Zertifizierungs-, Registrierungspflicht) | Voranalyse Nr. 5 |
 | K2 | Chemisches Produkt oder Lebensmittel mit erhöhten Prüfanforderungen (inkl. Düngemittelrecht) | Voranalyse Nr. 4, Miro „Rasendünger" |
 | K3 | Erotik-/Erwachsenenprodukt (Werbebeschränkung) | Voranalyse Nr. 6 |
 | K4 | Größenabhängige Retouren (Kleidung, Handschuhe, Schuhe) | Voranalyse Nr. 7, Miro „Gartenhandschuhe" |
 | K5 | Versandgewicht > 2 kg oder Übergrößenzuschlag bei FBA ohne Premium-Preisspielraum | Voranalyse Nr. 1–2, Miro „Schlauchwagen", „Rankgitter" |
 | K6 | Zielpreis auf Amazon.de dauerhaft < 10 € | Voranalyse Nr. 10 |
-| K7 | Kein Markenfit: nicht Garten/Pflanzenpflege, nicht als Edelstahl/Premium positionierbar | CLAUDE.md, Miro „Windlicht", „Kräuterschneider" |
+| K7 | Kein Markenfit: nicht Garten/Pflanzenpflege, nicht als Edelstahl/Premium positionierbar | `rules/produktkriterien.md` |
 
-## 6. Schwellen für Weiterleitung [neu]
+Red Flags, die auch bei Score ≥ 50 zur Stop-Empfehlung führen: dominanter IP-Inhaber in der Nische, Break-even-ACOS unter dem geschätzten CPC-Niveau.
 
-- `/ideen` vergibt nur eine Lane (A–D) als Vor-Score mit Begründung, keine Einzelscores.
-- `/voranalyse` vergibt die vier Einzelscores und berechnet `score_gesamt`. Empfehlung Go nur bei ≥ 6,5 und ohne K.O.
-- `/deep-dive` aktualisiert die Scores mit belegten Zahlen. Empfehlung Go nur bei ≥ 7,5 und ohne K.O.
+## 4. Zuordnung Gesamtscore → Lane A–D
+
+Miro und `/ideen` arbeiten mit Lanes, das Dashboard zeigt sie. Ab `/voranalyse` wird die Lane aus dem Score abgeleitet:
+
+| Lane | Bedeutung (Miro) | `score_gesamt` | Zone |
+|---|---|---|---|
+| A | Empfohlen | ≥ 70 | Go |
+| B | Prüfen | 60–69 | Review |
+| C | Beobachten | 50–59 | Review |
+| D | Ablehnen | < 50 oder K.O. | Reject |
+
+Importierte Miro-Karten behalten ihre Lane als `score`, `score_gesamt` bleibt `null`, bis `/voranalyse` die sechs Teilnoten vergibt.
+
+## 5. Schwellen je Stufe
+
+- `/ideen` vergibt nur eine Lane (A–D) als Vor-Score mit Begründung, keine Teilnoten.
+- `/voranalyse` vergibt die sechs Teilnoten, `score_gesamt`, Zone, Lane. Empfehlung strikt nach Zone; Red Flags (Abschnitt 3) schlagen die Zone.
+- `/deep-dive` aktualisiert die Teilnoten mit belegten Zahlen. Empfehlung Go nur, wenn zusätzlich DB1 ≥ 35 % im Ziel-Szenario, Break-even-ACOS über dem geschätzten CPC-Niveau und kein Risiko „hoch" ohne Gegenmaßnahme bleibt. Sonst Nacharbeit (mit Nennung der fehlenden Zahl) oder Stop.
 - `/briefing` ändert keine Scores mehr.

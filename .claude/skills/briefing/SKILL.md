@@ -10,7 +10,7 @@ description: Stufe 3 – Produktbriefing nach NG0001-Struktur, Teil A deutsch (E
 2. `pipeline/<slug>/00-idee.md`, `01-voranalyse.md`, `02-deep-dive.md` lesen. `gate_2` muss `go` sein, sonst abbrechen und nachfragen.
 
 ## Schreiben
-3. Teil A (deutsch) exakt in der Feldreihenfolge aus `rules/briefing.md`, Werte aus Deep-Dive Abschnitt K und L. Ziel-EK aus Alibaba-Spanne ableiten und Herleitung nennen. A.14 Entscheidungsgrundlage mit Margenrechnung und allen Annahmen.
+3. Teil A (deutsch) exakt in der Feldreihenfolge aus `rules/briefing.md`, Werte aus Deep-Dive Abschnitt K, L, M (Kalkulation) und D3 (Produktanforderungen). Ziel-EK aus Alibaba-Spanne ableiten und Herleitung nennen. A.14 Entscheidungsgrundlage mit Margenrechnung und allen Annahmen.
 4. Teil B (English) nach `rules/briefing.md`, jede Anforderung testbar formuliert. „Designed in Germany", nie „Made in Germany".
 5. `pipeline/<slug>/03-briefing.md` mit Frontmatter (`stufe: briefing`, `datum`, `ziel_ek_eur`, `ziel_vk_eur`, `moq`, `fazit`). Scores unverändert.
 6. Status `briefing` in `ideas/<slug>.md` und `00-idee.md`. `python scripts/dashboard.py`. Commit `feat(<slug>): briefing`.

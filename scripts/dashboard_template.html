@@ -215,6 +215,8 @@ table.runs th{cursor:default}
 .review{display:flex;flex-direction:column;gap:8px;font-size:12.5px}
 .review .row{display:flex;flex-direction:column;gap:2px}
 .review .k{font-size:11px;color:var(--muted)}
+.review .kz{grid-template-columns:repeat(3,minmax(0,1fr));background:var(--surface-2);border-radius:6px;padding:10px 12px;margin-bottom:4px}
+.review .kz .v{font-size:13px}
 .review .rec{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:13px}
 .review .rec.go{color:var(--good-text)}.review .rec.stop{color:var(--crit-text)}.review .rec.watch{color:var(--warn-text)}
 .review a{font-size:12px}
@@ -593,8 +595,14 @@ table.runs th{cursor:default}
     const gb = st.gate_block || null;
     const recCls = r => /^go/i.test(r)?"go":/^stop/i.test(r)?"stop":/beobachten/i.test(r)?"watch":"";
     const recIcon = r => /^go/i.test(r)?"▶":/^stop/i.test(r)?"×":/beobachten/i.test(r)?"◔":"·";
+    const kz = st.kennzahlen || {};
+    const KZ = [["score","Score"],["zone","Zone"],["vk_ziel","VK-Ziel"],["ek_annahme","EK-Annahme"],["landed_cost","Landed Cost"],["db1_prozent","DB1"],["db2_prozent","DB2"],["break_even_acos","BE-ACOS"],["moq","MOQ"],["kapitalbedarf","Kapital Ch. 1"],["varianten","Varianten"],["risiko_hoch","Risiken hoch"],["ko","K.O."],["empfehlung","Empfehlung"]].filter(([k])=>kz[k]!=null && kz[k]!=="");
+    const uns = ["unsicherheit_1","unsicherheit_2"].map(k=>kz[k]).filter(Boolean);
     return `<section><h3>Review · ${esc(STATUS_LABEL[st.stufe]||st.stufe)}${st.datum?` · ${esc(st.datum)}`:""}</h3><div class="review">
+      ${KZ.length?`<div class="kv kz">${KZ.map(([k,l])=>`<div><span class="k">${esc(l)}</span><span class="v">${esc(kz[k])}</span></div>`).join("")}</div>`:""}
+      ${uns.length?`<div class="row"><span class="k">Offene Unsicherheiten</span><span>${uns.map(u=>esc(u)).join(" · ")}</span></div>`:""}
       ${st.fazit?`<div class="row"><span class="k">Fazit</span><span>${esc(st.fazit)}</span></div>`:""}
+      ${gb&&gb.ergebnis?`<div class="row"><span class="k">Ergebnis Gate ${gb.gate}</span><span>${esc(gb.ergebnis)}</span></div>`:""}
       ${gb?`<div class="row"><span class="k">Empfehlung Gate ${gb.gate}</span><span class="rec ${recCls(gb.empfehlung)}"><i>${recIcon(gb.empfehlung)}</i>${esc(gb.empfehlung||"–")}</span></div>
       ${gb.begruendung?`<div class="row"><span class="k">Begründung</span><span>${esc(gb.begruendung)}</span></div>`:""}
       ${gb.offen?`<div class="row"><span class="k">Offene Punkte / Datenlücken</span><span>${esc(gb.offen)}</span></div>`:""}
@@ -655,8 +663,8 @@ table.runs th{cursor:default}
       ${e.stop_grund ? `<div class="${e.status==="abgelehnt"?"stop":"watchbox"}"><b>${e.status==="abgelehnt"?"Stop-Grund":"Grund"}:</b> ${esc(e.stop_grund)}</div>` : ""}
       <section><h3>Eckdaten</h3><div class="kv">
         <div><span class="k">VK-Spanne Amazon.de</span><span class="v">${vk(e)}</span></div>
-        <div><span class="k">Score gesamt (1–10)</span><span class="v">${fehlt(e.score_gesamt)}</span></div>
-        <div><span class="k">Einzelscores M / Mk / USP / R</span><span class="v">${[sc.marge,sc.markt,sc.usp,sc.risiko].map(v=>v==null?"–":v).join(" / ")}</span></div>
+        <div><span class="k">Score gesamt (0–100)</span><span class="v">${fehlt(e.score_gesamt)}</span></div>
+        <div><span class="k">Teilnoten Ma / Na / We / Lo / Mf / Ri</span><span class="v">${["marge","nachfrage","wettbewerb","logistik","markenfit","risiko"].map(k=>sc[k]==null?"–":sc[k]).join(" / ")}</span></div>
         <div><span class="k">K.O.-Verstöße</span><span class="v">${e.ko_verstoss&&e.ko_verstoss.length?esc(e.ko_verstoss.join(", ")):"keine"}</span></div>
         <div><span class="k">Status seit</span><span class="v">${esc(e.status_datum||"–")}</span></div>
         <div><span class="k">Lauf</span><span class="v mono">${esc(e.lauf||"–")}</span></div>

@@ -11,8 +11,10 @@ score: <A|B|C|D>
 score_gesamt: null
 scores:
   marge: null
-  markt: null
-  usp: null
+  nachfrage: null
+  wettbewerb: null
+  logistik: null
+  markenfit: null
   risiko: null
 ko_verstoss: []
 gate_1: null
