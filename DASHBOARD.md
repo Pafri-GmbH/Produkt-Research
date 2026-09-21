@@ -7,14 +7,16 @@ Stand: 2026-09-21 · generiert von `scripts/dashboard.py` · 41 Einträge · nä
 | Status | Anzahl | Bedeutung |
 |---|---|---|
 | `produkt` | 2 | Produkt (NG) |
-| `freigegeben` | 1 | Freigegeben → /voranalyse |
+| `voranalyse` | 1 | Gate 1 wartet |
 | `importiert` | 33 | Importiert (Miro) |
 | `beobachten` | 2 | Beobachten |
 | `abgelehnt` | 3 | Abgelehnt |
 
 ## Wartet auf Pafri
 
-Keine offenen Gates.
+| Slug | Stufe | Score | Gesamt | Pfad |
+|---|---|---|---|---|
+| edelstahl-pflanzsprueher | Gate 1 wartet | B | 67 | `pipeline/edelstahl-pflanzsprueher` |
 
 ## Produkte
 
@@ -27,7 +29,15 @@ Keine offenen Gates.
 
 | Slug | Status | Gate 1 | Gate 2 | Gate 3 | Gesamt | Pfad |
 |---|---|---|---|---|---|---|
-| edelstahl-pflanzsprueher | `freigegeben` | – | – | – | – | `ideas/edelstahl-pflanzsprueher.md` |
+| edelstahl-pflanzsprueher | `voranalyse` | – | – | – | 67 | `pipeline/edelstahl-pflanzsprueher` |
+
+## Analysen-Kennzahlen
+
+| Slug | Stufe | Score | Zone | VK-Ziel | DB1 % | BE-ACOS | Kapital Ch. 1 | Empfehlung | Stand |
+|---|---|---|---|---|---|---|---|---|---|
+| edelstahl-pflanzsprueher | voranalyse | 67 | review | 24,90 € | ~47 % | ~40 % | ~3.400 € | Nacharbeit | 2026-09-21 |
+
+Stufe 2 überschreibt VK, DB1, BE-ACOS und Kapital aus Stufe 1; Score und Zone stammen aus der Voranalyse, bis der Deep-Dive sie aktualisiert.
 
 ## Ideen (Stufe 0) nach Lane
 
