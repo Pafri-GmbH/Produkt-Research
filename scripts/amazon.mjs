@@ -26,6 +26,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createRequire } from "node:module";
+import crypto from "node:crypto";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(__dirname, "..");
@@ -35,6 +36,7 @@ const MARKETPLACE_DE = "A1PA6795UKMFR9";
 const UA =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36";
 const MAX_SEITEN_SUCHE = 7;
+const LIEFER_PLZ = process.env.AMAZON_PLZ || "10115"; // Lieferort für Preise (Berlin), überschreibbar
 
 const EXIT = { OK: 0, BEDIENUNG: 1, CAPTCHA: 2, EGRESS: 3, PLAYWRIGHT: 4 };
 
@@ -189,6 +191,20 @@ function cacheSchreiben(datei, obj) {
 // Browser
 // ---------------------------------------------------------------------------
 
+function proxyCaSpki() {
+  const kandidaten = [process.env.AMAZON_PROXY_CA, "/root/.ccr/agent-proxy-ca.crt"].filter(Boolean);
+  for (const datei of kandidaten) {
+    try {
+      if (!fs.existsSync(datei)) continue;
+      const cert = new crypto.X509Certificate(fs.readFileSync(datei));
+      return crypto.createHash("sha256").update(cert.publicKey.export({ type: "spki", format: "der" })).digest("base64");
+    } catch {
+      /* nächste Datei */
+    }
+  }
+  return null;
+}
+
 async function ladePlaywright() {
   try {
     return await import("playwright");
@@ -228,6 +244,10 @@ async function browserStarten(opts) {
   if (!process.env.PLAYWRIGHT_BROWSERS_PATH && fs.existsSync("/opt/pw-browsers/chromium")) {
     launch.executablePath = "/opt/pw-browsers/chromium";
   }
+  // Cloud-Session: der Egress-Proxy terminiert TLS mit eigener CA, die Chromium nicht kennt.
+  // Nur dieser einen CA (per SPKI-Hash) wird vertraut – keine allgemeine Abschaltung der TLS-Prüfung.
+  const spki = proxyCaSpki();
+  if (spki) launch.args.push(`--ignore-certificate-errors-spki-list=${spki}`);
   const context = await pw.chromium.launchPersistentContext(profil, launch);
   const page = context.pages()[0] || (await context.newPage());
   return { browser: null, context, page, schliessen: async () => { await context.close().catch(() => {}); } };
@@ -246,6 +266,15 @@ async function seiteLaden(page, url, versuch = 0) {
     throw e;
   }
   await page.waitForLoadState("networkidle", { timeout: 15000 }).catch(() => {});
+  // AWS-WAF-JavaScript-Prüfung: löst sich im Browser meist selbst auf (Skript von *.awswaf.com nötig)
+  if (await page.locator("#challenge-container").count()) {
+    await page.waitForFunction(() => !document.querySelector("#challenge-container"), null, { timeout: 20000 }).catch(() => {});
+    await page.waitForLoadState("networkidle", { timeout: 10000 }).catch(() => {});
+    if (await page.locator("#challenge-container").count()) {
+      console.error("amazon.de zeigt eine AWS-WAF-Prüfung, die nicht abgeschlossen wurde – *.awswaf.com in die Allowlist aufnehmen.");
+      process.exit(EXIT.CAPTCHA);
+    }
+  }
   // Cookie-Consent einmalig
   const consent = page.locator("#sp-cc-accept");
   if (await consent.count()) {
@@ -263,24 +292,60 @@ async function seiteLaden(page, url, versuch = 0) {
     console.error(`amazon.de Captcha/Sperre (${url})`);
     process.exit(EXIT.CAPTCHA);
   }
+  if (!lieferortGeprueft) {
+    lieferortGeprueft = true;
+    if (await lieferortSetzen(page)) return seiteLaden(page, url, versuch);
+  }
   return resp;
+}
+
+// Amazon leitet den Lieferort aus der IP ab (Cloud-VM: USA) und zeigt dann für viele Artikel keinen Preis.
+// Einmal je Browserprofil auf eine deutsche PLZ setzen; das Cookie bleibt im persistenten Profil erhalten.
+let lieferortGeprueft = false;
+async function lieferortSetzen(page) {
+  try {
+    const ort = (await page.locator("#glow-ingress-line2").textContent({ timeout: 3000 }).catch(() => "")) || "";
+    if (/\b\d{5}\b/.test(ort) || /Deutschland/i.test(ort)) return false;
+    const link = page.locator("#nav-global-location-popover-link");
+    if (!(await link.count())) return false;
+    await link.click({ timeout: 8000 });
+    await page.waitForSelector("#GLUXZipUpdateInput", { timeout: 10000 });
+    await page.fill("#GLUXZipUpdateInput", LIEFER_PLZ);
+    await page.click("#GLUXZipUpdate");
+    await schlaf(2500);
+    const done = page.locator("#GLUXConfirmClose, button[name='glowDoneButton']");
+    if (await done.count()) await done.first().click({ timeout: 3000 }).catch(() => {});
+    await schlaf(1000);
+    console.error(`Lieferort auf ${LIEFER_PLZ} gesetzt (vorher: ${ort.trim() || "unbekannt"}).`);
+    return true;
+  } catch (e) {
+    console.error(`Lieferort konnte nicht gesetzt werden (${String(e.message).slice(0, 80)}) – Preise können fehlen.`);
+    return false;
+  }
 }
 
 // ---------------------------------------------------------------------------
 // Extraktion (läuft im Browser-Kontext, daher reines DOM-JS ohne Imports)
 // ---------------------------------------------------------------------------
 
-const EXTRACT_SUCHE = () => {
+export const EXTRACT_SUCHE = () => {
   const txt = (el) => (el ? el.textContent.replace(/\s+/g, " ").trim() : null);
   const cards = [...document.querySelectorAll('[data-component-type="s-search-result"]')];
   const items = cards.map((el) => {
     const asin = el.getAttribute("data-asin") || null;
     const h2 = el.querySelector("h2");
     const link = el.querySelector("h2 a, a.a-link-normal.s-no-outline");
-    const badges = [...el.querySelectorAll(".a-badge-text, [data-a-badge-type] .a-badge-label-inner")].map(txt).filter(Boolean);
+    const badges = [...new Set([...el.querySelectorAll(".a-badge-label-inner, .a-badge-text")].map(txt).filter(Boolean))].filter(
+      (b, _, arr) => !arr.some((o) => o !== b && o.includes(b))
+    );
     const alle = txt(el) || "";
     const bought = alle.match(/([\d.]+\s*(?:Tsd\.|\+)?\+?)\s*Mal (?:im|in den) letzten Monat gekauft/i);
-    const review = el.querySelector('[aria-label$="Bewertungen"], [aria-label$="Bewertung"], a[href*="customerReviews"] span.s-underline-text, span.s-underline-text');
+    // Reihenfolge wichtig: der Sterne-Link endet ebenfalls auf „Bewertung"
+    const review =
+      el.querySelector('[data-cy="reviews-block"] [aria-label$=" Bewertungen"]') ||
+      el.querySelector('[data-cy="reviews-block"] [aria-label$=" Bewertung"]') ||
+      el.querySelector('[data-cy="reviews-block"] .s-underline-text') ||
+      el.querySelector('a[href*="customerReviews"] span.s-underline-text');
     return {
       asin,
       position: Number(el.getAttribute("data-index")) || null,
@@ -300,19 +365,30 @@ const EXTRACT_SUCHE = () => {
   const next = document.querySelector("a.s-pagination-next:not(.s-pagination-disabled)");
   const cur = document.querySelector(".s-pagination-selected");
   const info = document.querySelector('[data-component-type="s-result-info-bar"]');
+  const ergebnisSpan = info ? [...info.querySelectorAll("span")].map(txt).find((t) => t && /Ergebnis/.test(t)) : null;
   return {
     seite: cur ? Number(cur.textContent.trim()) : 1,
     naechste_seite: next ? next.href : null,
-    ergebnisse_roh: info ? info.textContent.replace(/\s+/g, " ").trim() : null,
+    ergebnisse_roh: ergebnisSpan || null,
+    lieferort: txt(document.querySelector("#glow-ingress-line2")),
     items,
   };
 };
 
-const EXTRACT_PRODUKT = () => {
+export const EXTRACT_PRODUKT = () => {
   const txt = (el) => (el ? el.textContent.replace(/\s+/g, " ").trim() : null);
   const q = (s) => document.querySelector(s);
+  // Preis aus einem .a-price-Element: a-offscreen ist teils leer, dann Ganzzahl + Nachkommastellen zusammensetzen
+  const preis = (el) => {
+    if (!el) return null;
+    const off = txt(el.querySelector(".a-offscreen"));
+    if (off && /\d/.test(off)) return off;
+    const ganz = txt(el.querySelector(".a-price-whole"));
+    const frac = txt(el.querySelector(".a-price-fraction"));
+    return ganz ? `${ganz.replace(/[.,]$/, "")},${frac || "00"} €` : null;
+  };
   const details = {};
-  document.querySelectorAll("#productDetails_detailBullets_sections1 tr, #productDetails_techSpec_section_1 tr, #productDetails_techSpec_section_2 tr").forEach((tr) => {
+  document.querySelectorAll("#prodDetails table tr, table.prodDetTable tr, #productDetails_detailBullets_sections1 tr, #productDetails_techSpec_section_1 tr, #productDetails_techSpec_section_2 tr").forEach((tr) => {
     const k = txt(tr.querySelector("th"));
     const v = txt(tr.querySelector("td"));
     if (k && v) details[k] = v;
@@ -326,23 +402,33 @@ const EXTRACT_PRODUKT = () => {
   const seitKey = Object.keys(details).find((k) => /Im Angebot von Amazon\.de seit|Date First Available/i.test(k));
   const gewichtKey = Object.keys(details).find((k) => /Artikelgewicht|Gewicht|Item Weight/i.test(k));
   const masseKey = Object.keys(details).find((k) => /Produktabmessungen|Abmessungen|Product Dimensions/i.test(k));
-  const merchant = txt(q("#merchant-info")) || txt(q("#tabular-buybox")) || "";
+  const herkunftKey = Object.keys(details).find((k) => /Herkunftsland|Country of Origin/i.test(k));
+  const merchant =
+    [txt(q("#fulfillerInfoFeature_feature_div")), txt(q("#merchantInfoFeature_feature_div")), txt(q("#sellerProfileTriggerId"))].filter(Boolean).join(" · ") ||
+    txt(q("#merchant-info")) || txt(q("#tabular-buybox")) || "";
   const bought = (txt(q("#social-proofing-faceout-title-tk_bought")) || "");
   const twister = [...document.querySelectorAll("#twister .a-row, #twister_feature_div .a-row, #variation_color_name, #variation_size_name")];
-  const varianten = [...document.querySelectorAll("#twister li[data-defaultasin], #twister li[id^='color_name_'], #twister li[id^='size_name_'], #twister select option")].length;
-  const reviews = [...document.querySelectorAll('#cm-cr-dp-review-list [data-hook="review"], [data-hook="review"]')].slice(0, 10).map((r) => ({
+  const varianten = [...document.querySelectorAll(
+    "#twister li[data-defaultasin], #twister li[id^='color_name_'], #twister li[id^='size_name_'], #twister select option, [id^='inline-twister-row-'] li[data-asin], [id^='inline-twister-row-'] li.swatch-list-item-text, .inline-twister-swatch"
+  )].length;
+  const reviews = [...document.querySelectorAll('[data-hook="review"]')].slice(0, 10).map((r) => ({
     datum_roh: txt(r.querySelector('[data-hook="review-date"]')),
     sterne_roh: txt(r.querySelector('[data-hook="review-star-rating"], [data-hook="cmps-review-star-rating"]')),
-    titel: txt(r.querySelector('[data-hook="review-title"] span:not(.a-icon-alt):last-child, [data-hook="review-title"]')),
-    text: txt(r.querySelector('[data-hook="review-body"]')),
+    titel: txt(r.querySelector('[data-hook="review-title"] span:not(.a-icon-alt):last-child, [data-hook="review-title"], [data-hook="reviewTitle"]')),
+    text: txt(r.querySelector('[data-hook="review-body"], [data-hook="reviewText"]')),
     variante: txt(r.querySelector('[data-hook="format-strip"]')),
     verifiziert: Boolean(r.querySelector('[data-hook="avp-badge"]')),
   }));
+  const preisEl =
+    q("#corePriceDisplay_desktop_feature_div .priceToPay") || q("#corePrice_feature_div .priceToPay") || q("#apex_desktop .priceToPay") ||
+    q("#corePrice_feature_div .a-price:not([data-a-strike])") || q("#corePriceDisplay_desktop_feature_div .a-price:not([data-a-strike])");
+  const listenEl = q("#corePriceDisplay_desktop_feature_div .basisPrice .a-price") || q("#apex_desktop .basisPrice .a-price") || q("#corePrice_feature_div .a-price[data-a-strike]");
   return {
     titel: txt(q("#productTitle")),
     marke: txt(q("#bylineInfo")),
-    preis_roh: txt(q("#corePrice_feature_div .a-price:not([data-a-strike]) .a-offscreen")) || txt(q("#corePriceDisplay_desktop_feature_div .a-price:not([data-a-strike]) .a-offscreen")) || txt(q(".a-price:not([data-a-strike]) .a-offscreen")),
-    listenpreis_roh: txt(q("#corePriceDisplay_desktop_feature_div .basisPrice .a-offscreen")) || txt(q(".a-price[data-a-strike] .a-offscreen")),
+    preis_roh: preis(preisEl),
+    listenpreis_roh: preis(listenEl),
+    herkunftsland: herkunftKey ? details[herkunftKey] : null,
     sterne_roh: (q("#acrPopover") || {}).getAttribute?.("title") || txt(q("#acrPopover .a-icon-alt")),
     bewertungen_roh: txt(q("#acrCustomerReviewText")),
     bsr_roh: bsrKey ? details[bsrKey] : txt(q("#SalesRank")),
@@ -350,8 +436,8 @@ const EXTRACT_PRODUKT = () => {
     gewicht: gewichtKey ? details[gewichtKey] : null,
     masse: masseKey ? details[masseKey] : null,
     verkaeufer: merchant || null,
-    fba: /Versand durch Amazon|Verkauf durch Amazon|Amazon\.de/.test(merchant) || null,
-    varianten_anzahl: varianten || (twister.length ? twister.length : 0),
+    fba: /Versand durch Amazon|Verkauf durch Amazon|Versender\s*\/?\s*Verkäufer\s*Amazon|Versender\s+Amazon|Amazon\.de/.test(merchant) || null,
+    varianten_anzahl: varianten || (twister.length ? twister.length : null),
     bilder_anzahl: document.querySelectorAll("#altImages li.imageThumbnail, #altImages li.item").length || null,
     aplus: Boolean(q("#aplus, #aplus_feature_div")),
     bullets: [...document.querySelectorAll("#feature-bullets li span.a-list-item")].map(txt).filter(Boolean).slice(0, 8),
@@ -362,13 +448,13 @@ const EXTRACT_PRODUKT = () => {
   };
 };
 
-const EXTRACT_REZENSIONEN = () => {
+export const EXTRACT_REZENSIONEN = () => {
   const txt = (el) => (el ? el.textContent.replace(/\s+/g, " ").trim() : null);
   const list = [...document.querySelectorAll('[data-hook="review"]')].map((r) => ({
     datum_roh: txt(r.querySelector('[data-hook="review-date"]')),
     sterne_roh: txt(r.querySelector('[data-hook="review-star-rating"], [data-hook="cmps-review-star-rating"]')),
-    titel: txt(r.querySelector('[data-hook="review-title"] span:not(.a-icon-alt):last-child, [data-hook="review-title"]')),
-    text: txt(r.querySelector('[data-hook="review-body"]')),
+    titel: txt(r.querySelector('[data-hook="review-title"] span:not(.a-icon-alt):last-child, [data-hook="review-title"], [data-hook="reviewTitle"]')),
+    text: txt(r.querySelector('[data-hook="review-body"], [data-hook="reviewText"]')),
     variante: txt(r.querySelector('[data-hook="format-strip"]')),
     verifiziert: Boolean(r.querySelector('[data-hook="avp-badge"]')),
   }));
@@ -377,7 +463,7 @@ const EXTRACT_REZENSIONEN = () => {
   return { rezensionen: list, naechste_seite: next ? next.href : null, login_noetig: login };
 };
 
-const EXTRACT_BESTSELLER = () => {
+export const EXTRACT_BESTSELLER = () => {
   const txt = (el) => (el ? el.textContent.replace(/\s+/g, " ").trim() : null);
   const items = [...document.querySelectorAll("#gridItemRoot, div[id^='p13n-asin-index-']")].map((el) => {
     const rank = txt(el.querySelector(".zg-bdg-text"));
@@ -436,6 +522,7 @@ export function normProdukt(asin, p) {
     bsr_unter: bsr.slice(1),
     bsr_roh: p.bsr_roh || null,
     erhaeltlich_seit: p.erhaeltlich_seit,
+    herkunftsland: p.herkunftsland,
     verkaeufer: p.verkaeufer,
     fba: p.fba,
     varianten_anzahl: p.varianten_anzahl,
@@ -450,13 +537,24 @@ export function normProdukt(asin, p) {
   };
 }
 
+export function rezensionsText(text) {
+  // Screenreader-Hinweise und Aufklapp-Labels aus dem Rezensionstext entfernen
+  if (!text) return null;
+  return String(text)
+    .replace(/Brief content visible, double tap to read full content\.?/g, "")
+    .replace(/Full content visible, double tap to read brief content\.?/g, "")
+    .replace(/Mehr erfahren\s*Weniger anzeigen\s*$/g, "")
+    .replace(/\s+/g, " ")
+    .trim() || null;
+}
+
 export function normRezension(r) {
   return {
     datum: parseDatumDE(r.datum_roh),
     sterne: parseSterne(r.sterne_roh),
     titel: r.titel,
-    text: kuerzen(r.text, 600),
-    variante: r.variante,
+    text: kuerzen(rezensionsText(r.text), 600),
+    variante: r.variante ? r.variante.replace(/(\S)(Stil|Größe|Farbe|Muster|Menge):/g, "$1 · $2:") : null,
     verifiziert: Boolean(r.verifiziert),
   };
 }
@@ -470,7 +568,7 @@ function z(v) {
 
 function mdSuche(res, datum) {
   const l = [];
-  l.push(`**Amazon.de Suche „${res.keyword}"** – Seite(n) ${res.seiten.map((s) => s.seite).join(", ")}, ${z(res.ergebnisse_roh)} (Amazon.de, ${datum})`);
+  l.push(`**Amazon.de Suche „${res.keyword}"** – Seite(n) ${res.seiten.map((s) => s.seite).join(", ")}, ${z(res.ergebnisse_roh)}, Lieferort ${z(res.lieferort)} (Amazon.de, ${datum})`);
   l.push("");
   l.push("| # | Marke / Titel (gekürzt) | ASIN | Preis | Sterne | Bewert. | Badges | Gesp. | Gekauft/Monat | abgerufen |");
   l.push("|---|---|---|---|---|---|---|---|---|---|");
@@ -509,6 +607,7 @@ function mdProdukt(p, datum) {
   l.push(`| BSR Unterkategorie | ${p.bsr_unter.length ? zitat(p.bsr_unter.map((b) => `Nr. ${b.rang} in ${b.kategorie}`).join("; "), datum) : "[fehlt]"} |`);
   l.push(`| Erhältlich seit | ${zitat(p.erhaeltlich_seit, datum)} |`);
   l.push(`| Verkäufer / FBA | ${zitat(p.verkaeufer, datum)}${p.fba ? " · FBA" : ""} |`);
+  l.push(`| Herkunftsland (Produktdaten) | ${zitat(p.herkunftsland, datum)} |`);
   l.push(`| Varianten | ${zitat(p.varianten_anzahl, datum)} |`);
   l.push(`| Bilder | ${zitat(p.bilder_anzahl, datum)} · A+ ${p.aplus ? "ja" : "nein"} |`);
   l.push(`| Maße / Gewicht | ${z(p.masse)} / ${z(p.gewicht)} |`);
@@ -581,6 +680,7 @@ async function cmdSuche(opts) {
         if (gesehen.has(asins)) break; // Amazon liefert Seite 1 bei Überlauf
         gesehen.add(asins);
         if (!res.ergebnisse_roh) res.ergebnisse_roh = roh.ergebnisse_roh;
+        if (!res.lieferort) res.lieferort = roh.lieferort;
         res.seiten.push({ seite: roh.seite || s, url, items });
         url = roh.naechste_seite;
       }
@@ -682,8 +782,9 @@ async function cmdBestseller(opts) {
           await schlaf(400);
         }
         const roh = await b.page.evaluate(EXTRACT_BESTSELLER);
+        const bekannt = new Set(res.items.map((k) => k.asin));
         res.items.push(
-          ...roh.items.filter((k) => k.asin).map((k) => ({
+          ...roh.items.filter((k) => k.asin && !bekannt.has(k.asin) && bekannt.add(k.asin)).map((k) => ({
             rang: k.rang, asin: k.asin, titel: k.titel, url: k.url,
             preis: parseZahlDE(k.preis_roh), sterne: parseSterne(k.sterne_roh), bewertungen: parseBewertungen(k.bewertungen_roh),
           }))
@@ -778,6 +879,12 @@ function selbsttest() {
       2345,
     ],
     ["normProdukt marke", normProdukt("B0002RL4NS", { marke: "Marke: blomus" }).marke, "blomus"],
+    [
+      "rezensionsText",
+      rezensionsText("Brief content visible, double tap to read full content.Full content visible, double tap to read brief content.Undicht, schlecht verschweißt.Mehr erfahrenWeniger anzeigen"),
+      "Undicht, schlecht verschweißt.",
+    ],
+    ["normRezension variante", normRezension({ variante: "Größe: 20 cmStil: Single" }).variante, "Größe: 20 cm · Stil: Single"],
   ];
   let ok = 0;
   for (const [name, ist, soll] of faelle) {

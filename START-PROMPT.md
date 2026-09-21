@@ -7,7 +7,7 @@
 4. Deine Vorlagen nach `vorlagen/` legen – siehe `vorlagen/README.md`.
 5. Optional: Miro-Longlist als CSV/Text nach `data/raw/miro-longlist.csv` (oder `.md`).
 6. `git add -A && git commit -m "chore: startpaket"` – dann `claude` starten.
-7. Amazon-Zugriff für `/amazon` (Voranalyse, Deep-Dive): In der Cloud-Session auf claude.ai/code die Umgebung bearbeiten → Network access **Custom** → „Also include default list of common package managers" anhaken → Allowed domains `www.amazon.de`, `*.amazon.de`, `*.media-amazon.com`, `*.ssl-images-amazon.com`, `completion.amazon.de` (optional `www.idealo.de`, `*.alibaba.com`, `www.ebay.de`, `www.otto.de`). Lokal stattdessen `npm i -g playwright && npx playwright install chromium`; Details in `.claude/skills/amazon/SKILL.md`.
+7. Amazon-Zugriff für `/amazon` (Voranalyse, Deep-Dive): In der Cloud-Session auf claude.ai/code die Umgebung bearbeiten → Network access **Custom** → „Also include default list of common package managers" anhaken → Allowed domains `www.amazon.de`, `*.amazon.de`, `*.media-amazon.com`, `*.ssl-images-amazon.com`, `completion.amazon.de`, `*.awswaf.com` (optional `www.idealo.de`, `*.alibaba.com`, `www.ebay.de`, `www.otto.de`). Lokal stattdessen `npm i -g playwright && npx playwright install chromium`; Details in `.claude/skills/amazon/SKILL.md`.
 
 ## Prompt 1 – Einrichtung (in Claude Code einfügen)
 
