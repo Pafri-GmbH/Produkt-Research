@@ -29,6 +29,8 @@ STAGE_LABEL = {
     "abgelehnt": "Abgelehnt",
 }
 LANE_ORDER = {"A": 0, "B": 1, "C": 2, "D": 3}
+REPO_URL = "https://github.com/Pafri-GmbH/Produkt-Research/blob/main/"
+STAGE_FILES = ["03-briefing.md", "02-deep-dive.md", "01-voranalyse.md"]
 
 
 def parse_frontmatter(text: str) -> dict:
@@ -128,6 +130,49 @@ def parse_body(text: str) -> dict:
     return {"kurz": kurz, "swot": swot, "kpis": kpis, "offen": offen}
 
 
+def parse_gate_block(text: str) -> dict | None:
+    """Liest den Gate-Block (rules/prozess.md) aus einer Stufen-Datei: Empfehlung, Begründung, offene Punkte, nächster Schritt, Entscheidung."""
+    m = re.search(r"^## Gate (\d):[^\n]*\n(.*?)(?:^---\s*$|\Z)", text, re.S | re.M)
+    if not m:
+        return None
+    block = {"gate": int(m.group(1)), "empfehlung": "", "begruendung": "", "offen": "", "naechster": "", "entscheidung": ""}
+    keys = {
+        "empfehlung": "empfehlung", "begründung": "begruendung", "begruendung": "begruendung",
+        "offene punkte": "offen", "nächster schritt": "naechster", "naechster schritt": "naechster",
+        "deine entscheidung": "entscheidung",
+    }
+    cur = None
+    for line in m.group(2).splitlines():
+        fm = re.match(r"^\*\*(.+?)\*\*\s*:?\s*(.*)$", line.strip())
+        if fm:
+            label = fm.group(1).lower()
+            cur = next((v for k, v in keys.items() if label.startswith(k)), None)
+            if cur:
+                block[cur] = fm.group(2).strip()
+            continue
+        if cur and line.strip():
+            block[cur] = (block[cur] + " " + line.strip()).strip()
+    block["empfehlung"] = block["empfehlung"].strip(" _*")
+    return block
+
+
+def parse_stage(folder: Path) -> dict | None:
+    """Jüngste Stufen-Datei in pipeline/<slug>/ bzw. products/NG00xx/: Datei, Fazit, Gate-Block."""
+    for name in STAGE_FILES:
+        path = folder / name
+        if path.exists():
+            text = path.read_text(encoding="utf-8")
+            fm = parse_frontmatter(text)
+            return {
+                "datei": str(path.relative_to(ROOT)),
+                "stufe": fm.get("stufe") or name[3:-3],
+                "datum": fm.get("datum"),
+                "fazit": fm.get("fazit"),
+                "gate_block": parse_gate_block(text),
+            }
+    return None
+
+
 def load_entries() -> list[dict]:
     entries: dict[str, dict] = {}
     # Reihenfolge: ideas zuerst, pipeline/products überschreiben (haben Vorrang).
@@ -145,6 +190,7 @@ def load_entries() -> list[dict]:
             if fm.get("slug"):
                 fm["_pfad"] = str(path.parent.relative_to(ROOT))
                 fm["_body"] = parse_body(text)
+                fm["_stufe"] = parse_stage(path.parent)
                 entries[fm["slug"]] = fm
     return list(entries.values())
 
@@ -307,13 +353,15 @@ def build_html(entries: list[dict], runs: list[dict]) -> str:
             "swot": body.get("swot", {}),
             "kpis": body.get("kpis", []),
             "offen": body.get("offen", []),
+            "github_url": REPO_URL + (e.get("_pfad") or ""),
+            "stufe": e.get("_stufe"),
         })
     run_rows = [{
         "lauf": r.get("lauf"), "thema": r.get("thema"), "ziel_anzahl": r.get("ziel_anzahl"),
         "gefunden": r.get("gefunden"), "dedupe_verworfen": r.get("dedupe_verworfen"),
         "quellen_eingeschraenkt": r.get("quellen_eingeschraenkt"),
     } for r in runs]
-    data = {"stand": date.today().isoformat(), "next_ng": next_ng(entries), "entries": rows, "runs": run_rows}
+    data = {"stand": date.today().isoformat(), "next_ng": next_ng(entries), "repo_url": REPO_URL, "entries": rows, "runs": run_rows}
     payload = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
     template = (ROOT / "scripts" / "dashboard_template.html").read_text(encoding="utf-8")
     return template.replace("__DATA__", payload)

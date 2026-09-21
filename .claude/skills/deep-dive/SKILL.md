@@ -23,4 +23,4 @@ description: Stufe 2 – Tiefenanalyse nach Pafris xlsx-Vorlage mit 4–6 Wettbe
 
 ## Abschluss
 11. Gate-2-Block. Empfehlung Go nur bei `score_gesamt ≥ 7,5` und ohne K.O. Warten. Nie `/briefing` selbst starten.
-12. Nach Entscheidung: `gate_2`, ggf. Status + `stop_grund`, Dashboard, Commit `gate(<slug>): …`.
+12. Nach Entscheidung (im Chat oder per Dashboard-Button, abgeholt durch `/entscheidungen`): `gate_2`, ggf. Status + `stop_grund`, Dashboard, Commit `gate(<slug>): …`.
