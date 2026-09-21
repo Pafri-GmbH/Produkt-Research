@@ -6,7 +6,11 @@
 3. **Preisvergleiche und Händler**: idealo, Google Shopping, OBI, Hornbach, Dehner, Bauhaus, Manufactum, Etsy (nur für Trend/Preis).
 4. **Wettbewerber-Shops** (Netrox, Relaxdays, Gardena, Lechuza, Blumat u. a.) für Spezifikationen und Preise.
 5. **Trend**: Google Trends (Keyword-Saisonalität), Pinterest/TikTok nur qualitativ.
-6. **Sourcing**: Alibaba/1688 nur lesend (Preisspanne, MOQ, Anbieterzahl).
+6. **Sourcing**: Alibaba/1688 nur lesend (Preisspanne, MOQ, Anbieterzahl, Lead Time).
+7. **Nachfrage-Signale ohne Helium 10**: Anzahl Suchergebnisse, „Über X Mal gekauft im letzten Monat" bei Top-Listings, Bestseller-Präsenz, Amazon-Autocomplete für Keywords, Google Trends DE.
+8. **Marken / IP**: DPMA- und EUIPO-Register (Marken), Google Patents und DPMAregister (Design, Gebrauchsmuster).
+9. **Compliance**: Produktsicherheitsverordnung (GPSR), Verpackungsgesetz/LUCID, PPWR-Übergangsfristen.
+10. **Kosten**: Amazon-FBA-Gebührentabelle DE (Versand nach Größenklasse, Verkaufsgebühr 15 % Garten), Seefracht-Richtwerte China–DE, Zollsätze (TARIC). Rechenweg in `rules/kalkulation.md`.
 
 ## Nicht verfügbar
 Helium 10, Junglescout, Keepa. Alle BSR-, Absatz-, Umsatz- und Suchvolumenangaben sind Schätzungen und werden so beschriftet.

@@ -14,9 +14,9 @@ Details, Status-Werte, Gate-Block und Warteschlange: `rules/prozess.md`.
 
 ## Betriebsregeln
 1. **Stop/Go an jedem Gate.** Jeder Skill endet mit dem Gate-Block aus `rules/prozess.md` und wartet auf Pafris Entscheidung. Nie eigenmächtig die nächste Stufe starten. Eine Entscheidung im Chat und ein Klick im Dashboard (abgeholt durch `/entscheidungen`) sind gleichwertig; nur nach einer davon läuft die nächste Stufe.
-2. **Zahlen haben eine Quelle.** Jede Zahl trägt Quelle und Abrufdatum oder ist als Schätzung markiert (`~`, „Schätzung aus …"). Es gibt keine Helium-10-Daten – BSR, Absatz und Suchvolumen sind immer Schätzungen und werden so beschriftet.
+2. **Zahlen haben eine Quelle.** Jede Zahl trägt Quelle und Abrufdatum oder ist als Schätzung markiert (`~`, „Schätzung aus …"). Es gibt keine Helium-10-Daten – BSR, Absatz und Suchvolumen sind immer Schätzungen und werden so beschriftet. Kalkulation (DB1, Break-even-ACOS, Kapitalbedarf) immer nach `rules/kalkulation.md`.
 3. **Markt = Amazon.de.** Andere Marktplätze nur auf ausdrückliche Anfrage.
-4. **Vorlagen 1:1.** `rules/scoring.md`, `rules/voranalyse.md`, `rules/deep-dive.md`, `rules/briefing.md` sind aus Pafris Vorlagen abgeleitet. Schema nicht ändern, ohne zu fragen.
+4. **Vorlagen 1:1.** `rules/scoring.md`, `rules/voranalyse.md`, `rules/deep-dive.md`, `rules/briefing.md`, `rules/kalkulation.md` sind aus Pafris Vorlagen abgeleitet; die Stufen-Dateien entstehen aus `templates/01-voranalyse.md` und `templates/02-deep-dive.md` (kopieren, alle Abschnitte behalten). Schema nicht ändern, ohne zu fragen.
 5. **Status nur über Frontmatter.** Statuswechsel setzt der jeweilige Skill (`rules/schema.md`); danach immer `python scripts/dashboard.py`. Das erzeugt `DASHBOARD.md` und `dashboard.html`; `dashboard.html` anschließend als Artifact unter https://claude.ai/artifact/2rvyEyRe1p9ietKExeRiiT neu veröffentlichen (gleiche URL, nie ein neues Artifact anlegen, nie den Parameter `capabilities` übergeben – sonst verlieren die Dashboard-Buttons ihre Datenbank).
 6. **Dedupe.** Vor jeder neuen Idee `ideas/`, `pipeline/` und `products/` prüfen – Slug, Synonyme, gleicher Produkttyp in anderer Größe.
 7. **Ein Lauf oder eine Stufe = ein Commit.** Format: `feat(ideen): lauf 2026-09-18 giesszubehoer` · `feat(<slug>): voranalyse` · `gate(<slug>): go deep-dive`.
@@ -29,8 +29,8 @@ CLAUDE.md               diese Datei
 START-PROMPT.md         Einrichtung und erster Lauf
 DASHBOARD.md            generierte Übersicht (scripts/dashboard.py)
 dashboard.html          generiertes interaktives Dashboard, veröffentlicht als Artifact (zentrales Tool, Buttons schreiben in die Artifact-DB)
-rules/                  Prozess, Schema, Produktkriterien, Recherche-Quellen, Stufen-Schemata (aus Vorlagen)
-templates/              Ideensteckbrief, Lauf-Protokoll
+rules/                  Prozess, Schema, Produktkriterien, Recherche-Quellen, Scoring, Kalkulation, Stufen-Schemata (aus Vorlagen)
+templates/              Ideensteckbrief, Lauf-Protokoll, 01-voranalyse, 02-deep-dive (Mustervorlagen der Stufen)
 vorlagen/               Pafris Original-Vorlagen (docx/xlsx/md) – nur lesen
 ideas/<slug>.md         Stufe 0: eine Datei je Idee
 ideas/_laeufe/          Protokoll je Recherche-Lauf
