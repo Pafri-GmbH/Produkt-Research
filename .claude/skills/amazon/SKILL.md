@@ -37,8 +37,11 @@ www.amazon.de
 *.media-amazon.com
 *.ssl-images-amazon.com
 completion.amazon.de
+*.awswaf.com
 ```
-Optional für Quellen Nr. 3/4/6: `www.idealo.de`, `*.alibaba.com`, `www.ebay.de`, `www.otto.de`. Wirkt ab der nächsten Session. Playwright und Chromium sind im Cloud-Image vorhanden.
+`*.awswaf.com` liefert das Skript der AWS-WAF-Prüfung, die Amazon gelegentlich vorschaltet. Optional für Quellen Nr. 3/4/6: `www.idealo.de`, `*.alibaba.com`, `www.ebay.de`, `www.otto.de`. Wirkt ab der nächsten Session. Playwright und Chromium sind im Cloud-Image vorhanden; der Egress-Proxy terminiert TLS mit eigener CA, der das Skript gezielt per SPKI-Hash vertraut (`/root/.ccr/agent-proxy-ca.crt`, überschreibbar mit `AMAZON_PROXY_CA`).
+
+**Lieferort:** Amazon leitet den Lieferort aus der IP ab (Cloud-VM: USA) und zeigt dann für viele Artikel keinen Preis. Das Skript setzt deshalb einmal je Browserprofil die PLZ `10115` (Berlin, überschreibbar mit `AMAZON_PLZ`); der Lieferort steht in der Kopfzeile der Suchausgabe.
 
 **Lokal (Desktop-App/CLI):** `npm i -g playwright && npx playwright install chromium`. Mit eigenem Browser statt headless: Chrome mit `--remote-debugging-port=9222` starten und `--cdp http://localhost:9222` anhängen – dann laufen die Abrufe über die eigene IP und Cookies, ohne Allowlist und praktisch ohne Captcha.
 
