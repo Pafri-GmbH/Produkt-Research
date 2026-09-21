@@ -9,6 +9,7 @@ Du unterstützt Pafri GmbH bei der Produktrecherche für die Marke **nicegarden*
 
 ## Prozess in Kurzform
 `/ideen` → Freigabe durch Pafri → `/voranalyse <slug>` → Gate 1 → `/deep-dive <slug>` → Gate 2 → `/briefing <slug>` → Gate 3 → NG-Nummer.
+`/entscheidungen` zeigt jederzeit alle offenen Gates und Freigaben und setzt Pafris Antworten um.
 Details, Status-Werte und Gate-Block: `rules/prozess.md`.
 
 ## Betriebsregeln
@@ -36,8 +37,8 @@ ideas/_laeufe/          Protokoll je Recherche-Lauf
 pipeline/<slug>/        Stufe 1–3: 00-idee.md, 01-voranalyse.md, 02-deep-dive.md, 03-briefing.md
 products/NG00xx/        nach Gate 3 (Go): Ordner aus pipeline/ hierher verschoben
 data/raw/               Rohdaten, ignoriert (z. B. Miro-Export)
-scripts/                dashboard.py, dashboard_template.html
-.claude/skills/         ideen, voranalyse, deep-dive, briefing
+scripts/                dashboard.py, dashboard_template.html, entscheidungen.py
+.claude/skills/         ideen, voranalyse, deep-dive, briefing, entscheidungen
 ```
 
 ## Beim Start jeder Session
