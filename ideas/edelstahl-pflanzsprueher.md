@@ -1,8 +1,8 @@
 ---
 slug: edelstahl-pflanzsprueher
 titel: Edelstahl-Pflanzsprüher
-status: importiert
-status_datum: 2026-09-16
+status: freigegeben
+status_datum: 2026-09-21
 quelle: miro-longlist
 lauf: 2026-09-16-miro-import
 kategorie: Bewässerung

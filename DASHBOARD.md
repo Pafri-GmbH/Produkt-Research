@@ -7,7 +7,8 @@ Stand: 2026-09-21 · generiert von `scripts/dashboard.py` · 41 Einträge · nä
 | Status | Anzahl | Bedeutung |
 |---|---|---|
 | `produkt` | 2 | Produkt (NG) |
-| `importiert` | 34 | Importiert (Miro) |
+| `freigegeben` | 1 | Freigegeben → /voranalyse |
+| `importiert` | 33 | Importiert (Miro) |
 | `beobachten` | 2 | Beobachten |
 | `abgelehnt` | 3 | Abgelehnt |
 
@@ -24,14 +25,15 @@ Keine offenen Gates.
 
 ## Pipeline (Stufe 1–3)
 
-Leer.
+| Slug | Status | Gate 1 | Gate 2 | Gate 3 | Gesamt | Pfad |
+|---|---|---|---|---|---|---|
+| edelstahl-pflanzsprueher | `freigegeben` | – | – | – | – | `ideas/edelstahl-pflanzsprueher.md` |
 
 ## Ideen (Stufe 0) nach Lane
 
 | Lane | Slug | Titel | Kategorie | VK | Status | Quelle | Lauf |
 |---|---|---|---|---|---|---|---|
 | A | anzucht-set | Anzucht-Set | Anzucht & Ranken | 12–24 € | `importiert` | miro-longlist | 2026-09-16-miro-import |
-| A | edelstahl-pflanzsprueher | Edelstahl-Pflanzsprüher | Bewässerung | 14–22 € | `importiert` | miro-longlist | 2026-09-16-miro-import |
 | A | kraeuteranzucht-kit | Kräuteranzucht-Kit | Anzucht & Ranken | 18–35 € | `importiert` | miro-longlist | 2026-09-16-miro-import |
 | A | microgreens-anzuchtset | Microgreens-Anzuchtset | Anzucht & Ranken | 20–35 € | `importiert` | miro-longlist | 2026-09-16-miro-import |
 | A | pflanzenetiketten-metall | Pflanzenetiketten Metall | Anzucht & Ranken | 9–16 € | `importiert` | miro-longlist | 2026-09-16-miro-import |
