@@ -9,8 +9,8 @@ Du unterstützt Pafri GmbH bei der Produktrecherche für die Marke **nicegarden*
 
 ## Prozess in Kurzform
 `/ideen` → Freigabe durch Pafri → `/voranalyse <slug>` → Gate 1 → `/deep-dive <slug>` → Gate 2 → `/briefing <slug>` → Gate 3 → NG-Nummer.
-Freigabe und Gate-Entscheidungen kommen per Chat **oder** per Button im Dashboard; Dashboard-Klicks holt `/entscheidungen` ab und führt die nächste Stufe aus.
-Details, Status-Werte, Gate-Block und Warteschlange: `rules/prozess.md`.
+`/entscheidungen` zeigt jederzeit alle offenen Gates und Freigaben und setzt Pafris Antworten um.
+Details, Status-Werte und Gate-Block: `rules/prozess.md`.
 
 ## Betriebsregeln
 1. **Stop/Go an jedem Gate.** Jeder Skill endet mit dem Gate-Block aus `rules/prozess.md` und wartet auf Pafris Entscheidung. Nie eigenmächtig die nächste Stufe starten. Eine Entscheidung im Chat und ein Klick im Dashboard (abgeholt durch `/entscheidungen`) sind gleichwertig; nur nach einer davon läuft die nächste Stufe.
@@ -37,7 +37,7 @@ ideas/_laeufe/          Protokoll je Recherche-Lauf
 pipeline/<slug>/        Stufe 1–3: 00-idee.md, 01-voranalyse.md, 02-deep-dive.md, 03-briefing.md (Review im Dashboard liest fazit + Gate-Block)
 products/NG00xx/        nach Gate 3 (Go): Ordner aus pipeline/ hierher verschoben
 data/raw/               Rohdaten, ignoriert (z. B. Miro-Export)
-scripts/                dashboard.py, dashboard_template.html
+scripts/                dashboard.py, dashboard_template.html, entscheidungen.py
 .claude/skills/         ideen, voranalyse, deep-dive, briefing, entscheidungen
 ```
 
