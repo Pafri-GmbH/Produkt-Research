@@ -17,5 +17,5 @@ description: Stufe 3 – Produktbriefing nach NG0001-Struktur, Teil A deutsch (E
 
 ## Abschluss
 7. Gate-3-Block mit Vorschlag der nächsten freien NG-Nummer (aus `DASHBOARD.md`). Warten. Keine Mails, keine Anfragen, keine Bestellungen.
-8. Bei Go durch Pafri: `ng_nummer` eintragen, `status: produkt`, `gate_3: go`, Ordner `git mv pipeline/<slug> products/NG00xx`, `ideas/<slug>.md` aktualisieren, Dashboard, Commit `gate(<slug>): go NG00xx`.
+8. Bei Go durch Pafri (im Chat oder per Dashboard-Button, abgeholt durch `/entscheidungen`): `ng_nummer` eintragen, `status: produkt`, `gate_3: go`, Ordner `git mv pipeline/<slug> products/NG00xx`, `ideas/<slug>.md` aktualisieren, Dashboard, Commit `gate(<slug>): go NG00xx`.
 9. Bei Stop/Beobachten: Status + `stop_grund`, Ordner bleibt in `pipeline/`, Dashboard, Commit `gate(<slug>): …`.

@@ -86,8 +86,8 @@ code{font-family:var(--mono);font-size:12px;background:var(--surface-2);padding:
 @media (max-width:480px){.stages{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 /* Next steps */
-.next{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-@media (max-width:800px){.next{grid-template-columns:1fr}}
+.next{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+@media (max-width:900px){.next{grid-template-columns:1fr}}
 .next ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
 .next li{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;background:var(--surface-2);cursor:pointer}
 .next li:hover{background:var(--surface-3)}
@@ -106,6 +106,7 @@ code{font-family:var(--mono);font-size:12px;background:var(--surface-2);padding:
 .pill.ok{background:var(--accent-soft);border-color:transparent;color:var(--good-text)}
 .pill.stop{background:var(--crit-soft);border-color:transparent;color:var(--crit-text)}
 .pill.watch{background:var(--surface-2);border-color:transparent;color:var(--ink-2)}
+.pill.queue{background:var(--surface-3);border-color:transparent;color:var(--ink)}
 .lane{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:5px;font-weight:800;font-size:12px;border:1.5px solid var(--ink-2);color:var(--ink);font-family:var(--mono)}
 .lane.A{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .lane.B{border-color:var(--ink)}
@@ -210,6 +211,27 @@ table.runs th{cursor:default}
 .kpi td{padding:5px 8px}
 .stop{background:var(--crit-soft);border-radius:6px;padding:8px 10px;font-size:12.5px;color:var(--crit-text)}
 .watchbox{background:var(--surface-2);border-radius:6px;padding:8px 10px;font-size:12.5px}
+/* Review + Entscheidung */
+.review{display:flex;flex-direction:column;gap:8px;font-size:12.5px}
+.review .row{display:flex;flex-direction:column;gap:2px}
+.review .k{font-size:11px;color:var(--muted)}
+.review .rec{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:13px}
+.review .rec.go{color:var(--good-text)}.review .rec.stop{color:var(--crit-text)}.review .rec.watch{color:var(--warn-text)}
+.review a{font-size:12px}
+.decide{display:flex;flex-direction:column;gap:10px}
+.decide textarea{width:100%;min-height:64px;resize:vertical;background:var(--surface);border:1px solid var(--line-2);border-radius:6px;padding:8px 10px;font-size:13px;line-height:1.4}
+.decide .btns{display:flex;flex-wrap:wrap;gap:8px}
+.btn{background:var(--surface);border:1px solid var(--line-2);border-radius:6px;padding:8px 12px;cursor:pointer;font-size:13px;font-weight:600;color:var(--ink);min-height:36px}
+.btn:hover:not(:disabled){background:var(--surface-2)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover:not(:disabled){filter:brightness(1.08);background:var(--accent)}
+.btn.danger{border-color:var(--crit);color:var(--crit-text)}
+.decide .hint{font-size:12px;color:var(--ink-2);margin:0}
+.decide .err{font-size:12px;color:var(--crit-text);margin:0}
+.queuebox{background:var(--warn-soft);border:1px solid var(--warn);border-radius:6px;padding:10px 12px;font-size:12.5px;display:flex;flex-direction:column;gap:6px}
+.queuebox b{color:var(--warn-text)}
+.queuebox .btn{align-self:flex-start;min-height:30px;padding:4px 10px;font-size:12px}
 .scrim{position:fixed;inset:0;background:rgba(0,0,0,.25);z-index:19}
 .scrim[hidden]{display:none}
 
@@ -243,12 +265,16 @@ table.runs th{cursor:default}
   <section class="panel">
     <div class="panel-h">
       <h2>Jetzt dran</h2>
-      <p>Gates entscheidet nur Pafri. Skills starten nie eigenmächtig die nächste Stufe.</p>
+      <p>Gates entscheidet nur Pafri – per Button im Steckbrief oder im Chat. Claude holt Klicks mit <code>/entscheidungen</code> ab und führt die nächste Stufe aus.</p>
     </div>
     <div class="next">
       <div>
         <h3>Entscheidung Pafri</h3>
         <ul id="next-pafri"></ul>
+      </div>
+      <div>
+        <h3>In Warteschlange · <code>/entscheidungen</code></h3>
+        <ul id="next-queue"></ul>
       </div>
       <div>
         <h3>Bereit für den nächsten Skill</h3>
@@ -316,7 +342,7 @@ table.runs th{cursor:default}
 
   <footer class="foot">
     <span>Generiert von <code>scripts/dashboard.py</code> aus dem Frontmatter, gleicher Stand wie <code>DASHBOARD.md</code>.</span>
-    <span>Nach jedem Statuswechsel: <code>python scripts/dashboard.py</code> ausführen und dashboard.html neu veröffentlichen.</span>
+    <span>Entscheidungen per Button landen in der Warteschlange und werden in einer Claude-Session mit <code>/entscheidungen</code> abgeholt; Status und Gates stehen im Repo.</span>
     <span>Alle Preise und Absätze sind Schätzungen ohne Helium 10.</span>
   </footer>
 </div>
@@ -356,17 +382,41 @@ table.runs th{cursor:default}
 
   function gateOf(e){ return e.status==="voranalyse"?["gate_1",1]:e.status==="deep-dive"?["gate_2",2]:e.status==="briefing"?["gate_3",3]:null; }
 
+  // ---------- Entscheidungen (Artifact-DB, Collection "entscheidungen") ----------
+  // Q: slug -> offenes Dokument. DB: Namespace aus claude.use("db") oder null. dbState: init | ok | none
+  let Q = {}, DB = null, dbState = "init";
+  const AKTION_LABEL = {freigabe:"Freigabe → Voranalyse", go:"Go", stop:"Stop", beobachten:"Beobachten", nacharbeit:"Nacharbeit"};
+  const NEXT_OF_GATE = {0:"Voranalyse", 1:"Deep-Dive", 2:"Briefing", 3:"NG-Nummer"};
+  function queued(e){ return Q[e.slug] || null; }
+  // Welche Buttons der Steckbrief anbietet. null = keine Entscheidung offen.
+  function decisionOptions(e){
+    const s = e.status;
+    if (["importiert","idee","beobachten"].includes(s)) return {gate:0, opts:[
+      {aktion:"freigabe", label: s==="beobachten"?"Wieder aufnehmen → Voranalyse":"Freigeben → Voranalyse", cls:"primary"},
+      ...(s==="beobachten"?[]:[{aktion:"beobachten", label:"Beobachten", cls:"", grund:true}]),
+      {aktion:"stop", label:"Ablehnen", cls:"danger", grund:true}]};
+    const g = gateOf(e); if (!g) return null;
+    const [k,n] = g; if (e[k]!=null) return null;
+    return {gate:n, opts:[
+      {aktion:"go", label:"Go → "+NEXT_OF_GATE[n], cls:"primary"},
+      {aktion:"nacharbeit", label:"Nacharbeit", cls:"", grund:true},
+      {aktion:"beobachten", label:"Beobachten", cls:"", grund:true},
+      {aktion:"stop", label:"Stop", cls:"danger", grund:true}]};
+  }
+  const fmtTs = iso => { try{ return new Date(iso).toLocaleString("de-DE",{dateStyle:"medium",timeStyle:"short"}); }catch(_){ return esc(iso||""); } };
+
   // Returns {kind: 'pafri'|'skill'|'none', text, cmd}
   function nextStep(e){
-    const s = e.status, slug = e.slug;
-    if (s==="importiert" || s==="idee") return {kind:"pafri", text: s==="idee"?"Freigabe nach /ideen-Lauf":"Freigabe aus Miro-Longlist", cmd:"/voranalyse "+slug, note:"status: freigegeben setzen"};
+    const s = e.status, slug = e.slug, q = queued(e);
+    if (q) return {kind:"queue", text:"In Warteschlange: "+(AKTION_LABEL[q.aktion]||q.aktion)+(q.gate?` (Gate ${q.gate})`:""), cmd:"/entscheidungen "+slug, note:"in einer Claude-Session abholen"};
+    if (s==="importiert" || s==="idee") return {kind:"pafri", text: s==="idee"?"Freigabe nach /ideen-Lauf":"Freigabe aus Miro-Longlist", cmd:"/voranalyse "+slug, note:"Button „Freigeben“ im Steckbrief"};
     if (s==="freigegeben") return {kind:"skill", text:"Voranalyse starten", cmd:"/voranalyse "+slug};
     const g = gateOf(e);
     if (g){
       const [k,n] = g, v = e[k];
       const nextCmd = n===1?"/deep-dive "+slug : n===2?"/briefing "+slug : "NG-Nummer vergeben, Ordner nach products/";
       if (v==="go") return {kind:"skill", text:"Gate "+n+" Go erteilt", cmd:nextCmd};
-      if (v==null) return {kind:"pafri", text:"Gate "+n+": Go / Stop / Beobachten / Nacharbeit", cmd:nextCmd, note:"Empfehlung im Gate-Block lesen"};
+      if (v==null) return {kind:"pafri", text:"Gate "+n+": Go / Stop / Beobachten / Nacharbeit", cmd:nextCmd, note:"Review im Steckbrief, dann Button"};
       return {kind:"none", text:"Gate "+n+": "+v};
     }
     if (s==="beobachten") return {kind:"none", text:"Zurückgestellt – Wiederaufnahme bei Anlass"};
@@ -376,6 +426,7 @@ table.runs th{cursor:default}
   }
   function pill(e){
     const s = e.status, g = gateOf(e);
+    if (queued(e)) return `<span class="pill queue"><i>⏳</i>Warteschlange</span>`;
     if (s==="produkt") return `<span class="pill ok"><i>✓</i>${esc(e.ng_nummer||"Produkt")}</span>`;
     if (s==="abgelehnt") return `<span class="pill stop"><i>×</i>Abgelehnt</span>`;
     if (s==="beobachten") return `<span class="pill watch"><i>◔</i>Beobachten</span>`;
@@ -422,13 +473,16 @@ table.runs th{cursor:default}
   function renderNext(){
     const p = E.filter(e => nextStep(e).kind==="pafri" && !["importiert"].includes(e.status));
     const sk = E.filter(e => nextStep(e).kind==="skill");
+    const qu = E.filter(e => nextStep(e).kind==="queue");
     const imp = E.filter(e => e.status==="importiert");
     const li = e => { const n = nextStep(e); return `<li data-slug="${esc(e.slug)}">${laneChip(e.score)}<span class="t"><b>${esc(e.titel)}</b><span>${esc(n.text)}${n.cmd?` · <code>${esc(n.cmd)}</code>`:""}</span></span>${pill(e)}</li>`; };
-    const pEl = document.getElementById('next-pafri'), sEl = document.getElementById('next-skill');
+    const pEl = document.getElementById('next-pafri'), sEl = document.getElementById('next-skill'), qEl = document.getElementById('next-queue');
     pEl.innerHTML = p.length ? p.map(li).join("") :
-      `<li class="empty">Keine offenen Gates.${imp.length?` <b>${imp.length}</b> importierte Ideen warten auf Freigabe: in <code>ideas/&lt;slug&gt;.md</code> <code>status: freigegeben</code> setzen, dann <code>/voranalyse &lt;slug&gt;</code>. Lane A zuerst.`:""}</li>`;
-    sEl.innerHTML = sk.length ? sk.map(li).join("") : `<li class="empty">Nichts freigegeben. Sobald eine Idee <code>freigegeben</code> ist, erscheint hier der Befehl.</li>`;
-    [pEl,sEl].forEach(ul => ul.querySelectorAll('li[data-slug]').forEach(l => l.addEventListener('click', () => openDetail(l.dataset.slug))));
+      `<li class="empty">Keine offenen Gates.${imp.length?` <b>${imp.length}</b> importierte Ideen warten auf Freigabe: Idee anklicken und im Steckbrief <b>Freigeben</b> wählen. Lane A zuerst.`:""}</li>`;
+    qEl.innerHTML = qu.length ? qu.map(li).join("") :
+      `<li class="empty">${dbState==="none" ? "Warteschlange nur im veröffentlichten Dashboard auf claude.ai sichtbar." : "Leer. Klicks im Steckbrief erscheinen hier, bis Claude sie mit <code>/entscheidungen</code> abgeholt hat."}</li>`;
+    sEl.innerHTML = sk.length ? sk.map(li).join("") : `<li class="empty">Nichts freigegeben. Sobald eine Idee <code>freigegeben</code> ist oder ein Gate Go hat, erscheint hier der Befehl.</li>`;
+    [pEl,sEl,qEl].forEach(ul => ul.querySelectorAll('li[data-slug]').forEach(l => l.addEventListener('click', () => openDetail(l.dataset.slug))));
   }
 
   // ---------- Lane chart ----------
@@ -531,12 +585,73 @@ table.runs th{cursor:default}
   function openDetail(slug){
     const e = E.find(x=>x.slug===slug); if (!e) return;
     selected = slug; renderTable();
+    fillDrawer(e);
+    $('drawer').classList.add('open'); $('drawer').setAttribute('aria-hidden','false'); $('scrim').hidden=false; save();
+  }
+  function reviewHtml(e){
+    const st = e.stufe; if (!st) return "";
+    const gb = st.gate_block || null;
+    const recCls = r => /^go/i.test(r)?"go":/^stop/i.test(r)?"stop":/beobachten/i.test(r)?"watch":"";
+    const recIcon = r => /^go/i.test(r)?"▶":/^stop/i.test(r)?"×":/beobachten/i.test(r)?"◔":"·";
+    return `<section><h3>Review · ${esc(STATUS_LABEL[st.stufe]||st.stufe)}${st.datum?` · ${esc(st.datum)}`:""}</h3><div class="review">
+      ${st.fazit?`<div class="row"><span class="k">Fazit</span><span>${esc(st.fazit)}</span></div>`:""}
+      ${gb?`<div class="row"><span class="k">Empfehlung Gate ${gb.gate}</span><span class="rec ${recCls(gb.empfehlung)}"><i>${recIcon(gb.empfehlung)}</i>${esc(gb.empfehlung||"–")}</span></div>
+      ${gb.begruendung?`<div class="row"><span class="k">Begründung</span><span>${esc(gb.begruendung)}</span></div>`:""}
+      ${gb.offen?`<div class="row"><span class="k">Offene Punkte / Datenlücken</span><span>${esc(gb.offen)}</span></div>`:""}
+      ${gb.naechster?`<div class="row"><span class="k">Nächster Schritt bei Go</span><span class="mono">${esc(gb.naechster)}</span></div>`:""}`:`<p class="muted">Kein Gate-Block in <span class="mono">${esc(st.datei)}</span> gefunden.</p>`}
+      <a href="${esc(D.repo_url + st.datei)}" target="_blank" rel="noopener">Vollständige Analyse in GitHub öffnen ↗</a>
+    </div></section>`;
+  }
+  function decideHtml(e){
+    const q = queued(e);
+    if (q) return `<section><h3>Entscheidung</h3><div class="queuebox">
+      <span><b>⏳ In Warteschlange:</b> ${esc(AKTION_LABEL[q.aktion]||q.aktion)}${q.gate?` (Gate ${q.gate})`:""} · ${fmtTs(q.erstellt)}</span>
+      ${q.kommentar?`<span>„${esc(q.kommentar)}“</span>`:""}
+      <span>Abholen: in einer Claude-Session <code>/entscheidungen</code> sagen. Claude setzt Status/Gate im Repo und führt die nächste Stufe aus.</span>
+      <button type="button" class="btn" id="d-withdraw">Zurückziehen</button>
+      <p class="err" id="d-err" hidden></p>
+    </div></section>`;
+    const o = decisionOptions(e); if (!o) return "";
+    const off = dbState!=="ok";
+    return `<section><h3>Entscheidung${o.gate?` · Gate ${o.gate}`:" · Freigabe"}</h3><div class="decide">
+      <textarea id="d-grund" placeholder="Grund bzw. Auftrag – Pflicht bei Stop, Beobachten und Nacharbeit" ${off?"disabled":""}></textarea>
+      <div class="btns">${o.opts.map(b=>`<button type="button" class="btn ${b.cls}" data-aktion="${b.aktion}" data-gate="${o.gate}" data-grund="${b.grund?1:0}" ${off?"disabled":""}>${esc(b.label)}</button>`).join("")}</div>
+      <p class="hint">${dbState==="init" ? "Verbindung zur Warteschlange wird aufgebaut …" : dbState==="none" ? "Entscheidungen sind nur im veröffentlichten Dashboard auf claude.ai möglich (hier: lokale Datei oder keine Freigabe)." : "Ein Klick legt die Entscheidung in die Warteschlange. Ausgeführt wird sie, sobald du in einer Claude-Session <code>/entscheidungen</code> sagst."}</p>
+      <p class="err" id="d-err" hidden></p>
+    </div></section>`;
+  }
+  function showErr(msg){ const el=$('d-err'); if(!el) return; el.textContent=msg; el.hidden=false; }
+  function bindDecision(e){
+    const w = $('d-withdraw');
+    if (w) w.addEventListener('click', async () => {
+      if (!DB) return; w.disabled = true;
+      try { await DB.doc("entscheidungen/"+e.slug).delete(); delete Q[e.slug]; refresh(); }
+      catch(err){ w.disabled=false; showErr("Zurückziehen fehlgeschlagen: "+(err&&err.code||"unbekannt")); }
+    });
+    $('d-body').querySelectorAll('button[data-aktion]').forEach(b => b.addEventListener('click', async () => {
+      if (!DB) return;
+      const aktion = b.dataset.aktion, gate = Number(b.dataset.gate), grund = ($('d-grund')?.value||"").trim();
+      if (b.dataset.grund==="1" && !grund){ showErr("Bitte einen Grund bzw. Auftrag eintragen."); $('d-grund')?.focus(); return; }
+      const btns = $('d-body').querySelectorAll('button[data-aktion]'); btns.forEach(x=>x.disabled=true);
+      const doc = {slug:e.slug, aktion, gate, naechste_stufe: aktion==="freigabe"||aktion==="go" ? NEXT_OF_GATE[gate] : null,
+        erwarteter_status:e.status, kommentar:grund, erstellt:new Date().toISOString(), status:"offen", verarbeitet:null, commit:null, hinweis:null};
+      try { await DB.doc("entscheidungen/"+e.slug).set(doc); Q[e.slug]=doc; refresh(); }
+      catch(err){
+        btns.forEach(x=>x.disabled=false);
+        const c = err&&err.code;
+        showErr(c==="quota_exceeded" ? "Warteschlange voll – alte Einträge mit /entscheidungen abarbeiten." : c==="invalid_argument" ? "Keine Schreibrechte für dieses Dashboard." : "Speichern fehlgeschlagen ("+(c||"unbekannt")+"), bitte erneut versuchen.");
+      }
+    }));
+  }
+  function fillDrawer(e){
     const n = nextStep(e), sc = e.scores||{};
     const list = arr => arr && arr.length ? `<ul>${arr.map(x=>isFehlt(x)?`<li class="fehlt">fehlt</li>`:`<li>${esc(x)}</li>`).join("")}</ul>` : `<span class="fehlt">fehlt</span>`;
     $('d-head').innerHTML = `<div class="eyebrow">${esc(e.kategorie||"ohne Kategorie")} · ${esc(e.quelle||"")}</div><h2>${esc(e.titel)}</h2><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:6px">${laneChip(e.score)}${pill(e)}<span class="mono muted">${esc(e.slug)}</span></div>`;
     const swot = e.swot||{};
     $('d-body').innerHTML = `
       ${n.kind!=="none" ? `<div class="cmd"><code>${esc(n.cmd)}</code><span>${esc(n.text)}${n.note?` · ${esc(n.note)}`:""}</span></div>` : ""}
+      ${reviewHtml(e)}
+      ${decideHtml(e)}
       ${e.stop_grund ? `<div class="${e.status==="abgelehnt"?"stop":"watchbox"}"><b>${e.status==="abgelehnt"?"Stop-Grund":"Grund"}:</b> ${esc(e.stop_grund)}</div>` : ""}
       <section><h3>Eckdaten</h3><div class="kv">
         <div><span class="k">VK-Spanne Amazon.de</span><span class="v">${vk(e)}</span></div>
@@ -556,8 +671,9 @@ table.runs th{cursor:default}
       </div></section>
       ${e.kpis&&e.kpis.length?`<section><h3>KPIs (Schätzungen)</h3><table class="kpi"><tbody>${e.kpis.map(k=>`<tr><td>${esc(k[0])}</td><td>${isFehlt(k[1])?'<span class="fehlt">fehlt</span>':esc(k[1])}</td></tr>`).join("")}</tbody></table></section>`:""}
       ${e.offen&&e.offen.length?`<section><h3>Offene Punkte</h3><ul style="margin:0;padding-left:18px">${e.offen.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></section>`:""}
+      <section><h3>Repo</h3><a href="${esc(e.github_url)}" target="_blank" rel="noopener" class="mono">${esc(e.pfad)} ↗</a></section>
     `;
-    $('drawer').classList.add('open'); $('drawer').setAttribute('aria-hidden','false'); $('scrim').hidden=false; save();
+    bindDecision(e);
   }
   function closeDetail(){ selected=null; $('drawer').classList.remove('open'); $('drawer').setAttribute('aria-hidden','true'); $('scrim').hidden=true; renderTable(); save(); }
   $('d-close').addEventListener('click', closeDetail); $('scrim').addEventListener('click', closeDetail);
@@ -578,8 +694,25 @@ table.runs th{cursor:default}
   function save(){ try{ localStorage.setItem('ng-radar', JSON.stringify({F, stageFilter, selected})); }catch(_){} }
   function load(){ try{ const s=JSON.parse(localStorage.getItem('ng-radar')||"null"); if(s){ Object.assign(F, s.F||{}); stageFilter=s.stageFilter||null; selected=s.selected||null; } }catch(_){} }
 
+  function refresh(){
+    renderStages(); renderNext(); renderTable();
+    if (selected){ const e = E.find(x=>x.slug===selected); if (e && $('drawer').classList.contains('open')) fillDrawer(e); }
+  }
+  async function initDb(){
+    let db = null;
+    try { if (window.claude && typeof window.claude.use==="function") db = await window.claude.use("db"); } catch(_){ db = null; }
+    if (!db){ dbState = "none"; refresh(); return; }
+    DB = db; dbState = "ok";
+    // Einmal abonnieren: alle offenen Entscheidungen, live über alle Tabs.
+    db.collection("entscheidungen").where("status","==","offen").onSnapshot(
+      snap => { Q = {}; snap.docs.forEach(d => { if (d.exists) Q[d.id] = d.data(); }); refresh(); },
+      () => { DB = null; dbState = "none"; Q = {}; refresh(); }
+    );
+  }
+
   load(); syncInputs();
   renderStages(); renderNext(); renderLaneChart(); renderProds(); renderTable();
   if (selected && E.some(e=>e.slug===selected)) openDetail(selected); else selected=null;
+  initDb();
 })();
 </script>
