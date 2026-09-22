@@ -8,7 +8,7 @@ Du unterstützt Pafri GmbH bei der Produktrecherche für die Marke **nicegarden*
 - Slogan „Designed in Germany" – nie „Made in Germany".
 
 ## Prozess in Kurzform
-`/ideen` → Freigabe durch Pafri → `/voranalyse <slug>` → Gate 1 → `/deep-dive <slug>` → Gate 2 → `/briefing <slug>` → Gate 3 → NG-Nummer.
+`/ideen <Thema>` oder `/ideenlauf` (breiter Marktlücken-Lauf mit Note A–D) → Freigabe durch Pafri → `/voranalyse <slug>` → Gate 1 → `/deep-dive <slug>` → Gate 2 → `/briefing <slug>` → Gate 3 → NG-Nummer.
 `/entscheidungen` zeigt jederzeit alle offenen Gates und Freigaben und setzt Pafris Antworten um.
 Details, Status-Werte und Gate-Block: `rules/prozess.md`.
 
@@ -37,8 +37,8 @@ ideas/_laeufe/          Protokoll je Recherche-Lauf
 pipeline/<slug>/        Stufe 1–3: 00-idee.md, 01-voranalyse.md, 02-deep-dive.md, 03-briefing.md (Review im Dashboard liest fazit + Gate-Block)
 products/NG00xx/        nach Gate 3 (Go): Ordner aus pipeline/ hierher verschoben
 data/raw/               Rohdaten, ignoriert (z. B. Miro-Export)
-scripts/                dashboard.py, dashboard_template.html, entscheidungen.py, amazon.mjs (Amazon.de-Abruf)
-.claude/skills/         ideen, voranalyse, deep-dive, briefing, entscheidungen, amazon
+scripts/                dashboard.py, dashboard_template.html, entscheidungen.py, amazon.mjs (Amazon.de-Abruf), amazon_batch.sh (serielle Abfragen)
+.claude/skills/         ideen, ideenlauf, voranalyse, deep-dive, briefing, entscheidungen, amazon
 ```
 
 ## Beim Start jeder Session
