@@ -8,7 +8,8 @@ Stand: 2026-09-22 · generiert von `scripts/dashboard.py` · 59 Einträge · nä
 |---|---|---|
 | `produkt` | 2 | Produkt (NG) |
 | `voranalyse` | 1 | Gate 1 wartet |
-| `idee` | 18 | Wartet auf Freigabe |
+| `freigegeben` | 1 | Freigegeben → /voranalyse |
+| `idee` | 17 | Wartet auf Freigabe |
 | `importiert` | 33 | Importiert (Miro) |
 | `beobachten` | 2 | Beobachten |
 | `abgelehnt` | 3 | Abgelehnt |
@@ -34,7 +35,6 @@ Stand: 2026-09-22 · generiert von `scripts/dashboard.py` · 59 Einträge · nä
 | schneckenkragen-edelstahl | Wartet auf Freigabe | C | – | `ideas/schneckenkragen-edelstahl.md` |
 | terrarium-werkzeug-set-edelstahl | Wartet auf Freigabe | C | – | `ideas/terrarium-werkzeug-set-edelstahl.md` |
 | unkrautstecher-edelstahl | Wartet auf Freigabe | D | – | `ideas/unkrautstecher-edelstahl.md` |
-| vogelfuttersaeule-edelstahl | Wartet auf Freigabe | A | – | `ideas/vogelfuttersaeule-edelstahl.md` |
 | wandhalterung-blumentopf-metall | Wartet auf Freigabe | B | – | `ideas/wandhalterung-blumentopf-metall.md` |
 
 ## Produkte
@@ -49,6 +49,7 @@ Stand: 2026-09-22 · generiert von `scripts/dashboard.py` · 59 Einträge · nä
 | Slug | Status | Gate 1 | Gate 2 | Gate 3 | Gesamt | Pfad |
 |---|---|---|---|---|---|---|
 | edelstahl-pflanzsprueher | `voranalyse` | – | – | – | 67 | `pipeline/edelstahl-pflanzsprueher` |
+| vogelfuttersaeule-edelstahl | `freigegeben` | – | – | – | – | `ideas/vogelfuttersaeule-edelstahl.md` |
 
 ## Analysen-Kennzahlen
 
@@ -72,7 +73,6 @@ Stufe 2 überschreibt VK, DB1, BE-ACOS und Kapital aus Stufe 1; Score und Zone s
 | A | regenwasser-eimer-edelstahl | Regenwasser-Eimer Edelstahl | Bewässerung | 20–40 € | `importiert` | miro-longlist | 2026-09-16-miro-import |
 | A | sukkulenten-toepfe-set | Sukkulenten-Töpfe Set | Gefäße & Deko | 16–28 € | `importiert` | miro-longlist | 2026-09-16-miro-import |
 | A | vermehrungsstation-glas | Vermehrungsstation Glas | Gefäße & Deko | 18–32 € | `importiert` | miro-longlist | 2026-09-16-miro-import |
-| A | vogelfuttersaeule-edelstahl | Vogelfuttersäule Edelstahl | Gefäße & Deko | 24–34 € | `idee` | ideen-lauf | 2026-09-22-marktluecken-edelstahl |
 | B | bienentraenke-edelstahl-glas | Bienentränke / Insektentränke Edelstahl-Glas | Gefäße & Deko | 19–29 € | `idee` | ideen-lauf | 2026-09-22-marktluecken-edelstahl |
 | B | blumentopfhalter-balkongelaender-edelstahl | Blumentopfhalter Balkongeländer Edelstahl | Gefäße & Deko | 24–36 € | `idee` | ideen-lauf | 2026-09-22-marktluecken-edelstahl |
 | B | bodenfeuchtigkeitsmesser | Bodenfeuchtigkeitsmesser | Pflege & Werkzeug | 7–14 € | `importiert` | miro-longlist | 2026-09-16-miro-import |

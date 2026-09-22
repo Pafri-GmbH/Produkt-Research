@@ -1,7 +1,7 @@
 ---
 slug: vogelfuttersaeule-edelstahl
 titel: Vogelfuttersäule Edelstahl
-status: idee
+status: freigegeben
 status_datum: 2026-09-22
 quelle: ideen-lauf
 lauf: 2026-09-22-marktluecken-edelstahl
