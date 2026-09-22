@@ -50,5 +50,6 @@ completion.amazon.de
 - Rezensionsseiten (`/product-reviews/`) verlangen teils Login; dann fällt das Skript auf die bis zu 10 Rezensionen der Produktseite zurück und kennzeichnet das in der Ausgabe.
 - Preise und Lieferhinweise hängen vom Standort-Cookie der Session ab (Cloud-VM ohne DE-Adresse); Preis in EUR ist trotzdem der Listingpreis.
 - Rechenzentrums-IPs erhalten häufiger ein Captcha. Das Skript wiederholt einmal nach 10 s, dann Exit 2.
+- Das Skript startet immer das volle Chromium (`/opt/pw-browsers/chromium`, überschreibbar mit `AMAZON_CHROMIUM`), nie Playwrights Headless-Shell: die meldet sich als „HeadlessChrome" und bekommt von amazon.de bei jedem Aufruf ein Captcha (beobachtet 2026-09-22, auch mit vollständiger Allowlist). Dauerhaftes Captcha trotz Allowlist → zuerst prüfen, ob das Profil unter `data/raw/amazon/.profile` gesperrt ist (Ordner umbenennen, neu starten).
 - Amazon ändert das DOM; brechen Felder auf `null` weg, Selektoren in `scripts/amazon.mjs` (Blöcke `EXTRACT_*`) nachziehen und `--selbsttest` erweitern.
 - Automatisierter Abruf ist von Amazons Nutzungsbedingungen nicht gedeckt; das Skript bleibt deshalb bei Lesezugriff in Browser-Kadenz und ohne Konto.

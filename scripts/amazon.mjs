@@ -241,9 +241,10 @@ async function browserStarten(opts) {
     viewport: { width: 1366, height: 900 },
     args: ["--no-sandbox", "--disable-blink-features=AutomationControlled"],
   };
-  if (!process.env.PLAYWRIGHT_BROWSERS_PATH && fs.existsSync("/opt/pw-browsers/chromium")) {
-    launch.executablePath = "/opt/pw-browsers/chromium";
-  }
+  // Immer das volle Chromium nehmen, nie die Headless-Shell: die meldet sich in den Client-Hints als
+  // „HeadlessChrome" und bekommt von amazon.de zuverlässig ein Captcha (Exit 2), auch mit Allowlist.
+  const vollesChromium = process.env.AMAZON_CHROMIUM || "/opt/pw-browsers/chromium";
+  if (fs.existsSync(vollesChromium)) launch.executablePath = vollesChromium;
   // Cloud-Session: der Egress-Proxy terminiert TLS mit eigener CA, die Chromium nicht kennt.
   // Nur dieser einen CA (per SPKI-Hash) wird vertraut – keine allgemeine Abschaltung der TLS-Prüfung.
   const spki = proxyCaSpki();
