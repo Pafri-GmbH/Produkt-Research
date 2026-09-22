@@ -64,3 +64,6 @@ Kategorie laut Miro: **Anzucht & Ranken**. Markenfit-Begründung: [fehlt] (Anhal
 
 ## Offene Punkte
 - Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche).
+
+## Ergänzung aus Lauf 2026-09-22 (Dedupe: Orchideenstab / Pflanzenstütze Metall)
+Kandidat „Orchideenstab Metall" wurde nicht neu angelegt, sondern hier geführt (gleicher Produkttyp Pflanzstab). Amazon.de-Suche „orchideenstab metall" (48 organische Listings, > 2.000 Ergebnisse, Amazon.de, 2026-09-22): Preisband 3,32–34,31 €, Median 13,76 €. Top-Anbieter: KARAT Rankstab 120 cm 10 Stück B0CMXV7KBB 11,58 €, 4,8★, 462 Bew. · Orchideenstab Kolibri (Deko) B07X5CGF8N 21,79 €, 4,9★, 193 Bew. · KADAX 10er Blumenstütze Stahl 50 cm B08BKSZC1T 26,38 €, 4,3★, 87 Bew. · Relaxdays Pflanzstäbe Metall 10er B0CCXB36H4 19,49 €, 4,5★, 24 Bew. Einschätzung: Massensegment aus Kunststoff-/Bambusstäben unter 12 €; Deko-Orchideenstäbe (Kolibri/Eisvogel, 21,79 €, 4,8–4,9★) sind die einzige Premium-Nische und Geschmacksware. Lane bleibt **A** aus Miro offen zur Prüfung; Edelstahl-Pflanzstab-Set (z. B. 3er, 40/60/80 cm, matt schwarz) wäre die nicegarden-Variante. Quelle: https://www.amazon.de/s?k=orchideenstab+metall (2026-09-22).

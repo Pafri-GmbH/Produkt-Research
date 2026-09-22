@@ -64,3 +64,6 @@ Kategorie laut Miro: **Anzucht & Ranken**. Markenfit-Begründung: [fehlt] (Anhal
 
 ## Offene Punkte
 - Kurzbeschreibung, Referenz-ASINs, Top-Anbieter und KPIs fehlen (Import ohne Recherche).
+
+## Ergänzung aus Lauf 2026-09-22 (Dedupe: Staudenhalter / Pflanzenstützring)
+Kandidat „Staudenhalter Metall (Ring)" wurde nicht neu angelegt, sondern hier geführt (gleicher Produkttyp Stütz-/Rankhilfe). Amazon.de-Suche „staudenhalter pflanzenstütze ring" (48 organische Listings, 300 Ergebnisse, Amazon.de, 2026-09-22): Preisband 3,43–67,70 €, Median 18,52 €. Top-Anbieter: OFFCUP Ringkäfig 6 Stück B0DGTX533G 16,09 €, 3,9★, 611 Bew. · Novatool 5 Strauchstützen 100 cm B0859G9SDV 23,40 €, 4,1★, 458 Bew., „100+ gekauft" · Nordstern Staudenhalter Rost 2er B0C9V1C9PW 27,53 €, 4,6★, 171 Bew., „100+ gekauft" · RoserRose 4er B0FPM59N3D 4,58 €, 4,2★, 220 Bew., „300+ gekauft". Autocomplete „staudenhalter metall", „… rost", „… hortensien", „… ring" (2026-09-22). Einschätzung: Ringe 40–100 cm hoch sind für FBA „Kleines Paket" zu sperrig, Edelstahl in dieser Größe ohne Preisspielraum, Top-Listings 3,9–4,1★ zeigen zwar Schwächen (Stabilität, Rost) – Lane bleibt **B** aus Miro, keine Neuanlage. Quelle: https://www.amazon.de/s?k=staudenhalter+pflanzenst%C3%BCtze+ring · https://www.garten.schule/staudenhalter/ (2026-09-22).
