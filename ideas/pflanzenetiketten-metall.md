@@ -1,8 +1,8 @@
 ---
 slug: pflanzenetiketten-metall
 titel: Pflanzenetiketten Metall
-status: importiert
-status_datum: 2026-09-16
+status: freigegeben
+status_datum: 2026-10-19
 quelle: miro-longlist
 lauf: 2026-09-16-miro-import
 kategorie: Anzucht & Ranken

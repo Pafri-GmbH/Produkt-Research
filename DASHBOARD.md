@@ -1,6 +1,6 @@
 # Dashboard nicegarden Produktrecherche
 
-Stand: 2026-09-22 · generiert von `scripts/dashboard.py` · 59 Einträge · nächste freie NG-Nummer: **NG0003**
+Stand: 2026-10-19 · generiert von `scripts/dashboard.py` · 59 Einträge · nächste freie NG-Nummer: **NG0003**
 
 ## Status-Übersicht
 
@@ -8,9 +8,9 @@ Stand: 2026-09-22 · generiert von `scripts/dashboard.py` · 59 Einträge · nä
 |---|---|---|
 | `produkt` | 2 | Produkt (NG) |
 | `voranalyse` | 1 | Gate 1 wartet |
-| `freigegeben` | 1 | Freigegeben → /voranalyse |
+| `freigegeben` | 2 | Freigegeben → /voranalyse |
 | `idee` | 17 | Wartet auf Freigabe |
-| `importiert` | 33 | Importiert (Miro) |
+| `importiert` | 32 | Importiert (Miro) |
 | `beobachten` | 2 | Beobachten |
 | `abgelehnt` | 3 | Abgelehnt |
 
@@ -49,6 +49,7 @@ Stand: 2026-09-22 · generiert von `scripts/dashboard.py` · 59 Einträge · nä
 | Slug | Status | Gate 1 | Gate 2 | Gate 3 | Gesamt | Pfad |
 |---|---|---|---|---|---|---|
 | edelstahl-pflanzsprueher | `voranalyse` | – | – | – | 67 | `pipeline/edelstahl-pflanzsprueher` |
+| pflanzenetiketten-metall | `freigegeben` | – | – | – | – | `ideas/pflanzenetiketten-metall.md` |
 | vogelfuttersaeule-edelstahl | `freigegeben` | – | – | – | – | `ideas/vogelfuttersaeule-edelstahl.md` |
 
 ## Analysen-Kennzahlen
@@ -66,7 +67,6 @@ Stufe 2 überschreibt VK, DB1, BE-ACOS und Kapital aus Stufe 1; Score und Zone s
 | A | anzucht-set | Anzucht-Set | Anzucht & Ranken | 12–24 € | `importiert` | miro-longlist | 2026-09-16-miro-import |
 | A | kraeuteranzucht-kit | Kräuteranzucht-Kit | Anzucht & Ranken | 18–35 € | `importiert` | miro-longlist | 2026-09-16-miro-import |
 | A | microgreens-anzuchtset | Microgreens-Anzuchtset | Anzucht & Ranken | 20–35 € | `importiert` | miro-longlist | 2026-09-16-miro-import |
-| A | pflanzenetiketten-metall | Pflanzenetiketten Metall | Anzucht & Ranken | 9–16 € | `importiert` | miro-longlist | 2026-09-16-miro-import |
 | A | pflanzenschere | Pflanzenschere | Pflege & Werkzeug | 12–25 € | `importiert` | miro-longlist | 2026-09-16-miro-import |
 | A | pflanzstaebe-rankstaebe | Pflanzstäbe / Rankstäbe | Anzucht & Ranken | 10–20 € | `importiert` | miro-longlist | 2026-09-16-miro-import |
 | A | pflanzwerkzeug-set | Pflanzwerkzeug-Set | Pflege & Werkzeug | 18–35 € | `importiert` | miro-longlist | 2026-09-16-miro-import |
