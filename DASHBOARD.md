@@ -7,8 +7,8 @@ Stand: 2026-10-19 · generiert von `scripts/dashboard.py` · 59 Einträge · nä
 | Status | Anzahl | Bedeutung |
 |---|---|---|
 | `produkt` | 2 | Produkt (NG) |
-| `voranalyse` | 1 | Gate 1 wartet |
-| `freigegeben` | 2 | Freigegeben → /voranalyse |
+| `voranalyse` | 2 | Gate 1 wartet |
+| `freigegeben` | 1 | Freigegeben → /voranalyse |
 | `idee` | 17 | Wartet auf Freigabe |
 | `importiert` | 32 | Importiert (Miro) |
 | `beobachten` | 2 | Beobachten |
@@ -19,6 +19,7 @@ Stand: 2026-10-19 · generiert von `scripts/dashboard.py` · 59 Einträge · nä
 | Slug | Stufe | Score | Gesamt | Pfad |
 |---|---|---|---|---|
 | edelstahl-pflanzsprueher | Gate 1 wartet | B | 67 | `pipeline/edelstahl-pflanzsprueher` |
+| pflanzenetiketten-metall | Gate 1 wartet | C | 50 | `pipeline/pflanzenetiketten-metall` |
 | bienentraenke-edelstahl-glas | Wartet auf Freigabe | B | – | `ideas/bienentraenke-edelstahl-glas.md` |
 | blumenfrosch-kenzan-edelstahl | Wartet auf Freigabe | D | – | `ideas/blumenfrosch-kenzan-edelstahl.md` |
 | blumentopfhalter-balkongelaender-edelstahl | Wartet auf Freigabe | B | – | `ideas/blumentopfhalter-balkongelaender-edelstahl.md` |
@@ -49,7 +50,7 @@ Stand: 2026-10-19 · generiert von `scripts/dashboard.py` · 59 Einträge · nä
 | Slug | Status | Gate 1 | Gate 2 | Gate 3 | Gesamt | Pfad |
 |---|---|---|---|---|---|---|
 | edelstahl-pflanzsprueher | `voranalyse` | – | – | – | 67 | `pipeline/edelstahl-pflanzsprueher` |
-| pflanzenetiketten-metall | `freigegeben` | – | – | – | – | `ideas/pflanzenetiketten-metall.md` |
+| pflanzenetiketten-metall | `voranalyse` | – | – | – | 50 | `pipeline/pflanzenetiketten-metall` |
 | vogelfuttersaeule-edelstahl | `freigegeben` | – | – | – | – | `ideas/vogelfuttersaeule-edelstahl.md` |
 
 ## Analysen-Kennzahlen
@@ -57,6 +58,7 @@ Stand: 2026-10-19 · generiert von `scripts/dashboard.py` · 59 Einträge · nä
 | Slug | Stufe | Score | Zone | VK-Ziel | DB1 % | BE-ACOS | Kapital Ch. 1 | Empfehlung | Stand |
 |---|---|---|---|---|---|---|---|---|---|
 | edelstahl-pflanzsprueher | voranalyse | 67 | review | 24,90 € | ~47 % | ~40 % | ~3.400 € | Nacharbeit | 2026-09-21 |
+| pflanzenetiketten-metall | voranalyse | 50 | review | 24,90 € | ~23 % | ~19 % | ~5.800 € | Stop | 2026-10-19 |
 
 Stufe 2 überschreibt VK, DB1, BE-ACOS und Kapital aus Stufe 1; Score und Zone stammen aus der Voranalyse, bis der Deep-Dive sie aktualisiert.
 
