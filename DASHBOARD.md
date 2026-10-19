@@ -50,7 +50,7 @@ Stand: 2026-10-19 · generiert von `scripts/dashboard.py` · 59 Einträge · nä
 | Slug | Status | Gate 1 | Gate 2 | Gate 3 | Gesamt | Pfad |
 |---|---|---|---|---|---|---|
 | edelstahl-pflanzsprueher | `voranalyse` | – | – | – | 67 | `pipeline/edelstahl-pflanzsprueher` |
-| pflanzenetiketten-metall | `voranalyse` | – | – | – | 50 | `pipeline/pflanzenetiketten-metall` |
+| pflanzenetiketten-metall | `voranalyse` | go | – | – | 50 | `pipeline/pflanzenetiketten-metall` |
 | regenwasser-eimer-edelstahl | `freigegeben` | – | – | – | – | `ideas/regenwasser-eimer-edelstahl.md` |
 | vogelfuttersaeule-edelstahl | `freigegeben` | – | – | – | – | `ideas/vogelfuttersaeule-edelstahl.md` |
 

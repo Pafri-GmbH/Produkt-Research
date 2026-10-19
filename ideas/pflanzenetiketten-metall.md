@@ -18,7 +18,7 @@ scores:
   risiko: 6
 ko_verstoss: []
 pipeline_status_miro: Longlist
-gate_1: null
+gate_1: go
 gate_2: null
 gate_3: null
 ng_nummer: null

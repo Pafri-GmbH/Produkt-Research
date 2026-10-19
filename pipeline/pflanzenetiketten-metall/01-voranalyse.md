@@ -195,5 +195,5 @@ Red Flag (`rules/scoring.md` Abschnitt 3): ja – Break-even-ACOS ~19 % unter de
 **Begründung (3 Sätze max):** Das Metall-Segment ist klein (~165 St./Monat, Marktführer GardenMate ~80, Schätzung aus BSR) und funktional/preisgetrieben. Mit EK nach 30-%-Regel liegt der Break-even-ACOS bei ~19 % und damit im geschätzten CPC-Band – Red Flag nach `rules/scoring.md`. Kippen würde das Bild nur Kriterium Marge: ein belegter Alibaba-EK ≤ ~3,50 € je 20er-Set (DB1 ~42 %), dann eher als Bundle-Beilage.
 **Offene Punkte / Datenlücken:** Alibaba-EK/MOQ (gesperrt); Google Trends 5 Jahre; DPMA/EUIPO und Design-Register.
 **Nächster Schritt bei Go:** /deep-dive pflanzenetiketten-metall
-**Deine Entscheidung (Go / Stop / Beobachten / Nacharbeit):** _wartet_
+**Deine Entscheidung (Go / Stop / Beobachten / Nacharbeit):** Go (Dashboard, 2026-10-19)
 ---
