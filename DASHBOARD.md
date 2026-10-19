@@ -1,6 +1,6 @@
 # Dashboard nicegarden Produktrecherche
 
-Stand: 2026-09-22 · generiert von `scripts/dashboard.py` · 59 Einträge · nächste freie NG-Nummer: **NG0003**
+Stand: 2026-10-19 · generiert von `scripts/dashboard.py` · 59 Einträge · nächste freie NG-Nummer: **NG0003**
 
 ## Status-Übersicht
 
@@ -8,9 +8,9 @@ Stand: 2026-09-22 · generiert von `scripts/dashboard.py` · 59 Einträge · nä
 |---|---|---|
 | `produkt` | 2 | Produkt (NG) |
 | `voranalyse` | 1 | Gate 1 wartet |
-| `freigegeben` | 1 | Freigegeben → /voranalyse |
+| `freigegeben` | 2 | Freigegeben → /voranalyse |
 | `idee` | 17 | Wartet auf Freigabe |
-| `importiert` | 33 | Importiert (Miro) |
+| `importiert` | 32 | Importiert (Miro) |
 | `beobachten` | 2 | Beobachten |
 | `abgelehnt` | 3 | Abgelehnt |
 
@@ -49,6 +49,7 @@ Stand: 2026-09-22 · generiert von `scripts/dashboard.py` · 59 Einträge · nä
 | Slug | Status | Gate 1 | Gate 2 | Gate 3 | Gesamt | Pfad |
 |---|---|---|---|---|---|---|
 | edelstahl-pflanzsprueher | `voranalyse` | – | – | – | 67 | `pipeline/edelstahl-pflanzsprueher` |
+| regenwasser-eimer-edelstahl | `freigegeben` | – | – | – | – | `ideas/regenwasser-eimer-edelstahl.md` |
 | vogelfuttersaeule-edelstahl | `freigegeben` | – | – | – | – | `ideas/vogelfuttersaeule-edelstahl.md` |
 
 ## Analysen-Kennzahlen
@@ -70,7 +71,6 @@ Stufe 2 überschreibt VK, DB1, BE-ACOS und Kapital aus Stufe 1; Score und Zone s
 | A | pflanzenschere | Pflanzenschere | Pflege & Werkzeug | 12–25 € | `importiert` | miro-longlist | 2026-09-16-miro-import |
 | A | pflanzstaebe-rankstaebe | Pflanzstäbe / Rankstäbe | Anzucht & Ranken | 10–20 € | `importiert` | miro-longlist | 2026-09-16-miro-import |
 | A | pflanzwerkzeug-set | Pflanzwerkzeug-Set | Pflege & Werkzeug | 18–35 € | `importiert` | miro-longlist | 2026-09-16-miro-import |
-| A | regenwasser-eimer-edelstahl | Regenwasser-Eimer Edelstahl | Bewässerung | 20–40 € | `importiert` | miro-longlist | 2026-09-16-miro-import |
 | A | sukkulenten-toepfe-set | Sukkulenten-Töpfe Set | Gefäße & Deko | 16–28 € | `importiert` | miro-longlist | 2026-09-16-miro-import |
 | A | vermehrungsstation-glas | Vermehrungsstation Glas | Gefäße & Deko | 18–32 € | `importiert` | miro-longlist | 2026-09-16-miro-import |
 | B | bienentraenke-edelstahl-glas | Bienentränke / Insektentränke Edelstahl-Glas | Gefäße & Deko | 19–29 € | `idee` | ideen-lauf | 2026-09-22-marktluecken-edelstahl |

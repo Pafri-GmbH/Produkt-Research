@@ -1,8 +1,8 @@
 ---
 slug: regenwasser-eimer-edelstahl
 titel: Regenwasser-Eimer Edelstahl
-status: importiert
-status_datum: 2026-09-16
+status: freigegeben
+status_datum: 2026-10-19
 quelle: miro-longlist
 lauf: 2026-09-16-miro-import
 kategorie: Bewässerung
