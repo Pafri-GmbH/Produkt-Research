@@ -204,5 +204,5 @@ Kippende Kriterien: Nachfrage (5) und Wettbewerb (6). Belegen Amazon-Zahlen eine
 **Begründung (3 Sätze max):** Produkt, Logistik, Markenfit und Kalkulation sprechen klar für das Produkt, kein K.O. Die beiden kippenden Kriterien Nachfrage (5) und Wettbewerb (6) sind keine negativen Befunde, sondern Datenlücken, weil Amazon.de, Alibaba und Preisvergleiche in diesem Lauf gesperrt waren. Mit belegtem BSR und Bewertungszahlen der Top-10 wird der Score nach oben oder unten entschieden.
 **Offene Punkte / Datenlücken:** BSR/Preis/Sterne/Bewertungen der Top-10-Listings; Alibaba-Angebot Vollmetall-Pumpkopf; DPMA/EUIPO-Abfrage; Google Trends 5 Jahre.
 **Nächster Schritt bei Go:** /deep-dive edelstahl-pflanzsprueher
-**Deine Entscheidung (Go / Stop / Beobachten / Nacharbeit):** _wartet_
+**Deine Entscheidung (Go / Stop / Beobachten / Nacharbeit):** Go (Chat, 2026-11-13)
 ---
