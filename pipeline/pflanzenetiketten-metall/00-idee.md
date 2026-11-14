@@ -1,8 +1,8 @@
 ---
 slug: pflanzenetiketten-metall
 titel: Pflanzenetiketten Metall
-status: voranalyse
-status_datum: 2026-10-19
+status: deep-dive
+status_datum: 2026-11-14
 quelle: miro-longlist
 lauf: 2026-09-16-miro-import
 kategorie: Anzucht & Ranken
@@ -10,9 +10,9 @@ vk_spanne_eur: [9, 16]
 score: C
 score_gesamt: 50
 scores:
-  marge: 3
+  marge: 4
   nachfrage: 4
-  wettbewerb: 5
+  wettbewerb: 4
   logistik: 8
   markenfit: 7
   risiko: 6
@@ -65,4 +65,5 @@ Kategorie laut Miro: **Anzucht & Ranken**. Markenfit-Begründung: [fehlt] (Anhal
 - Miro-Board „Nicegarden Scout Longlist", https://miro.com/app/board/uXjVHmZbxI8=/ (Stand April 2026, importiert 2026-09-16)
 
 ## Offene Punkte
+- Ergebnis Deep-Dive 2026-11-14: Score 50, Zone Review, DB1 ~26 %, Break-even-ACOS ~22 %, Empfehlung Stop (Red Flag bleibt; Go nur bei belegtem EK ≤ ~4,80 € je 20er-Set). Details `pipeline/pflanzenetiketten-metall/02-deep-dive.md`.
 - Ergebnis Voranalyse 2026-10-19: Score 50, Zone Review, Empfehlung Stop (Red Flag Break-even-ACOS). Details `pipeline/pflanzenetiketten-metall/01-voranalyse.md`.

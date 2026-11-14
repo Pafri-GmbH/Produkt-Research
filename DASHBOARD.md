@@ -1,13 +1,14 @@
 # Dashboard nicegarden Produktrecherche
 
-Stand: 2026-11-13 · generiert von `scripts/dashboard.py` · 59 Einträge · nächste freie NG-Nummer: **NG0003**
+Stand: 2026-11-14 · generiert von `scripts/dashboard.py` · 59 Einträge · nächste freie NG-Nummer: **NG0003**
 
 ## Status-Übersicht
 
 | Status | Anzahl | Bedeutung |
 |---|---|---|
 | `produkt` | 2 | Produkt (NG) |
-| `voranalyse` | 2 | Gate 1 wartet |
+| `deep-dive` | 1 | Gate 2 wartet |
+| `voranalyse` | 1 | Gate 1 wartet |
 | `freigegeben` | 2 | Freigegeben → /voranalyse |
 | `idee` | 17 | Wartet auf Freigabe |
 | `importiert` | 31 | Importiert (Miro) |
@@ -18,8 +19,8 @@ Stand: 2026-11-13 · generiert von `scripts/dashboard.py` · 59 Einträge · nä
 
 | Slug | Stufe | Score | Gesamt | Pfad |
 |---|---|---|---|---|
+| pflanzenetiketten-metall | Gate 2 wartet | C | 50 | `pipeline/pflanzenetiketten-metall` |
 | edelstahl-pflanzsprueher | Gate 1 wartet | B | 67 | `pipeline/edelstahl-pflanzsprueher` |
-| pflanzenetiketten-metall | Gate 1 wartet | C | 50 | `pipeline/pflanzenetiketten-metall` |
 | bienentraenke-edelstahl-glas | Wartet auf Freigabe | B | – | `ideas/bienentraenke-edelstahl-glas.md` |
 | blumenfrosch-kenzan-edelstahl | Wartet auf Freigabe | D | – | `ideas/blumenfrosch-kenzan-edelstahl.md` |
 | blumentopfhalter-balkongelaender-edelstahl | Wartet auf Freigabe | B | – | `ideas/blumentopfhalter-balkongelaender-edelstahl.md` |
@@ -49,8 +50,8 @@ Stand: 2026-11-13 · generiert von `scripts/dashboard.py` · 59 Einträge · nä
 
 | Slug | Status | Gate 1 | Gate 2 | Gate 3 | Gesamt | Pfad |
 |---|---|---|---|---|---|---|
+| pflanzenetiketten-metall | `deep-dive` | go | – | – | 50 | `pipeline/pflanzenetiketten-metall` |
 | edelstahl-pflanzsprueher | `voranalyse` | go | – | – | 67 | `pipeline/edelstahl-pflanzsprueher` |
-| pflanzenetiketten-metall | `voranalyse` | go | – | – | 50 | `pipeline/pflanzenetiketten-metall` |
 | regenwasser-eimer-edelstahl | `freigegeben` | – | – | – | – | `ideas/regenwasser-eimer-edelstahl.md` |
 | vogelfuttersaeule-edelstahl | `freigegeben` | – | – | – | – | `ideas/vogelfuttersaeule-edelstahl.md` |
 
@@ -58,10 +59,13 @@ Stand: 2026-11-13 · generiert von `scripts/dashboard.py` · 59 Einträge · nä
 
 | Slug | Stufe | Score | Zone | VK-Ziel | DB1 % | BE-ACOS | Kapital Ch. 1 | Empfehlung | Stand |
 |---|---|---|---|---|---|---|---|---|---|
+| pflanzenetiketten-metall | deep-dive | 50 | review | 24,90 € | ~26 % | ~22 % | ~5.400 € | Stop | 2026-11-14 |
 | edelstahl-pflanzsprueher | voranalyse | 67 | review | 24,90 € | ~47 % | ~40 % | ~3.400 € | Nacharbeit | 2026-09-21 |
-| pflanzenetiketten-metall | voranalyse | 50 | review | 24,90 € | ~23 % | ~19 % | ~5.800 € | Stop | 2026-10-19 |
 
 Stufe 2 überschreibt VK, DB1, BE-ACOS und Kapital aus Stufe 1; Score und Zone stammen aus der Voranalyse, bis der Deep-Dive sie aktualisiert.
+
+Offen (Unsicherheiten aus Deep-Dive):
+- pflanzenetiketten-metall: EK für 0,5-mm-Edelstahl-304-Stecker, vernietet, mit Stift und Box (Basis nur Alibaba-Snippets 0,14–0,35 €/Stk, keine Dicke angegeben) – schließen durch RFQ von Pafri bei 3 Lieferanten mit Zielpreis ≤ 4,80 € je 20er-Set · Absatz/Saisonfaktor (BSR-Schätzung aus Nebensaison Okt/Nov, kein Keepa/H10, kein Google Trends) – schließen durch H10-/Keepa-Export der 6 Wettbewerber über 12 Monate
 
 ## Ideen (Stufe 0) nach Lane
 
