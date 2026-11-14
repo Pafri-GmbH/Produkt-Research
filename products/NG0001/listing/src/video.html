@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><title>NG0001 Produktvideo 16:9 (30 s, ohne Ton)</title>
+<link rel="stylesheet" href="marke.css">
+<style>
+  body { width: 1920px; height: 1080px; position: relative; background: var(--beige); }
+  .szene { position: absolute; inset: 0; overflow: hidden; background: var(--beige); }
+  .abs { position: absolute; }
+  h1 { font-weight: 800; color: var(--gruen); text-transform: uppercase; letter-spacing: -.005em; line-height: 1.04; }
+  .sub { font-weight: 500; color: var(--text); line-height: 1.2; }
+  .chip { --u: 36px; }
+  .ring { border-radius: 50%; outline: 3px dashed var(--gruen); outline-offset: 10px; }
+  .eck-logo { position: absolute; right: 90px; top: 70px; width: 190px; }
+  .blatt { position: absolute; }
+
+  /* S1 Einstieg */
+  #s1 .kreis { left: 985px; top: 130px; width: 820px; height: 820px; border-radius: 50%; background: var(--flieder); }
+  #s1 .kreis::after { content: ""; position: absolute; inset: -22px; border-radius: 50%; border: 3px dashed var(--gruen); }
+  #s1 .kanne { left: 900px; top: 286px; width: 960px; transform-origin: 55% 60%; }
+  #s1 .logo { left: 110px; top: 96px; width: 250px; }
+  #s1 h1 { left: 110px; top: 392px; font-size: 104px; }
+  #s1 .sub { left: 110px; top: 648px; font-size: 44px; width: 640px; }
+
+  /* S2 Gießen (Foto aus PT06) */
+  #s2 { background: #2a2a22; }
+  #s2 .lage { inset: 0; transform-origin: 32% 65%; }
+  #s2 .lage img { width: 1920px; height: 1080px; display: block; }
+  /* deckt die Infobox des Originals (x 2,8–46,7 %, y 5,3–53,1 % des Ausschnitts) vollständig ab */
+  #s2 .tafel { left: 2.1%; top: 4.2%; width: 45.5%; height: 50.2%; background: var(--flieder); border-radius: 46px; padding: 62px 64px; }
+  #s2 .tafel::after { content: ""; position: absolute; inset: 20px; border: 3px dashed rgba(255,255,255,.95); border-radius: 30px; }
+  #s2 h1 { font-size: 62px; margin-bottom: 40px; }
+  #s2 .punkt { --u: 42px; display: flex; align-items: center; gap: 16px; font-size: 42px; color: var(--gruen); margin-top: 26px; white-space: nowrap; }
+  #s2 .punkt svg { width: 34px; height: 34px; fill: var(--gruen); flex: none; }
+
+  /* S3 Details */
+  #s3 h1 { left: 110px; top: 84px; font-size: 68px; }
+  #s3 .sub { left: 110px; top: 172px; font-size: 40px; }
+  #s3 .kanne { left: 130px; top: 400px; width: 880px; transform-origin: 50% 55%; }
+  .lupe { width: 236px; height: 236px; border-radius: 50%; background-color: #fff; background-image: url(/data/raw/listing/NG0001/assets/kanne.png); background-repeat: no-repeat; outline: 3px dashed var(--gruen); outline-offset: 9px; box-shadow: 0 18px 40px rgba(49,81,30,.18); }
+  #s3 .reihe { left: 1110px; display: flex; align-items: center; gap: 46px; }
+  #s3 .r1 { top: 262px; } #s3 .r2 { top: 532px; } #s3 .r3 { top: 802px; }
+  #s3 .c4 { left: 400px; top: 952px; }
+  #s3 .marke { width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 50%; border: 5px solid var(--gruen); background: rgba(255,255,255,.75); }
+  #s3 .blatt { z-index: 0; }
+
+  /* S4 Maße */
+  #s4 .buehne { left: 120px; top: 300px; width: 1010px; }
+  #s4 .buehne img { width: 100%; display: block; }
+  #s4 svg.mass { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; }
+  #s4 svg.mass line { stroke: var(--gruen); stroke-width: 9; stroke-dasharray: 26 20; }
+  #s4 svg.mass circle { fill: var(--gruen); }
+  #s4 svg.mass text { font-family: "Red Hat Display"; font-weight: 700; font-size: 112px; fill: var(--gruen); text-anchor: middle; }
+  #s4 h1 { left: 1230px; top: 176px; font-size: 74px; width: 640px; }
+  #s4 .sub { left: 1230px; top: 520px; font-size: 42px; width: 600px; }
+  #s4 .liter { left: 1230px; top: 690px; width: 230px; height: 230px; border-radius: 50%; background: var(--flieder); display: grid; place-items: center; font-size: 84px; font-weight: 500; color: var(--gruen); }
+  #s4 .liter::after { content: ""; position: absolute; inset: 14px; border-radius: 50%; border: 3px dashed rgba(255,255,255,.95); }
+
+  /* S5 Indoor & Outdoor (Fotos aus PT04) */
+  #s5 .wohn { left: 100px; top: 90px; width: 560px; height: 900px; border-radius: 280px 280px 40px 40px; overflow: hidden; }
+  #s5 .wohn img { width: 100%; height: 100%; object-fit: cover; object-position: 60% 50%; transform-origin: 60% 60%; }
+  #s5 .wohnring { left: 84px; top: 74px; width: 592px; height: 932px; border-radius: 296px 296px 56px 56px; border: 3px dashed var(--gruen); }
+  #s5 .cw { left: 250px; top: 880px; }
+  #s5 h1 { left: 760px; top: 196px; font-size: 84px; }
+  #s5 .sub { left: 760px; top: 394px; font-size: 44px; }
+  #s5 .orte { left: 760px; top: 540px; display: flex; gap: 58px; }
+  #s5 .ort { width: 232px; display: flex; flex-direction: column; align-items: center; gap: 36px; }
+  #s5 .ort img { width: 232px; height: 232px; border-radius: 50%; outline: 3px dashed var(--gruen); outline-offset: 9px; }
+
+  /* S6 Geschenk */
+  #s6 { background: radial-gradient(ellipse 60% 75% at 30% 52%, #3f6628 0%, var(--gruen) 72%); }
+  #s6 .karton { left: 90px; top: 122px; width: 940px; transform-origin: 50% 60%; }
+  #s6 h1 { left: 1110px; top: 262px; font-size: 96px; color: var(--beige); }
+  #s6 .sub { left: 1110px; top: 500px; font-size: 46px; width: 680px; color: var(--flieder); }
+  #s6 .c1 { left: 1110px; top: 690px; }
+  #s6 .c2 { left: 1110px; top: 800px; }
+  #s6 .blatt { background: rgba(255,255,255,.07); }
+
+  /* S7 Endkarte */
+  #s7 .kreis { left: 640px; top: 84px; width: 640px; height: 640px; border-radius: 50%; background: var(--flieder); }
+  #s7 .kreis::after { content: ""; position: absolute; inset: -22px; border-radius: 50%; border: 3px dashed var(--gruen); }
+  #s7 .logo { left: 715px; top: 270px; width: 490px; }
+  #s7 .claim { left: 0; right: 0; top: 794px; text-align: center; font-size: 76px; font-weight: 800; color: var(--gruen); text-transform: uppercase; }
+  #s7 .dig { left: 0; right: 0; top: 924px; text-align: center; font-size: 38px; font-weight: 500; letter-spacing: .28em; text-transform: uppercase; color: var(--gruen); }
+</style></head>
+<body>
+<div id="sym"></div>
+
+<!-- S1  0,0–3,6 s  Einstieg -->
+<section class="szene" id="s1">
+  <div class="blatt" style="width:300px; left:-70px; bottom:-90px; transform:rotate(24deg)"></div>
+  <div class="abs kreis"></div>
+  <img class="abs kanne" src="/data/raw/listing/NG0001/assets/kanne_schatten.png" alt="">
+  <div class="abs logo"></div>
+  <h1 class="abs"><span class="z">Mehr Freude</span><br><span class="z">am Gießen</span></h1>
+  <p class="abs sub">Die Edelstahl-Gießkanne mit Holzgriff – 1&nbsp;Liter</p>
+</section>
+
+<!-- S2  3,6–8,2 s  Einfach & genau gießen -->
+<section class="szene" id="s2">
+  <div class="abs lage">
+    <img src="/data/raw/listing/NG0001/assets/foto_giessen.jpg" alt="">
+    <div class="abs tafel">
+      <h1>Einfach &amp; genau<br>gießen</h1>
+      <div class="punkt"><svg><use href="#blume"/></svg>Extra langer Auslauf</div>
+      <div class="punkt"><svg><use href="#blume"/></svg>Präziser Ausguss</div>
+      <div class="punkt"><svg><use href="#blume"/></svg>Leicht zu befüllen</div>
+    </div>
+  </div>
+</section>
+
+<!-- S3  8,2–13,2 s  Qualität im Detail -->
+<section class="szene" id="s3">
+  <div class="blatt" style="width:250px; left:-60px; bottom:-70px; transform:rotate(24deg)"></div>
+  <h1 class="abs">Modernes Design trifft Qualität</h1>
+  <p class="abs sub">Langlebig – Präzise – Wertig</p>
+  <img class="abs kanne" src="/data/raw/listing/NG0001/assets/kanne_schatten.png" alt="">
+  <!-- Markierungen auf dem Produkt: Position = Punkt in kanne_schatten.png * (880 / 2902) -->
+  <div class="abs marke k1" style="left:666px; top:508px"></div>
+  <div class="abs marke k2" style="left:157px; top:416px"></div>
+  <div class="abs marke k3" style="left:962px; top:613px"></div>
+  <div class="abs reihe r1"><div class="lupe" data-punkt="1766,354" data-zoom="0.43"></div><div class="chip"><svg><use href="#blume"/></svg>Hochwertiger Edelstahl</div></div>
+  <div class="abs reihe r2"><div class="lupe" data-punkt="96,62" data-zoom="0.82"></div><div class="chip"><svg><use href="#blume"/></svg>Präziser Ausguss</div></div>
+  <div class="abs reihe r3"><div class="lupe" data-punkt="2739,700" data-zoom="0.5"></div><div class="chip"><svg><use href="#blume"/></svg>Stabiler Holzgriff</div></div>
+  <div class="abs chip c4"><svg><use href="#blume"/></svg>Robust &amp; rostfrei</div>
+</section>
+
+<!-- S4  13,2–17,6 s  Maße (Werte aus PT03) -->
+<section class="szene" id="s4">
+  <div class="blatt" style="width:280px; right:60px; top:-80px; transform:rotate(150deg)"></div>
+  <div class="abs buehne">
+    <img src="/data/raw/listing/NG0001/assets/kanne_schatten.png" alt="">
+    <!-- Koordinaten = Pixel in kanne_schatten.png (2902 x 1727) -->
+    <svg class="mass" viewBox="0 0 2902 1727">
+      <g class="m m1"><line x1="1246" y1="-70" x2="2236" y2="-70"/><circle cx="1246" cy="-70" r="16"/><circle cx="2236" cy="-70" r="16"/><text x="1741" y="-110">9,5 cm</text></g>
+      <g class="m m2"><line x1="2430" y1="17" x2="2430" y2="1639"/><circle cx="2430" cy="17" r="16"/><circle cx="2430" cy="1639" r="16"/><text x="2430" y="828" transform="rotate(90 2430 828) translate(0 -42)">13 cm</text></g>
+      <g class="m m3"><line x1="1083" y1="1790" x2="2348" y2="1790"/><circle cx="1083" cy="1790" r="16"/><circle cx="2348" cy="1790" r="16"/><text x="1715" y="1920">11 cm</text></g>
+      <g class="m m4"><line x1="-44" y1="63" x2="998" y2="1297"/><circle cx="-44" cy="63" r="16"/><circle cx="998" cy="1297" r="16"/><text x="477" y="680" transform="rotate(49.8 477 680) translate(0 118)">15,8 cm</text></g>
+    </svg>
+  </div>
+  <h1 class="abs">Kompaktes Design – großes Volumen</h1>
+  <p class="abs sub">Leicht und perfekt ausbalanciert</p>
+  <div class="abs liter">1&nbsp;L</div>
+</section>
+
+<!-- S5  17,6–22,4 s  Indoor & Outdoor -->
+<section class="szene" id="s5">
+  <div class="blatt" style="width:250px; right:70px; top:-60px; transform:rotate(160deg)"></div>
+  <div class="abs wohnring"></div>
+  <div class="abs wohn"><img src="/data/raw/listing/NG0001/assets/foto_wohnzimmer.jpg" alt=""></div>
+  <div class="abs chip cw"><svg><use href="#blume"/></svg>Wohnzimmer</div>
+  <h1 class="abs">Indoor &amp; Outdoor<br>geeignet</h1>
+  <p class="abs sub">Überall vielseitig einsetzbar</p>
+  <div class="abs orte">
+    <div class="ort"><img src="/data/raw/listing/NG0001/assets/ort_garten.jpg" alt=""><div class="chip"><svg><use href="#blume"/></svg>Garten</div></div>
+    <div class="ort"><img src="/data/raw/listing/NG0001/assets/ort_balkon.jpg" alt=""><div class="chip"><svg><use href="#blume"/></svg>Balkon</div></div>
+    <div class="ort"><img src="/data/raw/listing/NG0001/assets/ort_kueche.jpg" alt=""><div class="chip"><svg><use href="#blume"/></svg>Küche</div></div>
+    <div class="ort"><img src="/data/raw/listing/NG0001/assets/ort_bad.jpg" alt=""><div class="chip"><svg><use href="#blume"/></svg>Bad</div></div>
+  </div>
+</section>
+
+<!-- S6  22,4–26,2 s  Geschenk -->
+<section class="szene" id="s6">
+  <div class="blatt" style="width:330px; right:-60px; top:-90px; transform:rotate(28deg)"></div>
+  <div class="blatt" style="width:230px; right:330px; bottom:-90px; transform:rotate(-150deg)"></div>
+  <img class="abs karton" src="/data/raw/listing/NG0001/assets/karton_szene.png" alt="">
+  <h1 class="abs">Stilvoll<br>verpackt</h1>
+  <p class="abs sub">Eine schöne Geschenkidee für Pflanzenliebhaber</p>
+  <div class="abs chip c1"><svg><use href="#blume"/></svg>Hochwertige Verpackung</div>
+  <div class="abs chip c2"><svg><use href="#blume"/></svg>Edles Design</div>
+</section>
+
+<!-- S7  26,2–30,0 s  Endkarte -->
+<section class="szene" id="s7">
+  <div class="blatt" style="width:300px; left:90px; top:120px; transform:rotate(-24deg)"></div>
+  <div class="blatt" style="width:260px; right:110px; bottom:60px; transform:rotate(150deg)"></div>
+  <div class="abs kreis"></div>
+  <div class="abs logo"></div>
+  <p class="abs claim">Mehr Freude am Gießen</p>
+  <p class="abs dig">Designed in Germany</p>
+</section>
+
+<script src="zeit.js"></script>
+<script>
+// Lupen: Ausschnitt aus kanne.png (2897 x 1644) um data-punkt, vergrößert um data-zoom
+document.querySelectorAll(".lupe").forEach((el) => {
+  const [px, py] = el.dataset.punkt.split(",").map(Number);
+  const z = Number(el.dataset.zoom);
+  el.style.backgroundSize = `${2897 * z}px ${1644 * z}px`;
+  el.style.backgroundPosition = `${118 - px * z}px ${118 - py * z}px`;
+});
+
+const LIN = "linear";
+// S1  (vom ersten Frame an sichtbar: kein leerer Start)
+szene("#s1", 0, 3.6);
+anim("#s1 .kanne", [{ transform: "scale(1)" }, { transform: "scale(1.06)" }], { t: 0, d: 4.2, ease: LIN });
+rein("#s1 h1 .z", 0.25, "hoch", 0.7, 0.14);
+document.querySelectorAll("#s1 h1 .z").forEach((z) => { z.style.display = "inline-block"; });
+rein("#s1 .sub", 0.75, "hoch", 0.7);
+// S2
+szene("#s2", 3.6, 8.2);
+anim("#s2 .lage", [{ transform: "scale(1)" }, { transform: "scale(1.07)" }], { t: 3.6, d: 5.2, ease: LIN });
+rein("#s2 h1", 4.0, "links", 0.6);
+rein("#s2 .punkt", 4.5, "links", 0.55, 0.45);
+// S3
+szene("#s3", 8.2, 13.2);
+rein("#s3 h1", 8.5, "hoch"); rein("#s3 .sub", 8.7, "hoch");
+anim("#s3 .kanne", [{ transform: "scale(.97)" }, { transform: "scale(1.02)" }], { t: 8.2, d: 5.6, ease: LIN });
+rein("#s3 .k1", 9.0, "pop", 0.4); rein("#s3 .r1", 9.1, "rechts", 0.6);
+rein("#s3 .k2", 9.9, "pop", 0.4); rein("#s3 .r2", 10.0, "rechts", 0.6);
+rein("#s3 .k3", 10.8, "pop", 0.4); rein("#s3 .r3", 10.9, "rechts", 0.6);
+rein("#s3 .c4", 11.8, "hoch", 0.5);
+// S4
+szene("#s4", 13.2, 17.6);
+rein("#s4 h1", 13.5, "rechts"); rein("#s4 .sub", 13.75, "rechts");
+rein("#s4 .m1", 14.0, "fade", 0.5); rein("#s4 .m2", 14.5, "fade", 0.5); rein("#s4 .m3", 15.0, "fade", 0.5); rein("#s4 .m4", 15.5, "fade", 0.5);
+rein("#s4 .liter", 16.0, "pop", 0.6);
+// S5
+szene("#s5", 17.6, 22.4);
+anim("#s5 .wohn img", [{ transform: "scale(1.02)" }, { transform: "scale(1.1)" }], { t: 17.6, d: 5.4, ease: LIN });
+rein("#s5 h1", 17.9, "hoch"); rein("#s5 .sub", 18.15, "hoch");
+rein("#s5 .cw", 18.5, "pop", 0.5);
+rein("#s5 .ort", 18.8, "pop", 0.55, 0.42);
+// S6
+szene("#s6", 22.4, 26.2);
+anim("#s6 .karton", [{ transform: "scale(1)" }, { transform: "scale(1.05)" }], { t: 22.4, d: 4.4, ease: LIN });
+rein("#s6 h1", 22.8, "rechts"); rein("#s6 .sub", 23.1, "rechts");
+rein("#s6 .c1", 23.7, "hoch", 0.5); rein("#s6 .c2", 24.1, "hoch", 0.5);
+// S7 (bleibt bis zum letzten Frame stehen: kein leeres Ende)
+szene("#s7", 26.2, null);
+rein("#s7 .kreis", 26.4, "pop", 0.7); rein("#s7 .logo", 26.7, "pop", 0.6);
+rein("#s7 .claim", 27.2, "hoch", 0.6); rein("#s7 .dig", 27.6, "fade", 0.7);
+
+window.__bereit = fetch("blume.svg.html").then((r) => r.text()).then((t) => { document.getElementById("sym").innerHTML = t; });
+</script>
+</body></html>

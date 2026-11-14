@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><title>PT04 neu – Geschenk / Verpackung</title>
+<link rel="stylesheet" href="marke.css">
+<style>
+  body { width: 3000px; height: 3000px; position: relative; }
+  .buehne { position: absolute; left: 0; top: 0; width: 3000px; height: 2202px; background: radial-gradient(ellipse 70% 75% at 36% 52%, #3f6628 0%, var(--gruen) 70%); overflow: hidden; }
+  .buehne .blatt { position: absolute; background: rgba(255,255,255,.07); }
+  .szene { position: absolute; left: 110px; top: 150px; width: 2150px; }
+  .liste { --u: 80px; position: absolute; right: 86px; top: 236px; }
+  .band { position: absolute; left: 0; top: 2202px; width: 3000px; height: 798px; background: var(--beige); border-top: 6px solid var(--gruen); }
+  h1 { position: absolute; left: 93px; top: 106px; font-size: 200px; line-height: 217px; font-weight: 700; color: var(--gruen); letter-spacing: 0; text-transform: uppercase; }
+  .sub { position: absolute; left: 93px; top: 582px; font-size: 133px; line-height: 1; font-weight: 400; }
+  .band .blatt { position: absolute; left: 1900px; top: 110px; width: 330px; transform: rotate(-14deg); }
+  .band .logo { position: absolute; right: 90px; bottom: 88px; width: 440px; }
+</style></head>
+<body>
+<div id="sym"></div>
+<div class="buehne">
+  <div class="blatt" style="width:560px; right:90px; bottom:150px; transform:rotate(-18deg)"></div>
+  <div class="blatt" style="width:330px; left:-90px; bottom:-110px; transform:rotate(150deg)"></div>
+  <img class="szene" src="/data/raw/listing/NG0001/assets/karton_szene.png" alt="">
+  <div class="liste">
+    <div><svg><use href="#blume"/></svg>Hochwertige Verpackung</div>
+    <div><svg><use href="#blume"/></svg>Edles Design</div>
+    <div><svg><use href="#blume"/></svg>Ideal zum Verschenken</div>
+  </div>
+</div>
+<div class="band">
+  <h1>Eine schöne<br>Geschenkidee</h1>
+  <p class="sub">Hochwertig &amp; stilvoll verpackt</p>
+  <div class="blatt"></div>
+  <div class="logo"></div>
+</div>
+<script>window.__bereit = fetch("blume.svg.html").then(r => r.text()).then(t => { document.getElementById("sym").innerHTML = t; });</script>
+</body></html>

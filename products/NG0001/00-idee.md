@@ -33,6 +33,7 @@ Bestandsprodukt, vor Einführung dieses Repos gelaunched (Voranalyse 08.11.2024,
 - Produktbriefing Quick Check - Blumengießkanne – Doc `1pG_0GzwZAn5rUzh4PpJwtcO6Ie6wHAmFk88fEmhMzdk` (Textfassung: `vorlagen/briefing-ng0001-blumengiesskanne.md`)
 - Listingbilder - Gießkanne - NG0001 – Drive-Ordner `1tdOfoxY_0pA-juvGuqDUqzpGGha00cOM`
 - Notion-Projekt „NG0001 - Blumengießkanne" (Stage: On Going)
+- Listing-Update 2026-11 (Bild-Audit, neue Bilder, Produktvideo) – `products/NG0001/listing/audit.md`, Dateien im Drive-Unterordner „Update 2026-11" `1y5vSEN5R_u_DWU6Yj7V1x5kex0e6U9A4`
 
 ## Kurzbeschreibung
 Edelstahl-Gießkanne 1–1,5 l für Zimmerpflanzen, rostfrei, schlankes Design, Griff mit Holz-/Farbakzent, Ziel-EK ~3 €, MOQ 500, Jahresmenge ~2.500 (Briefing Dez 2024).
